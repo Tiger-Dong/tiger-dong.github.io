@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配方测试表单</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 60%;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .form-footer {
+            text-align: center;
+        }
+        input[type="submit"] {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<div class="container">
+    <h2>参数设置</h2>
+    <div>
+        <h3>任务名称：配方测试</h3>
+        <div>
+            <h4>任务描述：填写材料 份数、官能度、羟值</h4>
+    </div>
+    <form action="/submit-form" method="post">
+        <!-- 第一个表格 A料 -->
+        <table>
+            <tr>
+                <th colspan="6">A料</th>
+            </tr>
+            <tr>
+                <th>名称</th>
+                <th>投料份数</th>
+                <th>官能度</th>
+                <th>羟值</th>
+                <th>公式</th>
+            </tr>
+            <!-- ... -->
+            <tr>
+                <td><input type="text" name="resource_name_1" id="resource_name_2" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_1" placeholder="投料份数" ></td>
+                <td><input type="number" name="functionality_1" placeholder="官能度" ></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_1" placeholder="羟值"  ></td>
+                <td><input type="text" name="formula_1" placeholder="公式"  ></td>
+            </tr>
+            <!-- ... -->
+            <tr>
+                <td><input type="text" name="resource_name_2" id="resource_name_2" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_2" placeholder="投料份数"  ></td>
+                <td><input type="number" name="functionality_2" placeholder="官能度"  ></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_2" placeholder="羟值"  ></td>
+                <td><input type="text" name="formula_2" placeholder="公式"  ></td>
+            </tr>
+            <!-- ... -->
+            <tr>
+                <td><input type="text" name="resource_name_3" id="resource_name_3" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_3" placeholder="投料份数"  ></td>
+                <td><input type="number" name="functionality_3" placeholder="官能度"  ></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_3" placeholder="羟值"  ></td>
+                <td><input type="text" name="formula_3" placeholder="公式"  ></td>
+            </tr>
+            <!-- ... -->
+            <tr>
+                <td><input type="text" name="resource_name_4" id="resource_name_4" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_4" placeholder="投料份数"  ></td>
+                <td><input type="number" name="functionality_4" placeholder="官能度"  ></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_4" placeholder="羟值"  ></td>
+                <td><input type="text" name="formula_4" placeholder="公式"  ></td>
+            </tr>
+            <!-- ... -->
+            <tr>
+                <td><input type="text" name="resource_name_5" id="resource_name_5" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_5" placeholder="投料份数"  ></td>
+                <td><input type="number" name="functionality_5" placeholder="官能度"  ></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_5" placeholder="羟值"  ></td>
+                <td><input type="text" name="formula_5" placeholder="公式"  ></td>
+            </tr>
+            <!-- 添加的行 -->
+            <tr>
+                <td><input type="text" name="resource_name_6" id="resource_name_6" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_6" placeholder="投料份数"></td>
+                <td><input type="number" name="functionality_6" placeholder="官能度"></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_6" placeholder="羟值"></td>
+                <td><input type="text" name="formula_6" placeholder="公式"></td>
+            </tr>
+            <!-- 其他行... -->
+            <tr>
+                <td><input type="text" name="resource_name_7" id="resource_name_7" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_7" placeholder="投料份数"></td>
+                <td><input type="number" name="functionality_7" placeholder="官能度"></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_7" placeholder="羟值"></td>
+                <td><input type="text" name="formula_7" placeholder="公式"></td>
+            </tr>
+            <!-- ... -->
+            <tr>
+                <td><input type="text" name="resource_name_8" id="resource_name_8" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_8" placeholder="投料份数"  ></td>
+                <td><input type="number" name="functionality_8" placeholder="官能度"  ></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_8" placeholder="羟值"  ></td>
+                <td><input type="text" name="formula_8" placeholder="公式"  ></td>
+            </tr>
+            <!-- ... -->
+            <tr>
+                <td><input type="text" name="resource_name_9" id="resource_name_9" placeholder="名称"></td>
+                <td><input type="text" name="batch_amount_9" placeholder="投料份数"  ></td>
+                <td><input type="number" name="functionality_9" placeholder="官能度"  ></td>
+                <td><input type="number" step="0.1" name="hydroxyl_value_9" placeholder="羟值"  ></td>
+                <td><input type="text" name="formula_9" placeholder="公式"  ></td>
+            </tr>
+        </table>
+
+            <!-- 第二个表格 B料 -->
+            <table>
+                <tr>
+                    <th colspan="6">B料</th>
+                </tr>
+                <tr>
+                    <th>名称</th>
+                    <th>投料份数</th>
+                    <th>官能度</th>
+                    <th>羟值</th>
+                    <th>公式</th>
+                </tr>
+                <!-- 表单行，根据需要添加更多行 -->
+                <tr>
+                    <td><input type="text" name="resource_name_B" id="resource_name_B" placeholder="名称"></td>
+                    <td><input type="text" name="batch_amount" id="batch_amount" placeholder="投料份数"></td>
+                    <td><input type="number" name="functionality" id="functionality" placeholder="官能度"></td>
+                    <td><input type="number" step="0.1" name="hydroxyl_value" id="hydroxyl_value" placeholder="羟值"></td>
+                    <td><input type="text" name="formula" id="formula" placeholder="公式"></td>
+                </tr>
+                <!-- 其他材料行 -->
+                <!-- ... -->
+            </table>
+
+            <div class="form-footer">
+                <input type="submit" value="提交配方">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

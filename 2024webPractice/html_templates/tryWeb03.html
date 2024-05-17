@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>材料操作表单</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding-right: 20px; /* 为表单和浏览器窗口的右侧添加一些空间 */
+        }
+        .container {
+            width: 30%; /* 根据需要调整宽度 */
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px; /* 增加第一行和第二行之间的间距 */
+        }
+        .form-group label {
+            margin-right: 10px;
+        }
+        .button-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px; /* 增加按钮行之间的间距 */
+        }
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="/perform-action" method="post">
+            <!-- 材料名称 -->
+            <div class="form-group">
+                <label for="material-name">材料名称:</label>
+                <input type="text" id="material-name" name="materialName" placeholder="输入材料名称">
+            </div>
+
+            <!-- 材料数据 -->
+            <div class="form-group">
+                <label for="material-data">材料数据:</label>
+                <input type="text" id="material-data" name="materialData" placeholder="输入材料数据">
+            </div>
+
+            <!-- 放大/缩小按钮 -->
+            <div class="button-row">
+                <button type="button">放大</button>
+                <button type="button">缩小</button>
+            </div>
+
+            <!-- 上/下/左/右按钮 -->
+            <div class="button-row">
+                <button type="button">上</button>
+                <button type="button">下</button>
+                <button type="button">左</button>
+                <button type="button">右</button>
+            </div>
+
+            <!-- 上一个/下一个按钮 -->
+            <div class="button-row">
+                <button type="button">上一个</button>
+                <button type="button">下一个</button>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button type="submit">执行操作</button>
+        </form>
+    </div>
+</body>
+</html>
