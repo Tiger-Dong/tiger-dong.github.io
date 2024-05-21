@@ -78,11 +78,11 @@
         window.onload = function() {
             // 化学数据 A 的处理
             const selects_A = document.querySelectorAll('select[name^="resource_name_A"]');
-            loadChemicals(selects_A, chemicalData_A, '_A_');
+            loadChemicals(selects_A, chemicalData_A, '_A');
 
             // 化学数据 B 的处理
             const selects_B = document.querySelectorAll('select[name^="hydroxyl_value_B"]');
-            loadChemicals(selects_B, chemicalData_B, '_B_');
+            loadChemicals(selects_B, chemicalData_B, '_B');
         };
 
         // 这个函数用于加载化学数据并设置事件监听器
@@ -278,7 +278,7 @@
                 <!--. B料 01 .-->
                 <tr>
                     <td>
-                        <select name="hydroxyl_value_B" id="hydroxyl_value_B">
+                        <select name="hydroxyl_value_B_1" id="hydroxyl_value_B_1">
                             <option value="">请输入NCO值</option>
                             
                         </select>
