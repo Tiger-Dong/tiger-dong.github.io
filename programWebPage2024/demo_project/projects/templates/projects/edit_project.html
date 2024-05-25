@@ -1,0 +1,15 @@
+{% extends 'projects/base.html' %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ project_form.as_p }}
+    <p> Stage: 
+        <select name="state" >
+          {% for stage in stage_form.State %}
+            {{ stage }}
+          {% endfor %}
+        </select>
+    </p>
+    <button type="submit">Save</button>
+</form>
+{% endblock %}
