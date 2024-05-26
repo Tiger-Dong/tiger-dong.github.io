@@ -13,7 +13,7 @@ def job_list(request):
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> float:
     return (
-        job.chemial_A_mass
+        float(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
         / chemical_A.molecular_mass
     )
@@ -21,11 +21,11 @@ def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> float:
 
 def calculate_parameter(job: Job, chemical_As: list):
     total_shares_A = sum([chemical_A.shares for chemical_A in chemical_As])
-    total_hydroxyl_A = sum(
+    total_hydroxyl_A = float(sum(
         [chemical_A.hydroxyl * chemical_A.shares for chemical_A in chemical_As]
-    )
+    ))
     job.theory_shares_ratio = (
-        4202.0 / (job.chemical_B_NCO * total_shares_A) * total_hydroxyl_A / 56100
+        4202.0 / (float(job.chemical_B_NCO) * total_shares_A) * total_hydroxyl_A / 56100
     )
     job.save()
     parameters = {"job_id": job.id, "job_name": job.name}
@@ -38,20 +38,25 @@ def calculate_parameter(job: Job, chemical_As: list):
                 parameters[value] = calcualte_N(job, chemical_A, total_shares_A)
         
     # dump the parameters to a json file
-    parameter_path = Path.cwd() / f"parameters"
-    parameter_path.mkdir(exist_ok=True)
-    parameter_file = parameter_path / f"{job.id}.json"
+    tool_path = Path.cwd().parent / "tools"
+    assert tool_path.exists(), f"{tool_path} does not exist, the test.sh, *.molg and py should be in this folder"
+    parameter_file = tool_path / f"{job.id}.json"
     print(f"parameter file: {parameter_file}")
     # write parameter to parameter file
     with parameter_file.open("w") as f:
         json.dump(parameters, f)
 
+    # read shell template file
+    with (tool_path / "test.sh.template").open("r") as f:
+        shell_template = f.read()
+    test_sh = tool_path / "test.sh"
+    with test_sh.open("w") as f:
+        f.write(shell_template.replace("{{job_id}}", str(job.id)))
+            
     completed_process = subprocess.run(
         [
-            "python3",
-            Path.cwd().joinpath("tools/0519.molg").as_posix(),
-            "--config",
-            parameter_file.as_posix(),
+            "sbatch",
+            test_sh.as_posix(),            
         ],
         text=True,
         capture_output=True,
@@ -61,7 +66,7 @@ def calculate_parameter(job: Job, chemical_As: list):
 
 
 def job_create(request):
-    prefix = "chemicals"
+    prefix = "chemicals"    
     if request.method == "POST":
         job_form = JobForm(request.POST)
         if job_form.is_valid():
@@ -70,12 +75,11 @@ def job_create(request):
                 request.POST, instance=job, prefix=prefix
             )            
             chemical_As = []    
-            for chemical_A in chemical_A_formset:
-                if chemical_A.cleaned_data:
-                    chemical_A.complete()
-                    chemical_A.save()
-                    chemical_As.append(chemical_A)                    
-            # calculate_parameter(job, chemical_As)    
+            for chemical_AForm in chemical_A_formset:
+                if chemical_AForm.is_valid() and chemical_AForm.has_changed():                    
+                    cA = chemical_AForm.save()
+                    chemical_As.append(cA)                    
+            calculate_parameter(job, chemical_As)    
             return redirect("job_list")
     else:
         job_form = JobForm()
@@ -87,6 +91,7 @@ def job_create(request):
             "job_form": job_form,
             "chemical_A_formset": chemical_A_formset,
             "prefix": prefix,
+            "chemical_A_dict": Chemical_A.chemicalData_A,
         },
     )
 

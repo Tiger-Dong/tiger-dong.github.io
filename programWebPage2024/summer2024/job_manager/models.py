@@ -9,11 +9,11 @@ class Job(models.Model):
     chemial_A_mass = models.DecimalField(max_digits=10, decimal_places=2)
     
     chemicalData_B = {
-            "b0" : {"nco": 12.8, "functionality": 2, "molecule_quality": 7000 },
+            "nco": 12.8, "functionality": 2, "molecule_quality": 7000,
     }
-    chemical_B_NCO = models.DecimalField(max_digits=10, decimal_places=2, default=chemicalData_B["b0"]["nco"])
-    chemical_B_functionality = models.IntegerField(default=chemicalData_B["b0"]["functionality"])
-    chemical_B_molecular_mass = models.IntegerField(default=chemicalData_B["b0"]["molecule_quality"])
+    chemical_B_NCO = models.DecimalField(max_digits=10, decimal_places=2, default=chemicalData_B["nco"])
+    chemical_B_functionality = models.IntegerField(default=chemicalData_B["functionality"])
+    chemical_B_molecular_mass = models.IntegerField(default=chemicalData_B["molecule_quality"])
     chemical_B_mass = models.IntegerField(default=0)
     
     temperature = models.IntegerField()

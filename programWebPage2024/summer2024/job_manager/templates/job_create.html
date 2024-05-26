@@ -79,9 +79,30 @@
 
 </div>
 <script>
+  // 化学数据
+  const chemicalData = {
+            "PTMG1000": { functionality: "2", hydroxyl_value: "112.2", molecule_quality: "1000" },
+            "PTMG2000": { functionality: "2", hydroxyl_value: "56.1", molecule_quality: "2000" },
+            "330N": { functionality: "3", hydroxyl_value: "35", molecule_quality: "4800" },
+            "BDO": { functionality: "2", hydroxyl_value: "1247", molecule_quality: "90" },
+            "water": { functionality: "2", hydroxyl_value: "6233", molecule_quality: "18" },
+            "silicone_oil": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "color_paster": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "catalyst_1": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "catalyst_2": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+        };
+
   $(document).ready(function () {
     $('select').on('change', function () {
       $('select').not(this).find('option[value="' + $(this).val() + '"]').prop('disabled', true);
+      
+      const selectedChemical = chemicalData[this.value];      
+      const prefix = this.id.slice(0, 0 - "name".length);      
+      if (selectedChemical) {        
+          document.getElementById(prefix + 'functionality').value = selectedChemical.functionality;                        
+          document.getElementById(prefix + 'molecular_mass').value = selectedChemical.molecule_quality;          
+          document.getElementById(prefix +'hydroxyl').value = selectedChemical.hydroxyl_value ;          
+      }
     });
   });
 </script>
