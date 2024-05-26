@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>参数设置</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 65%;
+            border: 1px solid #ddd;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .center-table-header {
+            text-align: center; /* 文本居中 */
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .form-footer {
+            text-align: center;
+        }
+        input[type="submit"] {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    <script>
+        // 化学数据
+        const chemicalData_A = {
+            "PTMG1000": { functionality: "2", hydroxyl_value: "112.2", molecule_quality: "1000" },
+            "PTMG2000": { functionality: "2", hydroxyl_value: "56.1", molecule_quality: "2000" },
+            "330N": { functionality: "3", hydroxyl_value: "35", molecule_quality: "4800" },
+            "BDO": { functionality: "2", hydroxyl_value: "1247", molecule_quality: "90" },
+            "水": { functionality: "2", hydroxyl_value: "6233", molecule_quality: "18" },
+            "硅油": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "色膏": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "催化剂1": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "催化剂2": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+        };
+
+        const chemicalData_B = {
+            "12.8": { functionality: "2", molecule_quality: "1000" },
+            "000": { functionality: "2", molecule_quality: "1000" },              
+
+        };
+
+
+        window.onload = function() {
+            // 化学数据 A 的处理
+            const selects_A = document.querySelectorAll('select[name^="resource_name_A"]');
+            loadChemicals(selects_A, chemicalData_A, '_A');
+
+            // 化学数据 B 的处理
+            const selects_B = document.querySelectorAll('select[name^="hydroxyl_value_B"]');
+            loadChemicals(selects_B, chemicalData_B, '_B');
+        };
+
+        // 这个函数用于加载化学数据并设置事件监听器
+        function loadChemicals(selects, chemicalData, suffix) {
+            // 为每个 select 元素添加选项
+            selects.forEach(select => {
+                Object.entries(chemicalData).forEach(([key, value]) => {
+                    const option = new Option(key, key);
+                    select.add(option);
+                });
+            // 使用一个自执行函数来捕获正确的 select 元素
+                // 使用 let select 来存储当前 select 元素的引用
+                let selectElement = select;
+                selectElement.addEventListener('change', function() {
+                    $('select').not(this).find('option[value="' + $(this).val() + '"]').prop('disabled', true);            
+                    const selectedChemical = chemicalData[this.value];
+                    if (selectedChemical) {
+                        // 更新相应的输入框的值，使用后缀区分
+                        document.getElementById('functionality' + suffix + '_' + selectElement.id.slice(-1)).value = selectedChemical.functionality;                        
+                        document.getElementById('molecule_quality' + suffix + '_' + selectElement.id.slice(-1)).value = selectedChemical.molecule_quality;
+                        if (suffix == '_A'){
+                            document.getElementById('hydroxyl_value' + suffix + '_' + selectElement.id.slice(-1)).value = selectedChemical.hydroxyl_value || '';
+                        }
+                    }
+                });
+            });
+        }        
+    </script>
+
+</head>
+<body>
+<div class="container">
+    <h2>参数设置</h2>
+    <div>
+        <h4>任务名称：<input type= "text" id="title_top_1" placeholder=" "></h4>
+        <div>
+        <h4>任务描述：<input type= "text" id="title_top_2" placeholder=" "></h4>
+        <div>
+        <h4>理论投料比(B/A):<input type= "text" id="title_top_3" placeholder=" "></h4>
+
+    </div>
+    <form action="/submit-form" method="post">
+        <!-- 第一个表格 A料 -->
+        <table>
+            <tr>
+                <th colspan="5" class="center-table-header">A料</th>
+            </tr>
+            </tr>
+            <th colspan="1">A料质量(克):</th>
+                <td><input type="text" id="unit_A_1" placeholder=" "></td>
+            </tr> 
+
+            <tr>
+                <th>A料名称</th>
+                <th>官能度</th>
+                <th>羟值</th>
+                <th>相对分子质量</th>
+                <th>投料份数</th>
+            </tr>
+            <!--. A料 01 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_1" id="resource_name_A_1">
+                        <option value="">请选择材料</option>
+                        
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_1" placeholder="官能度"></td>
+                <td><input type="number" id="hydroxyl_value_A_1" placeholder="羟值"></td>
+                <td><input type="text" id="molecule_quality_A_1" placeholder="相对分子质量"></td>
+                <td><input type="text" name="batch_amount_A_1" placeholder="投料份数"></td>
+            </tr>
+            <!--. A料 02 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_2" id="resource_name_A_2">
+                        <option value="">请选择材料</option>
+                        
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_2" placeholder="官能度"  ></td>
+                <td><input type="number" id="hydroxyl_value_A_2" placeholder="羟值"  ></td>
+                <td><input type="text" id="molecule_quality_A_2" placeholder="相对分子质量"  ></td>
+                <td><input type="text" name="batch_amount_A_2" placeholder="投料份数"></td>
+            </tr>
+            <!--. A料 03 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_3" id="resource_name_A_3">
+                        <option value="">请选择材料</option>
+                        
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_3" placeholder="官能度"  ></td>
+                <td><input type="number" id="hydroxyl_value_A_3" placeholder="羟值"  ></td>
+                <td><input type="text" id="molecule_quality_A_3" placeholder="相对分子质量"  ></td>
+                <td><input type="text" name="batch_amount_A_3" placeholder="投料份数"></td>
+            </tr>
+            <!--. A料 04 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_4" id="resource_name_A_4">
+                        <option value="">请选择材料</option>
+                   
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_4" placeholder="官能度"  ></td>
+                <td><input type="number" id="hydroxyl_value_A_4" placeholder="羟值"  ></td>
+                <td><input type="text" id="molecule_quality_A_4" placeholder="相对分子质量"  ></td>
+                <td><input type="text" name="batch_amount_A_4" placeholder="投料份数"></td>
+            </tr>
+            <!--. A料 05 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_5" id="resource_name_A_5">
+                        <option value="">请选择材料</option>
+                     
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_5" placeholder="官能度"  ></td>
+                <td><input type="number" id="hydroxyl_value_A_5" placeholder="羟值"  ></td>
+                <td><input type="text" id="molecule_quality_A_5" placeholder="相对分子质量"  ></td>
+                <td><input type="text" name="batch_amount_A_5" placeholder="投料份数"></td>
+            </tr>
+            <!--. A料 06 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_6" id="resource_name_A_6">
+                        <option value="">请选择材料</option>
+                 
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_6" placeholder="官能度"></td>
+                <td><input type="number" id="hydroxyl_value_A_6" placeholder="羟值"></td>
+                <td><input type="text" id="molecule_quality_A_6" placeholder="相对分子质量"  ></td>
+                <td><input type="text" name="batch_amount_A_6" placeholder="投料份数"></td>
+            </tr>
+            <!--. A料 07 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_7" id="resource_name_A_7">
+                        <option value="">请选择材料</option>
+                    
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_7" placeholder="官能度"></td>
+                <td><input type="number" id="hydroxyl_value_A_7" placeholder="羟值"></td>
+                <td><input type="text" id="molecule_quality_A_7" placeholder="相对分子质量"  ></td>
+                <td><input type="text" name="batch_amount_A_7" placeholder="投料份数"></td>
+            </tr>
+            <!--. A料 08 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_8" id="resource_name_A_8">
+                        <option value="">请选择材料</option>
+                
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_8" placeholder="官能度"  ></td>
+                <td><input type="number" id="hydroxyl_value_A_8" placeholder="羟值"  ></td>
+                <td><input type="text" id="molecule_quality_A_8" placeholder="相对分子质量"  ></td>
+                <td><input type="text" name="batch_amount_A_8" placeholder="投料份数"></td>
+            </tr>
+            <!--. A料 09 .-->
+            <tr>
+                <td>
+                    <select name="resource_name_A_9" id="resource_name_A_9">
+                        <option value="">请选择材料</option>
+                      
+                    </select>
+                </td>
+                <td><input type="number" id="functionality_A_9" placeholder="官能度"  ></td>
+                <td><input type="number" id="hydroxyl_value_A_9" placeholder="羟值"  ></td>
+                <td><input type="text" id="molecule_quality_A_9" placeholder="相对分子质量"  ></td>
+                <td><input type="text" name="batch_amount_A_9" placeholder="投料份数"></td>
+            </tr>
+        </table>
+
+            <!-- 第二个表格 B料 -->
+            <table>
+                <tr>
+                    <th colspan="6" class="center-table-header">B料: 异氰酸酯预聚体</th>
+                </tr>
+                <tr>
+                    <th>NCO值</th>
+                    <th>官能度</th>
+                    <th>相对分子质量</th>
+                    <th>投料份数</th>
+                </tr>
+                <!--. B料 01 .-->
+                <tr>
+                    <td>
+                        <select name="hydroxyl_value_B_1" id="hydroxyl_value_B_1">
+                            <option value="">请输入NCO值</option>
+                            
+                        </select>
+                    </td>
+                    <td><input type="number" id="functionality_B_1" placeholder="官能度"></td>
+                    <td><input type="text" id="molecule_quality_B_1" placeholder="相对分子质量"  ></td>
+                    <td><input type="text" name="batch_amount_B_1" id="batch_amount_B_1" placeholder="投料份数"></td>
+
+                </tr>
+                <!-- 其他材料行 -->
+                <!-- ... -->
+            </table>
+             <!-- 反应设置 -->
+             <table>
+                <tr>
+                    <th colspan="6"class="center-table-header">反应设置</th>
+                </tr>
+                <tr>
+                    <th>反应温度（℃）</th>
+                    <td><input type="text" name="temperature_amount" id="temperature_amount" placeholder="温度？"></td>
+                </tr>
+
+                </tr>
+                <!-- ... -->
+            </table>
+
+            <div class="form-footer">
+                <input type="submit" value="提交配方">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+  
+  
+  
+  

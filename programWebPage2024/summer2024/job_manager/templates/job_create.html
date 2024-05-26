@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <form method="POST">
+    {% csrf_token %}
+    <h2>参数设置</h2>
+    <div>
+      <h4>任务名称：{{job_form.name}}</h4>
+      <div>
+        <h4>任务描述：{{job_form.description}}</h4>
+        <div>
+          <h4>理论投料比(B/A):{{job_form.theory_shares_ratio}}</h4>
+
+        </div>
+        <table>
+          <tr>
+            <th colspan="5" class="center-table-header">A料</th>
+          </tr>
+          </tr>
+          <th colspan="1">A料质量(克):</th>
+          <td>{{job_form.chemial_A_mass}}</td>
+          </tr>
+          <tr>
+            <th>A料名称</th>
+            <th>官能度</th>
+            <th>羟值</th>
+            <th>相对分子质量</th>
+            <th>投料份数</th>
+          </tr>
+
+          <fieldset>
+            {{ chemical_A_formset.management_form }}
+            {% for form in chemical_A_formset %}
+            <tr>
+              <td>{{ form.name }}</td>
+              <td>{{ form.functionality}} </td>
+              <td>{{ form.hydroxyl}} </td>
+              <td>{{ form.molecular_mass}} </td>
+              <td>{{ form.shares}} </td>
+            </tr>
+            {% endfor %}
+          </fieldset>
+        </table>
+
+        <table>
+          <tr>
+            <th colspan="6" class="center-table-header">B料: 异氰酸酯预聚体</th>
+          </tr>
+          <tr>
+            <th>NCO值</th>
+            <th>官能度</th>
+            <th>相对分子质量</th>
+            <th>投料质量</th>
+          </tr>
+          <!--. B料 01 .-->
+          <tr>
+            <td>{{job_form.chemical_B_NCO}}</td>
+            <td>{{job_form.chemical_B_functionality}}</td>
+            <td>{{job_form.chemical_B_molecular_mass}}</td>
+            <td>{{job_form.chemical_B_mass}}</td>
+          </tr>
+        </table>
+        <!-- 反应设置 -->
+        <table>
+          <tr>
+            <th colspan="6" class="center-table-header">反应设置</th>
+          </tr>
+          <tr>
+            <th>反应温度（℃）</th>
+            <td>{{ job_form.temperature}}</td>
+          </tr>
+
+          </tr>
+          <!-- ... -->
+        </table>
+        <button type="submit">提交配方</button>
+  </form>
+
+</div>
+<script>
+  $(document).ready(function () {
+    $('select').on('change', function () {
+      $('select').not(this).find('option[value="' + $(this).val() + '"]').prop('disabled', true);
+    });
+  });
+</script>
+
+{% endblock %}

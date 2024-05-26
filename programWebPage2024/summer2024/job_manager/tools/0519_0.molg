@@ -1,0 +1,125 @@
+#!/usr/bin/python
+from poetry import molgen
+import os
+import string
+import math
+import re
+import random
+lx = 30.0
+ly = 30.0
+lz = 30.0
+
+
+### 待传入参数
+n=3 
+N1=100
+N2=100
+N3=100
+N4=100
+
+
+
+
+#PTMG  setParticleTypes
+mol1_particaltypes=""
+mol1_particaltypes += "F,"
+for _ in range(n-2):
+    mol1_particaltypes += "G,"
+mol1_particaltypes += "F"
+#PTMG  setTopology
+mol1_start = 0
+mol1_end = n-1
+mol1_topology_str=""
+# 循环生成序列并追加到mol1_topology_str
+for i in range(mol1_start, mol1_end):
+    mol1_topology_str += f"{i}-{i+1},"
+mol1_topology_str = mol1_topology_str[:-1]
+
+#330N  setParticleTypes
+unit_len=26
+mol2_particaltypes1 = ""
+mol2_particaltypes2 = ""
+mol2_particaltypes3 = ""
+
+mol2_particaltypes1 += "I,"
+for _ in range(26):
+    mol2_particaltypes1 += "J,"
+mol2_particaltypes1 += "K01"
+
+for _ in range(26):
+    mol2_particaltypes2 += "J,"
+mol2_particaltypes2 += "K02"
+
+for _ in range(26):
+    mol2_particaltypes3 += "J,"
+mol2_particaltypes3 += "K03"
+
+mol2_particaltypes=mol2_particaltypes1+","+mol2_particaltypes2+","+mol2_particaltypes3
+
+# print(mol2_particaltypes)
+# exit()
+#330N setTopology
+mol2_topology_str = ""
+mol2_start = 0
+mol2_end = 81
+
+for i in range(mol2_start, mol2_end):
+    mol2_topology_str += f"{i}-{i+1},"
+mol2_topology_str = mol2_topology_str[:-1]
+# 替换"27-28"为"0-28"
+mol2_topology_str = mol2_topology_str.replace("27-28,", "0-28,")
+mol2_topology_str = mol2_topology_str.replace("54-55,", "0-55,")
+
+
+#PTMG
+mol1=molgen.Molecule(n) # 公式2==n read from UI output
+mol1.setTopology(mol1_topology_str) # 0-1,...,(n-2)-(n-1)
+mol1.setParticleTypes(mol1_particaltypes) # G, G, G...（n个）
+mol1.setBondLength(1.0)
+mol1.setInit(0)
+mol1.setCris(0)
+
+
+#330N
+mol2=molgen.Molecule(82) 
+mol2.setTopology(mol2_topology_str) # 0-1,...,80-81
+mol2.setParticleTypes(mol2_particaltypes) #I(J26K)3
+mol2.setBondLength(1.0)
+mol2.setInit(0)
+mol2.setCris(0)
+
+#BDO
+mol3=molgen.Molecule(3)
+mol3.setTopology("0-1,1-2")
+mol3.setParticleTypes("C, D, C")
+mol3.setBondLength(1.0)
+mol3.setInit(0)
+mol3.setCris(0)
+
+#水
+mol4=molgen.Molecule(3)
+mol4.setTopology("0-1,1-2")
+mol4.setParticleTypes("O, H, O")
+mol4.setBondLength(1.0)
+mol4.setInit(0)
+mol4.setCris(0)
+
+
+
+# #异氰酸酯封端聚合物
+# mol0=molgen.Molecule(4)
+# mol0.setTopology("0-1,0-2,0-3")
+# mol0.setParticleTypes("F,C0,C1,C2")
+# mol0.setInit(0)
+# mol0.setCris(0)
+
+gen0=molgen.Generators(lx,ly,lz)
+# gen0.addMolecule(mol0,45)
+gen0.addMolecule(mol1,N1) #式3，N
+gen0.addMolecule(mol2,N2)
+gen0.addMolecule(mol3,N3)
+gen0.addMolecule(mol4,N4)
+
+gen0.setDimension(3)
+gen0.setMinimumDistance(0.9)
+gen0.outPutXML("ABC")

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Management</title>
+    <!-- Add your CSS files here -->
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        header {
+            position: sticky;
+            top: 0;
+            background-color: white; /* or any color you prefer */
+            z-index: 10;
+        }
+
+        footer {
+            margin-top: auto;
+        }
+        .container {
+            width: 65%;
+            border: 1px solid #ddd;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .center-table-header {
+            text-align: center; /* 文本居中 */
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .form-footer {
+            text-align: center;
+        }
+        input[type="submit"] {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <header>              
+        <!-- Add your navigation links here -->
+        <nav>
+            <a href="{% url 'job_list' %}">All Jobs</a>
+            <a href="{% url 'job_create' %}">New Job</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Content of the child templates will be inserted here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2024 Job Management</p>
+    </footer>
+</body>
+</html>
