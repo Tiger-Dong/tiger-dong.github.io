@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 import subprocess
 
-
 def job_list(request):
     jobs = Job.objects.all()
     return render(request, "job_list.html", {"jobs": jobs})
