@@ -83,7 +83,7 @@
             loadChemicals(selects_A, chemicalData_A, '_A');
 
             // 化学数据 B 的处理
-            const selects_B = document.querySelectorAll('select[name^="hydroxyl_value_B"]');
+            const selects_B = document.querySelectorAll('select[name^="nco_value_B"]');
             loadChemicals(selects_B, chemicalData_B, '_B');
         };
 
@@ -118,15 +118,17 @@
 <body>
 <div class="container">
     <h2>参数设置</h2>
+    <form  method="post">
     <div>
-        <h4>任务名称：<input type= "text" id="title_top_1" placeholder=" "></h4>
+        <h4>任务名称：{{form_abc.name}} </h4>
+        <!-- <div>
+        <h4>任务描述：{{form_abc.name}}</h4>
         <div>
-        <h4>任务描述：<input type= "text" id="title_top_2" placeholder=" "></h4>
-        <div>
-        <h4>理论投料比(B/A):<input type= "text" id="title_top_3" placeholder=" "></h4>
+        <h4>理论投料比(B/A):{{form_abc.name}}</h4> -->
 
     </div>
-    <form action="/submit-form" method="post">
+    
+        {% csrf_token %}
         <!-- 第一个表格 A料 -->
         <table>
             <tr>
@@ -277,14 +279,16 @@
                 <!--. B料 01 .-->
                 <tr>
                     <td>
-                        <select name="hydroxyl_value_B_1" id="hydroxyl_value_B_1">
-                            <option value="">请输入NCO值</option>
+                        <select name="nco_value" id="nco_value">
+                            <option value='12.8'>12.8</option>
+                            <option value='1'>chose me</option>
+                            <option value='2'> 22 </option>
                             
                         </select>
                     </td>
-                    <td><input type="number" id="functionality_B_1" placeholder="官能度"></td>
-                    <td><input type="text" id="molecule_quality_B_1" placeholder="相对分子质量"  ></td>
-                    <td><input type="text" name="batch_amount_B_1" id="batch_amount_B_1" placeholder="投料份数"></td>
+                    <td>{{form_abc.functionality}}</td>
+                    <td>{{form_abc.molecule_quality}}</td>
+                    <td>{{form_abc.batch_amount}}</td>
 
                 </tr>
                 <!-- 其他材料行 -->
@@ -297,7 +301,7 @@
                 </tr>
                 <tr>
                     <th>反应温度（℃）</th>
-                    <td><input type="text" name="temperature_amount" id="temperature_amount" placeholder="温度？"></td>
+                    <td>{{form_abc.temperature_amount}}</td>
                 </tr>
 
                 </tr>
