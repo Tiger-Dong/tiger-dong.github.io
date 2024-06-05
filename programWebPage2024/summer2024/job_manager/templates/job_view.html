@@ -59,9 +59,7 @@
 <body>
 <div class="container">
     </div>
-    <form action="/submit-form" method="post">
-
-            <!-- 反应设置 -->
+    <form method="post">
             <table>
                 <tr>
                     <th colspan="6"class="center-table-header">目前进度</th>
@@ -80,14 +78,14 @@
                 {{}}
 
                 <tr>
-                  <td>{job_N0}</td>
-                  <td>{job_N1}</td>
-                  <td>{job_N2}</td>
-                  <td>{job_N3}</td>
-                  <td>{job_N4}</td>
-                  <td>{job_N5}</td>
+                  <td>{{job.N0}}</td>
+                  <td>{{job.N1}}</td>
+                  <td>{{job.N2}}</td>
+                  <td>{{job.N3}}</td>
+                  <td>{{job.N4}}</td>
+                  <td>{{job.N5}}</td>
 
-                  <td>{job.sbatch_job_id}</td>
+                  <td>{{job.sbatch_job_id}}</td>
                   
                 </tr>
 

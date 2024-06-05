@@ -9,13 +9,6 @@ def job_list(request):
     jobs = Job.objects.all()
     return render(request, "job_list.html", {"jobs": jobs})
 
-def find_job_id():
-    in_text = "information from the list "
-    start_index = in_text.find("Python ") + len("Python ")
-    end_index = start_index + len("0.0.00")
-    job_id = in_text[start_index:end_index]
-    return job_id
-
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> float:
     return (
@@ -50,6 +43,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     job.N4 = parameters["N4"]
     job.N5 = parameters["N5"]
     job.save()
+    
         
     # dump the parameters to a json file
     tool_path = Path.cwd().parent / "tools"
@@ -80,15 +74,26 @@ def calculate_parameter(job: Job, chemical_As: list):
     print(f"Output: {completed_process.stdout}")
 
     # Search job_id
-    sbatch_id 
-    sbatch_id = print(f"Output: {completed_process.stdout}")
-    start_index = job.sbatch_job_id.find("job_output_") + len("job_output_")
-    end_index = start_index + len("00000")
-    job.sbatch_job_id = sbatch_id [start_index:end_index]
+    job.sbatch_job_id =  find_sbatch_job_id(completed_process.stdout)
+    job.save()
+
+def find_sbatch_job_id(input_str: str):
+    text_before_id = "Submitted batch job "
+    start_index = input_str.find(text_before_id) + len(text_before_id)
+    sbatch_id = input_str [start_index:]
+    return sbatch_id
+
+     
+
+
+
 
 def job_view(request, pk):
+    job = Job.objects.get(pk=pk)
+
     
     return render(request, 'job_view.html', {'job': job})
+
 
 
 def job_create(request):
@@ -106,7 +111,7 @@ def job_create(request):
                     cA = chemical_AForm.save()
                     chemical_As.append(cA)                    
             calculate_parameter(job, chemical_As)    
-            return redirect("job_list")
+            return redirect("job_view")
     else:
         job_form = JobForm()
         chemical_A_formset = Chemical_AFormSet(prefix=prefix)
