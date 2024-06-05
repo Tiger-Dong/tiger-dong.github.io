@@ -3,25 +3,6 @@
 {% block content %}
 
 {% for job in jobs %}
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
-    input[type="submit"] {
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 5px;
-    }
-
-</style>
     <div class="job">
         <p>{{ job.name }},    {{ job.description }}</p>
     </div>

@@ -86,6 +86,10 @@ def calculate_parameter(job: Job, chemical_As: list):
     end_index = start_index + len("00000")
     job.sbatch_job_id = sbatch_id [start_index:end_index]
 
+def job_view(request, pk):
+    
+    return render(request, 'job_view.html', {'job': job})
+
 
 def job_create(request):
     prefix = "chemicals"    
