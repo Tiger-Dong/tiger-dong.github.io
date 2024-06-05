@@ -9,6 +9,13 @@ def job_list(request):
     jobs = Job.objects.all()
     return render(request, "job_list.html", {"jobs": jobs})
 
+def find_job_id():
+    in_text = "information from the list "
+    start_index = in_text.find("Python ") + len("Python ")
+    end_index = start_index + len("0.0.00")
+    job_id = in_text[start_index:end_index]
+    return job_id
+
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> float:
     return (
@@ -35,12 +42,21 @@ def calculate_parameter(job: Job, chemical_As: list):
         for key, value in parameter_mapping.items():
             if key in chemical_A.name:
                 parameters[value] = calcualte_N(job, chemical_A, total_shares_A)
+    
+    job.N0 = parameters["N0"]
+    job.N1 = parameters["N1"]
+    job.N2 = parameters["N2"]
+    job.N3 = parameters["N3"]
+    job.N4 = parameters["N4"]
+    job.N5 = parameters["N5"]
+    job.save()
         
     # dump the parameters to a json file
     tool_path = Path.cwd().parent / "tools"
     assert tool_path.exists(), f"{tool_path} does not exist, the test.sh, *.molg and py should be in this folder"
     parameter_file = tool_path / f"{job.id}.json"
     print(f"parameter file: {parameter_file}")
+
     # write parameter to parameter file
     with parameter_file.open("w") as f:
         json.dump(parameters, f)
@@ -62,6 +78,13 @@ def calculate_parameter(job: Job, chemical_As: list):
     )
     print(f"Return code: {completed_process.returncode}")
     print(f"Output: {completed_process.stdout}")
+
+    # Search job_id
+    sbatch_id 
+    sbatch_id = print(f"Output: {completed_process.stdout}")
+    start_index = job.sbatch_job_id.find("job_output_") + len("job_output_")
+    end_index = start_index + len("00000")
+    job.sbatch_job_id = sbatch_id [start_index:end_index]
 
 
 def job_create(request):
@@ -93,7 +116,6 @@ def job_create(request):
             "chemical_A_dict": Chemical_A.chemicalData_A,
         },
     )
-
 
 def edit_job(request, pk):
     job = Job.objects.get(pk=pk)

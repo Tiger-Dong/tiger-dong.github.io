@@ -20,8 +20,16 @@ class Job(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    N0 = models.IntegerField(null = True)
+    N1 = models.IntegerField(null = True)
+    N2 = models.IntegerField(null = True)
+    N3 = models.IntegerField(null = True)
+    N4 = models.IntegerField(null = True)
+    N5 = models.IntegerField(null = True)
+
+    sbatch_job_id = models.CharField(max_length=20)
     
-    
+
     def __str__(self):
         return self.name
     

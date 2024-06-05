@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>参数设置</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 65%;
+            border: 1px solid #ddd;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .center-table-header {
+            text-align: center; /* 文本居中 */
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .form-footer {
+            text-align: center;
+        }
+        input[type="submit"] {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    </div>
+    <form action="/submit-form" method="post">
+
+            <!-- 反应设置 -->
+            <table>
+                <tr>
+                    <th colspan="6"class="center-table-header">目前进度</th>
+                </tr>
+                <tr>
+                    <th>目前进度</th>
+                    <th>N0</th>
+                    <th>N1</th>
+                    <th>N2</th>
+                    <th>N3</th>
+                    <th>N4</th>
+                    <th>N5</th>
+                  </tr>
+            
+            <fieldset>
+                {{}}
+
+                <tr>
+                  <td>{job_N0}</td>
+                  <td>{job_N1}</td>
+                  <td>{job_N2}</td>
+                  <td>{job_N3}</td>
+                  <td>{job_N4}</td>
+                  <td>{job_N5}</td>
+
+                  <td>{job.sbatch_job_id}</td>
+                  
+                </tr>
+
+              </fieldset>
+            </table>
+
+        </form>
+</body>
+</html>
