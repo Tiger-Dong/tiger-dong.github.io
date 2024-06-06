@@ -57,18 +57,20 @@
 
 </head>
 <body>
-<div class="container">
-    </div>
+    <div class="container">
+        <h2>目前进度(job_view)</h2>
+        <div>
+            <h4>当前状态(Status): <"r"></h4>
+        </div>
     <form method="post">
             <table>
                 <tr>
-                    <th colspan="6"class="center-table-header">目前进度</th>
+                    <th colspan="9"class="center-table-header">目前进度</th>
                 </tr>
                 <tr>
-                    <th>job_view</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>sbatch_id</th>                   
+                    <th>名字</th>
+                    <th>内容描述</th>
+                    <th>Sbatch_id</th>                   
                     <th>N0</th>
                     <th>N1</th>
                     <th>N2</th>
@@ -80,19 +82,28 @@
             <fieldset>
 
                 <tr>
-                  <td>{{job.N0}}</td>
-                  <td>{{job.N1}}</td>
-                  <td>{{job.N2}}</td>
-                  <td>{{job.N3}}</td>
-                  <td>{{job.N4}}</td>
-                  <td>{{job.N5}}</td>
-
-                  <td>{{job.sbatch_job_id}}</td>
+                    <td><div class="job">
+                        <p>{{ job.name }}</p>
+                    </div></td>
+                    <td><div class="job">
+                        <p>{{ job.description }}</p>
+                    </div></td>
+                    <td>{{job.sbatch_job_id}}</td>
+                    <td>{{job.N0}}</td>
+                    <td>{{job.N1}}</td>
+                    <td>{{job.N2}}</td>
+                    <td>{{job.N3}}</td>
+                    <td>{{job.N4}}</td>
+                    <td>{{job.N5}}</td>
                   
                 </tr>
 
               </fieldset>
             </table>
+
+            <div class="form-footer">
+                <a href="{% url 'job_view' %}">刷新</a>
+            </div>
 
         </form>
 </body>
