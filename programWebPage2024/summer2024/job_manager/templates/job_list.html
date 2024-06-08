@@ -3,8 +3,17 @@
 {% block content %}
 
 {% for job in jobs %}
+<html lang="en">
+<body>
+    <form method="post">
+    <table>
     <div class="job">
-        <p>{{ job.name }},    {{ job.description }}</p>
+        <p>{{ job.name }},    {{ job.description }}, {{ job.created_at}}, {{status}}, <div class="form-footer"><a href="{% url 'job_view' job.pk %}">查看</a>
+        </div>,{{end}}</p>
     </div>
+    </table>
+    </form>
+</body>
+</html>
 {% endfor %}
 {% endblock %}

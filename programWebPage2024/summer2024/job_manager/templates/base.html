@@ -8,12 +8,13 @@
     <!-- <link rel="stylesheet" href="css/style.css"> -->
     <style>
         body {
+            
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100%;
             margin: 0;
         }
         header {
@@ -26,8 +27,12 @@
         footer {
             margin-top: auto;
         }
+        .element {
+            max-width: 100%; /* 确保在缩放后元素可以适应屏幕宽度 */
+        }
         .container {
-            width: 65%;
+            overflow: auto;
+            width: 75%;
             border: 1px solid #ddd;
             padding: 30px;
             border-radius: 10px;
