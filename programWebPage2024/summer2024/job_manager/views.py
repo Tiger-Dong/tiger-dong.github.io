@@ -64,17 +64,18 @@ def calculate_parameter(job: Job, chemical_As: list):
         json.dump(parameters, f)
 
     # read shell template file
-    with (tool_path / "test.sh.template").open("r") as f:
-        shell_template = f.read()
+    # with (tool_path / "test.sh.template").open("r") as f:
+    #     shell_template = f.read()
     test_sh = tool_path / "test.sh"
-    with test_sh.open("w") as f:
-        f.write(shell_template.replace("{{job_id}}", str(job.id)))
+    # with test_sh.open("w") as f:
+    #     f.write(shell_template.replace("{{job_id}}", str(job.id)))
 
     completed_process = subprocess.run(
         [
             "sbatch",
             test_sh.as_posix(),
         ],
+        cwd=tool_path.as_posix(),
         text=True,
         capture_output=True,
     )
