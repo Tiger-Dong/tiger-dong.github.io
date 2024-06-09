@@ -28,6 +28,7 @@ class Job(models.Model):
     N5 = models.FloatField(null = True)
 
     sbatch_job_id = models.CharField(max_length=20, null = True)
+    status = models.CharField(max_length=40, default="created")
     
 
     def __str__(self):

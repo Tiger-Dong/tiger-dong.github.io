@@ -27,12 +27,38 @@
         footer {
             margin-top: auto;
         }
+        .job-links {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            font-size: 20px; /* 调整文字大小 */
+            font-family: Arial, sans-serif; /* 调整字体样式 */
+        }
+
+        .job-links form {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin-right: 20px; /* 在链接之间添加右边距 */
+        }
+
+        .job-links form:hover {
+            background-color: #ddd;
+        }
+
+        .job-links a:not(:last-child) {
+            margin-right: 20px; /* 仅为最后一个链接之前的链接添加右边距 */
+        }
+
         .element {
             max-width: 100%; /* 确保在缩放后元素可以适应屏幕宽度 */
         }
         .container {
             overflow: auto;
-            width: 75%;
+            width: 100%;
             border: 1px solid #ddd;
             padding: 30px;
             border-radius: 10px;
@@ -75,9 +101,9 @@
 <body>
     <header>              
         <!-- Add your navigation links here -->
-        <nav>
-            <a href="{% url 'job_list' %}">All Jobs</a>
-            <a href="{% url 'job_create' %}">New Job</a>
+        <nav class="job-links">
+            <a href="{% url 'job_list' %}">全部任务列表</a>
+            <a href="{% url 'job_create' %}">新建任务</a>
         </nav>
     </header>
 

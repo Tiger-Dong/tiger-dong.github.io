@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Job, Chemical_A
 from .forms import JobForm, Chemical_AForm, Chemical_AFormSet
 import json
+from math import floor
 from pathlib import Path
 import subprocess
 
@@ -11,11 +12,11 @@ def job_list(request):
     return render(request, "job_list.html", {"jobs": jobs})
 
 
-def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> float:
+def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
     return (
-        float(job.chemial_A_mass)
+        floor((float(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
-        / chemical_A.molecular_mass
+        / chemical_A.molecular_mass) + 0.5)
     )
 
 
@@ -29,7 +30,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     )
     job.save()
     parameters = {"job_id": job.id, "job_name": job.name}
-    parameters["N0"] = job.chemical_B_mass / job.chemical_B_molecular_mass
+    parameters["N0"] = floor((job.chemical_B_mass / job.chemical_B_molecular_mass) + 0.5)
     parameter_mapping = {
         "PTMG1000": "N1",
         "PTMG2000": "N2",
@@ -42,12 +43,12 @@ def calculate_parameter(job: Job, chemical_As: list):
             if key in chemical_A.name:
                 parameters[value] = calcualte_N(job, chemical_A, total_shares_A)
 
-    job.N0 = parameters["N0"]
-    job.N1 = parameters["N1"]
-    job.N2 = parameters["N2"]
-    job.N3 = parameters["N3"]
-    job.N4 = parameters["N4"]
-    job.N5 = parameters["N5"]
+    job.N0 = parameters.get("N0", 0) 
+    job.N1 = parameters.get("N1", 0)
+    job.N2 = parameters.get("N2", 0)
+    job.N3 = parameters.get("N3", 0)
+    job.N4 = parameters.get("N4", 0)
+    job.N5 = parameters.get("N5", 0)
     job.save()
 
     # dump the parameters to a json file
@@ -55,7 +56,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     assert (
         tool_path.exists()
     ), f"{tool_path} does not exist, the test.sh, *.molg and py should be in this folder"
-    parameter_file = tool_path / f"{job.id}.json"
+    parameter_file = tool_path / "config.json"
     print(f"parameter file: {parameter_file}")
 
     # write parameter to parameter file
@@ -69,21 +70,21 @@ def calculate_parameter(job: Job, chemical_As: list):
     with test_sh.open("w") as f:
         f.write(shell_template.replace("{{job_id}}", str(job.id)))
 
-    # completed_process = subprocess.run(
-    #     [
-    #         "sbatch",
-    #         test_sh.as_posix(),
-    #     ],
-    #     text=True,
-    #     capture_output=True,
-    # )
-    # print(f"Return code: {completed_process.returncode}")
-    # print(f"Output: {completed_process.stdout}")
+    completed_process = subprocess.run(
+        [
+            "sbatch",
+            test_sh.as_posix(),
+        ],
+        text=True,
+        capture_output=True,
+    )
+    print(f"Return code: {completed_process.returncode}")
+    print(f"Output: {completed_process.stdout}")
 
     # Search job_id
-    faked_stdout = "Submitted batch job 34880"
-    job.sbatch_job_id = find_sbatch_job_id(faked_stdout)
-    # job.sbatch_job_id =  find_sbatch_job_id(completed_process.stdout)
+    # faked_stdout = "Submitted batch job 34880"
+    # job.sbatch_job_id = find_sbatch_job_id(faked_stdout)
+    job.sbatch_job_id =  find_sbatch_job_id(completed_process.stdout)
     job.save()
 
 
@@ -96,7 +97,33 @@ def find_sbatch_job_id(input_str: str):
 
 def job_view(request, pk):
     job = Job.objects.get(pk=pk)
-
+    status_dict = {
+        "R":"正在运行",
+        "PD": "正在排队",
+        "CG": "即将完成",
+        "CD": "已完成",
+    }
+    # output = """
+    #     JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+    #     34880  gpu-4080     test yuerongx  PD       0:12      1 MW06
+    # """
+    completed_process = subprocess.run(
+        [
+            "squeue",
+        ],
+        text=True,
+        capture_output=True,
+    )
+    output = completed_process.stdout
+    print(f"Return code: {completed_process.returncode}")
+    print(f"Output: {output}")
+    
+    for line in output.split("\n"):
+        if str(job.sbatch_job_id) in line:            
+            job.status = status_dict.get(line.split()[4], "未知状态")
+            print(job.status)
+            job.save()
+    
     return render(request, "job_view.html", {"job": job})
 
 
