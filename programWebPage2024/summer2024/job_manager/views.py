@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from .models import Job, Chemical_A
 from .forms import JobForm, Chemical_AForm, Chemical_AFormSet
 import json
-from math import floor
 from pathlib import Path
 import subprocess
+import os
+# from math import floor
 
 
 def job_list(request):
@@ -14,9 +15,9 @@ def job_list(request):
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
     return (
-        floor((float(job.chemial_A_mass)
+        round(float(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
-        / chemical_A.molecular_mass) + 0.5)
+        / chemical_A.molecular_mass)
     )
 
 
@@ -30,7 +31,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     )
     job.save()
     parameters = {"job_id": job.id, "job_name": job.name}
-    parameters["N0"] = floor((job.chemical_B_mass / job.chemical_B_molecular_mass) + 0.5)
+    parameters["N0"] = round(job.chemical_B_mass / job.chemical_B_molecular_mass)
     parameter_mapping = {
         "PTMG1000": "N1",
         "PTMG2000": "N2",
@@ -63,29 +64,24 @@ def calculate_parameter(job: Job, chemical_As: list):
     with parameter_file.open("w") as f:
         json.dump(parameters, f)
 
-    # read shell template file
-    # with (tool_path / "test.sh.template").open("r") as f:
-    #     shell_template = f.read()
-    test_sh = tool_path / "test.sh"
-    # with test_sh.open("w") as f:
-    #     f.write(shell_template.replace("{{job_id}}", str(job.id)))
-
-    completed_process = subprocess.run(
-        [
-            "sbatch",
-            test_sh.as_posix(),
-        ],
-        cwd=tool_path.as_posix(),
-        text=True,
-        capture_output=True,
-    )
-    print(f"Return code: {completed_process.returncode}")
-    print(f"Output: {completed_process.stdout}")
+    if os.environ.get("LOCAL_RUN", "False") == "True":
+        output = "Submitted batch job 34880"
+    else:        
+        completed_process = subprocess.run(
+            [
+                "sbatch",
+                tool_path.joinpath("test.sh").as_posix(),
+            ],
+            cwd=tool_path.as_posix(),
+            text=True,
+            capture_output=True,
+        )        
+        output = completed_process.stdout
+        print(f"Return code: {completed_process.returncode}")
+        print(f"Output: {output}")
 
     # Search job_id
-    # faked_stdout = "Submitted batch job 34880"
-    # job.sbatch_job_id = find_sbatch_job_id(faked_stdout)
-    job.sbatch_job_id =  find_sbatch_job_id(completed_process.stdout)
+    job.sbatch_job_id =  find_sbatch_job_id(output)
     job.save()
 
 
@@ -104,27 +100,28 @@ def job_view(request, pk):
         "CG": "即将完成",
         "CD": "已完成",
     }
-    # output = """
-    #     JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-    #     34880  gpu-4080     test yuerongx  PD       0:12      1 MW06
-    # """
-    completed_process = subprocess.run(
-        [
-            "squeue",
-        ],
-        text=True,
-        capture_output=True,
-    )
-    output = completed_process.stdout
-    print(f"Return code: {completed_process.returncode}")
+    output = """
+        JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        34880  gpu-4080     test yuerongx  PD       0:12      1 MW06
+    """
+    if os.environ.get("LOCAL_RUN", "False") == "False":
+        completed_process = subprocess.run(
+            [
+                "squeue",
+            ],
+            text=True,
+            capture_output=True,
+        )
+        output = completed_process.stdout
+        print(f"Return code: {completed_process.returncode}")
     print(f"Output: {output}")
-    
+
     for line in output.split("\n"):
-        if str(job.sbatch_job_id) in line:            
+        if str(job.sbatch_job_id) in line:
             job.status = status_dict.get(line.split()[4], "未知状态")
             print(job.status)
             job.save()
-    
+
     return render(request, "job_view.html", {"job": job})
 
 
