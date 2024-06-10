@@ -20,14 +20,15 @@ class Job(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    N0 = models.FloatField(null = True)
-    N1 = models.FloatField(null = True)
-    N2 = models.FloatField(null = True)
-    N3 = models.FloatField(null = True)
-    N4 = models.FloatField(null = True)
-    N5 = models.FloatField(null = True)
+    N0 = models.IntegerField(null = True)
+    N1 = models.IntegerField(null = True)
+    N2 = models.IntegerField(null = True)
+    N3 = models.IntegerField(null = True)
+    N4 = models.IntegerField(null = True)
+    N5 = models.IntegerField(null = True)
 
     sbatch_job_id = models.CharField(max_length=20, null = True)
+    status = models.CharField(max_length=40, default="created")
     
 
     def __str__(self):

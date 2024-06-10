@@ -1,68 +1,16 @@
 {% extends 'base.html' %}
-{% block content %}
 
+{% block content %}
 <div class="container">
   <form method="POST">
     {% csrf_token %}
     <h2>参数设置</h2>
-    <style>
-      body {
-          font-family: Arial, sans-serif;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100%;
-          margin: 0;
-      }
-      .container {
-          overflow: auto;
-          width: 100%;
-          border: 1px solid #ddd;
-          padding: 30px;
-          border-radius: 10px;
-          background-color: #f9f9f9;
-      }
-      .center-table-header {
-          text-align: center; /* 文本居中 */
-      }
-      h2 {
-          text-align: center;
-      }
-      table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-bottom: 15px;
-      }
-      th, td {
-          border: 1px solid #ddd;
-          text-align: left;
-          padding: 4px;
-      }
-      th {
-          background-color: #f2f2f2;
-      }
-      .form-footer {
-          text-align: center;
-      }
-      input[type="submit"] {
-          cursor: pointer;
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          padding: 10px 35px;
-          border-radius: 10px;
-      }
-      input[type="submit"]:hover {
-          background-color: #45a049;
-      }
-    </style>
-    <div class="container">
     <div>
-        <h4>任务名称：{{job_form.name}}</h4>
-        <div>
+      <h4>任务名称：{{job_form.name}}</h4>
+      <div>
         <h4>任务描述：{{job_form.description}}</h4>
         <div>
-        <h4>理论投料比(B/A):{{job_form.theory_shares_ratio}}</h4>
+          <h4>理论投料比(B/A):{{job_form.theory_shares_ratio}}</h4>
 
     </div>
     <form method="post">
@@ -82,7 +30,7 @@
             <th>投料份数</th>
           </tr>
 
-          <fieldset>
+          <fieldset style="border: 0;">
             {{ chemical_A_formset.management_form }}
             {% for form in chemical_A_formset %}
             <tr>
@@ -92,7 +40,7 @@
               <td>{{ form.molecular_mass}} </td>
               <td>{{ form.shares}} </td>
             </tr>
-            {% endfor %}
+            {% endfor %}          
           </fieldset>
         </table>
 

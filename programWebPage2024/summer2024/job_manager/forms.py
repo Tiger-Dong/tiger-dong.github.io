@@ -13,7 +13,7 @@ class JobForm(forms.ModelForm):
         widget=forms.NumberInput(attrs={'readonly':'readonly'})) 
     class Meta:
         model = Job
-        exclude = ['N0', 'N1', 'N2', 'N3', 'N4', 'N5', 'sbatch_job_id']
+        exclude = ['N0', 'N1', 'N2', 'N3', 'N4', 'N5', 'sbatch_job_id', 'status']
         fields = '__all__'
         
 class Chemical_AForm(forms.ModelForm):

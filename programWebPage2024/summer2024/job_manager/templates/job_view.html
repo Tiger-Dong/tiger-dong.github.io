@@ -15,7 +15,7 @@
         }
         .container {
             overflow: auto;
-            width: 65%;
+            width: 80%;
             border: 1px solid #ddd;
             padding: 30px;
             border-radius: 10px;
@@ -59,9 +59,9 @@
 </head>
 <body>
     <div class="container">
-        <h2>目前进度(job_view)</h2>
+        <h2>作业状态</h2>
         <div>
-            <h4>当前状态(Status): <"r"></h4>
+            <h4>当前作业状态: {{job.status}}</h4>
         </div>
     <form method="post">
             <table>
@@ -80,7 +80,7 @@
                     <th>N5</th>
                   </tr>
             
-            <fieldset>
+            
 
                 <tr>
                     <td><div class="job">
@@ -89,17 +89,16 @@
                     <td><div class="job">
                         <p>{{ job.description }}</p>
                     </div></td>
-                    <td>{{job.sbatch_job_id}}</td>
-                    <td>{{f"{job.N0:.3f}"}}</td>
-                    <td>{{job.N1}}</td>
-                    <td>{{job.N2}}</td>
-                    <td>{{job.N3}}</td>
-                    <td>{{job.N4}}</td>
-                    <td>{{job.N5}}</td>
-                  
+                    <td>{{ job.sbatch_job_id }}</td>
+                    <td>{{ job.N0 }}</td>
+                    <td>{{ job.N1 }}</td>
+                    <td>{{ job.N2 }}</td>
+                    <td>{{ job.N3 }}</td>
+                    <td>{{ job.N4 }}</td>
+                    <td>{{ job.N5 }}</td>
                 </tr>
 
-              </fieldset>
+            
             </table>
 
             <div class="form-footer">
