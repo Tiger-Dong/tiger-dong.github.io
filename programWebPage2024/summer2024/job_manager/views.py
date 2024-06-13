@@ -15,10 +15,10 @@ def job_list(request):
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
     return (
-        round(float(job.chemial_A_mass)
+        round(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
         / chemical_A.molecular_mass)
-    )
+    
 
 
 def calculate_parameter(job: Job, chemical_As: list):
@@ -102,7 +102,7 @@ def job_view(request, pk):
     }
     output = """
         JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-        34880  gpu-4080     test yuerongx  PD       0:12      1 MW06
+        34880  gpu-4080     test yuerongx  CG       0:12      1 MW06
     """
     if os.environ.get("LOCAL_RUN", "False") == "False":
         completed_process = subprocess.run(
@@ -112,7 +112,7 @@ def job_view(request, pk):
             text=True,
             capture_output=True,
         )
-        output = completed_process.stdout
+        output = completed_process.stdoutu
         print(f"Return code: {completed_process.returncode}")
     print(f"Output: {output}")
 

@@ -11,7 +11,7 @@
     <th>详细信息</th>
 </tr>  
 
-    {% for job in jobs %}  
+    {% for job in jobs %}
         <tr>
             <td>{{ job.name }}</td>
             <td>{{ job.description }}</td>
@@ -19,6 +19,7 @@
             <td>{{ job.status }}</td>
             <td><a href="{% url 'job_view' job.pk %}">查看</a></td>
         </tr>
+
     {% endfor %}    
 </table>
     
