@@ -1,16 +1,25 @@
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from .models import Job, Chemical_A
 from .forms import JobForm, Chemical_AForm, Chemical_AFormSet
 import json
 from pathlib import Path
 import subprocess
 import os
+from .models import Job
 # from math import floor
 
 
 def job_list(request):
-    jobs = Job.objects.all()
-    return render(request, "job_list.html", {"jobs": jobs})
+    jobs_list = Job.objects.all()  # 获取所有 jobs
+    paginator = Paginator(jobs_list, 10)  # 每页 x 个 jobs
+
+    page_number = request.GET.get('page')  # 从请求中获取页码
+    page_obj = paginator.get_page(page_number)  # 获取当前页码的 jobs
+
+    print(page_obj.number, page_obj.paginator.num_pages, page_obj.has_previous(), page_obj.has_next())
+
+    return render(request, 'job_list.html', {'page_obj': page_obj})
 
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
