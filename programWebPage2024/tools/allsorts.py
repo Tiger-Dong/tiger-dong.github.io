@@ -1,52 +1,38 @@
 #!/usr/bin/python
+from poetry import cu_gala as gala 
+from poetry import _options
 import math
 import time 
 start_time = time.time()  # 获取开始时间  
 
 # ----------- start 读取配置文件, 生成 output folder -----------
-import argparse
 import json
 from pathlib import Path
-# Create the parser
-parser = argparse.ArgumentParser(description='Read a config file.')
-parser.add_argument('--config', type=str, help='Path to the config file')
-args = parser.parse_args()
-if not args.config:
-    print("ERROR: config file is not provided!")
-    exit()
 
-with open(args.config) as f:
+with open("config.json") as f:
     config = json.load(f)
 ### 待传入参数：数目
-N0 = config['N0']  # N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
-N1 = config['N1']  # N1=5 #mol1:PTMG1000
-N2 = config['N2']  # N2=0 #mol2:PTMG2000
-N3 = config['N3']  # N3=10 #mol3:330N
-N4 = config['N4']  # N4=0 #mol4:BDO
-N5 = config['N5']  # N5=0 #mol5:水
+N0 = config.get('N0',0)  # N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
+N1 = config.get('N1',0)  # N1=5 #mol1:PTMG1000
+N2 = config.get('N2',0)  # N2=0 #mol2:PTMG2000
+N3 = config.get('N3',0)  # N3=10 #mol3:330N
+N4 = config.get('N4',0)  # N4=0 #mol4:BDO
+N5 = config.get('N5',0)  # N5=0 #mol5:水
 
 job_id = str(config['job_id'])
 output_dir = Path.cwd()/job_id
 output_dir.mkdir(parents=True, exist_ok=True)
 
-import sys
-# Remove '--config' and its value, to avoid conflict with poetry
-if '--config' in sys.argv:
-    index = sys.argv.index('--config')
-    sys.argv.pop(index)  # Removes '--config'
-    sys.argv.pop(index)  # Removes '123.json'
 print(f"N0: {N0}, N1: {N1}, N2: {N2}, N3: {N3}, N4: {N4}, N5: {N5}, output_dir: {output_dir}") 
 # ----------- end  -----------
 
-from poetry import cu_gala as gala 
-from poetry import _options
 ##待传入参数1.数目 2.温度 3.反应概率
-N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
-N1=5 #mol1:PTMG1000
-N2=0 #mol2:PTMG2000
-N3=10 #mol3:330N
-N4=10 #mol4:BDO
-N5=0 #mol5:水
+# N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
+# N1=5 #mol1:PTMG1000
+# N2=0 #mol2:PTMG2000
+# N3=10 #mol3:330N
+# N4=10 #mol4:BDO
+# N5=0 #mol5:水
 
 T=1.0
 
@@ -83,7 +69,7 @@ N5_switch = int(N5 != 0)
 dt = 0.002
 P=1.0
 filename = "NCO_"+ str(N0) +"_PTMG1000_"+str(N1)+"_PTMG2000_"+str(N2)+"_330N_"+str(N3)+"_BDO_"+str(N4)+"_H2O_"+str(N5)+'.xml'
-build_method = gala.XMLReader(filename)
+build_method = gala.XMLReader(output_dir.joinpath(filename).as_posix())
 perform_config = gala.PerformConfig(_options.gpu)
 all_info = gala.AllInfo(build_method, perform_config)
 app = gala.Application(all_info, dt)  # build up an application with system information and integration time-step
@@ -279,7 +265,7 @@ app.add(zm)
 
 name="NCO_"+ str(N0) +"_PTMG1000_"+str(N1)+"_PTMG2000_"+str(N2)+"_330N_"+str(N3)+"_BDO_"+str(N4)+"_H2O_"+str(N5)
 
-DInfo = gala.DumpInfo(all_info, comp_info, 'data.log')
+DInfo = gala.DumpInfo(all_info, comp_info, f'{job_id}/data.log')
 DInfo.setPeriod(500)# (period)
 DInfo.dumpBoxSize()
 DInfo.dumpVirial(LJ)
@@ -289,14 +275,14 @@ DInfo.dumpVirialMatrix(FENE)
 app.add(DInfo)
 
 #write bin file
-binary2 = gala.BinaryDump(all_info, name)
+binary2 = gala.BinaryDump(all_info, f"{job_id}/{name}")
 binary2.setPeriod(10000)# (period)
 binary2.setOutput(['image', 'bond'])
 binary2.setOutputForRestart()
 app.add(binary2)
  
 
-xml = gala.XMLDump(all_info, "allparticles") # output the configuration files in xml formatxml.setPeriod(100000)# (period)
+xml = gala.XMLDump(all_info, f"{job_id}/allparticles") # output the configuration files in xml formatxml.setPeriod(100000)# (period)
 xml.setPeriod(1000)# (period)
 xml.setOutputType(True)
 xml.setOutputBond(True)

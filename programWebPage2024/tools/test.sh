@@ -19,5 +19,5 @@ cd "$SLURM_SUBMIT_DIR"
 
 # 运行你的命令或脚本
 
-python allsorts.molg --config 31.json
-python allsorts.py  --config 31.json
+python allsorts.molg 
+python allsorts.py  
