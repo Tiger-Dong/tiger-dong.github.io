@@ -26,8 +26,8 @@
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; 第一页</a>
-            <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; 第一页</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">上一页</a>
         {% endif %}
         
         <span class="current">
@@ -35,10 +35,14 @@
         </span>
         
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">下一页</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">最后一页 &raquo;</a>
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">下一页</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">最后一页 &raquo;</a>
         {% endif %}
     </span>
 </div>
+<form method="get">
+    <input type="text" name="search" placeholder="Search jobs..." value="{{ search_query }}">
+    <button type="submit">Search</button>
+</form>
     
 {% endblock %}

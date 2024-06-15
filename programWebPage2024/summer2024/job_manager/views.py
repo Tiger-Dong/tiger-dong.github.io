@@ -11,15 +11,20 @@ from .models import Job
 
 
 def job_list(request):
-    jobs_list = Job.objects.all()  # 获取所有 jobs
-    paginator = Paginator(jobs_list, 10)  # 每页 x 个 jobs
+    search_query = request.GET.get('search', '')  # Capture the search query
+    if search_query:
+        # Filter jobs based on the search query
+        jobs_list = Job.objects.filter(name__icontains=search_query)  # Adjust the filter based on your needs
+    else:
+        jobs_list = Job.objects.all()  # 获取所有 jobs
+
+    paginator = Paginator(jobs_list, 10)  # 每页10个 jobs
 
     page_number = request.GET.get('page')  # 从请求中获取页码
     page_obj = paginator.get_page(page_number)  # 获取当前页码的 jobs
 
-    print(page_obj.number, page_obj.paginator.num_pages, page_obj.has_previous(), page_obj.has_next())
-
-    return render(request, 'job_list.html', {'page_obj': page_obj})
+    # Include the search query in the context so it can be reused in the template
+    return render(request, 'job_list.html', {'page_obj': page_obj, 'search_query': search_query})
 
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
@@ -27,8 +32,6 @@ def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
         round(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
         / chemical_A.molecular_mass)
-    
-
 
 def calculate_parameter(job: Job, chemical_As: list):
     total_shares_A = sum([chemical_A.shares for chemical_A in chemical_As])
@@ -102,36 +105,40 @@ def find_sbatch_job_id(input_str: str):
 
 
 def job_view(request, pk):
-    job = Job.objects.get(pk=pk)
-    status_dict = {
-        "R":"正在运行",
-        "PD": "正在排队",
-        "CG": "即将完成",
-        "CD": "已完成",
-    }
-    output = """
-        JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-        34880  gpu-4080     test yuerongx  CG       0:12      1 MW06
-    """
-    if os.environ.get("LOCAL_RUN", "False") == "False":
-        completed_process = subprocess.run(
-            [
-                "squeue",
-            ],
-            text=True,
-            capture_output=True,
-        )
-        output = completed_process.stdoutu
-        print(f"Return code: {completed_process.returncode}")
-    print(f"Output: {output}")
+    if request.method == "POST":
+        request.description = request.POST.get("description")
+        return redirect("job_view", pk=pk)
+    else:
+        job = Job.objects.get(pk=pk)
+        status_dict = {
+            "R":"正在运行",
+            "PD": "正在排队",
+            "CG": "即将完成",
+            "CD": "已完成",
+        }
+        output = """
+            JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+            34880  gpu-4080     test yuerongx  CG       0:12      1 MW06
+        """
+        if os.environ.get("LOCAL_RUN", "False") == "False":
+            completed_process = subprocess.run(
+                [
+                    "squeue",
+                ],
+                text=True,
+                capture_output=True,
+            )
+            output = completed_process.stdoutu
+            print(f"Return code: {completed_process.returncode}")
+        print(f"Output: {output}")
 
-    for line in output.split("\n"):
-        if str(job.sbatch_job_id) in line:
-            job.status = status_dict.get(line.split()[4], "未知状态")
-            print(job.status)
-            job.save()
+        for line in output.split("\n"):
+            if str(job.sbatch_job_id) in line:
+                job.status = status_dict.get(line.split()[4], "未知状态")
+                print(job.status)
+                job.save()
 
-    return render(request, "job_view.html", {"job": job})
+        return render(request, "job_view.html", {"job": job})
 
 
 def job_create(request):
