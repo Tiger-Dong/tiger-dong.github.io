@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 import os
 from .models import Job
+from django.http import HttpResponse
 # from math import floor
 
 
@@ -106,8 +107,9 @@ def find_sbatch_job_id(input_str: str):
 
 def job_view(request, pk):
     if request.method == "POST":
-        request.description = request.POST.get("description")
-        return redirect("job_view", pk=pk)
+        job.description = request.POST.get("description")
+        job.save()
+        return HttpResponse("Success", content_type="text/plain", status=200)
     else:
         job = Job.objects.get(pk=pk)
         status_dict = {

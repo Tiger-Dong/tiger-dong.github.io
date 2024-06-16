@@ -57,6 +57,38 @@
         }
     </style>
 
+    <script>
+    function editDescription() {
+        console.log("Editing description...");
+        // Toggle visibility
+        document.getElementById('descriptionText').style.display = 'none';
+        document.getElementById('descriptionEdit').style.display = 'block';
+        document.getElementById('editDescriptionBtn').style.display = 'none'; 
+        document.getElementById('saveDescriptionBtn').style.display = 'block'; // Show save button
+    }
+    
+    function saveDescription() {
+        var editedText = document.getElementById('descriptionEdit').value;
+        document.getElementById('descriptionText').textContent = editedText;
+        // Toggle visibility back
+        document.getElementById('descriptionEdit').style.display = 'none';
+        document.getElementById('descriptionText').style.display = 'block';
+        document.getElementById('saveDescriptionBtn').style.display = 'none'; // Hide save button
+        document.getElementById('editDescriptionBtn').style.display = 'block'; 
+        
+        // AJAX request to send editedText to the server
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'job_view' job.id %}", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                // Handle successful update here, e.g., show a success message
+                console.log("Description updated successfully.");
+            }
+        };
+        xhr.send("description=" + encodeURIComponent(editedText) + "&jobId={{job.id}}");
+    }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -65,7 +97,7 @@
             <h4>当前作业状态: {{job.status}}</h4>
         </div>
     <form method="post">
-        {% csrf_token %}
+
             <table>
                 <tr>
                     <th colspan="9"class="center-table-header">目前进度</th>
@@ -86,8 +118,8 @@
                         <div class="job">
                             <p id="descriptionText">{{ job.description }}</p>
                             <textarea id="descriptionEdit" style="display:none;">{{ job.description }}</textarea>
-                            <button onclick="editDescription()">Edit</button>
-                            <button onclick="saveDescription()" style="display:none;">Save</button>
+                            <button type="button" onclick="editDescription()" id="editDescriptionBtn">Edit</button>
+                            <button type="button" onclick="saveDescription()" id="saveDescriptionBtn" style="display:none;">Save</button>
                         </div>
                     </td>
                     <td>{{ job.sbatch_job_id }}</td>
@@ -116,34 +148,6 @@
             <p>© 2024 Job Management - 铁科翼辰计算平台</p>
         </footer>
 
-        <script>
-            function editDescription() {
-                // Toggle visibility
-                document.getElementById('descriptionText').style.display = 'none';
-                document.getElementById('descriptionEdit').style.display = 'block';
-                document.querySelector('.job button:nth-child(3)').style.display = 'block'; // Show save button
-            }
-            
-            function saveDescription() {
-                var editedText = document.getElementById('descriptionEdit').value;
-                document.getElementById('descriptionText').textContent = editedText;
-                // Toggle visibility back
-                document.getElementById('descriptionText').style.display = 'block';
-                document.getElementById('descriptionEdit').style.display = 'none';
-                document.querySelector('.job button:nth-child(3)').style.display = 'none'; // Hide save button
-                
-                // AJAX request to send editedText to the server
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "job_view/{{job.id}}" , true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); //跟服务器通讯，用的 url 编码，用的 form 形式，
-                xhr.onreadystatechange = function() {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        // Handle successful update here, e.g., show a success message
-                        console.log("Description updated successfully.");
-                    }
-                };
-                xhr.send("description=" + encodeURIComponent(editedText) + "&jobId={{job.id}}");
-            }
-            </script>
+        
 </body>
 </html>
