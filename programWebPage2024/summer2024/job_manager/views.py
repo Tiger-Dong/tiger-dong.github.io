@@ -106,12 +106,12 @@ def find_sbatch_job_id(input_str: str):
 
 
 def job_view(request, pk):
+    job = Job.objects.get(pk=pk)
     if request.method == "POST":
         job.description = request.POST.get("description")
         job.save()
         return HttpResponse("Success", content_type="text/plain", status=200)
     else:
-        job = Job.objects.get(pk=pk)
         status_dict = {
             "R":"正在运行",
             "PD": "正在排队",

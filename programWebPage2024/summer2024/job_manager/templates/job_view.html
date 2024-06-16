@@ -80,6 +80,7 @@
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "{% url 'job_view' job.id %}", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("X-CSRFTOKEN", "{{ csrf_token }}");
         xhr.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                 // Handle successful update here, e.g., show a success message
@@ -97,7 +98,7 @@
             <h4>当前作业状态: {{job.status}}</h4>
         </div>
     <form method="post">
-
+        {% csrf_token %}
             <table>
                 <tr>
                     <th colspan="9"class="center-table-header">目前进度</th>
