@@ -29,8 +29,7 @@ def job_list(request):
 
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
-    return (
-        round(job.chemial_A_mass)
+    return round(float(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
         / chemical_A.molecular_mass)
 
@@ -130,7 +129,7 @@ def job_view(request, pk):
                 text=True,
                 capture_output=True,
             )
-            output = completed_process.stdoutu
+            output = completed_process.stdout
             print(f"Return code: {completed_process.returncode}")
         print(f"Output: {output}")
 
