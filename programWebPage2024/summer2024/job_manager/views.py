@@ -1,15 +1,38 @@
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from .models import Job, Chemical_A
 from .forms import JobForm, Chemical_AForm, Chemical_AFormSet
 import json
 from pathlib import Path
 import subprocess
 import os
+from .models import Job
+from django.http import HttpResponse
+from tools.draw_all_variables import draw_all_variables
+
+status_dict = {
+    "R":"正在运行",
+    "PD": "正在排队",
+    "CG": "即将完成",
+    "CD": "已完成",
+}
 
 
 def job_list(request):
-    jobs = Job.objects.all()
-    return render(request, "job_list.html", {"jobs": jobs})
+    search_query = request.GET.get('search', '')  # Capture the search query
+    if search_query:
+        # Filter jobs based on the search query
+        jobs_list = Job.objects.filter(name__icontains=search_query)  # Adjust the filter based on your needs
+    else:
+        jobs_list = Job.objects.all()  # 获取所有 jobs
+
+    paginator = Paginator(jobs_list, 10)  # 每页10个 jobs
+
+    page_number = request.GET.get('page')  # 从请求中获取页码
+    page_obj = paginator.get_page(page_number)  # 获取当前页码的 jobs
+
+    # Include the search query in the context so it can be reused in the template
+    return render(request, 'job_list.html', {'page_obj': page_obj, 'search_query': search_query})
 
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
@@ -30,6 +53,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     )
     job.save()
     parameters = {"job_id": job.id, "job_name": job.name}
+    parameters["Temperature"] = job.temperature
     parameters["N0"] = round(job.chemical_B_mass / job.chemical_B_molecular_mass)
     parameter_mapping = {
         "PTMG1000": "N1",
@@ -52,7 +76,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     job.save()
 
     # dump the parameters to a json file
-    tool_path = Path.cwd().parent / "tools"
+    tool_path = Path.cwd() / "tools"
     assert (
         tool_path.exists()
     ), f"{tool_path} does not exist, the test.sh, *.molg and py should be in this folder"
@@ -80,6 +104,7 @@ def calculate_parameter(job: Job, chemical_As: list):
         print(f"Output: {output}")
     # Search job_id    
     job.sbatch_job_id = find_sbatch_job_id(output)
+    job.status = status_dict.get("R", "正在运行")
     job.save()
 
 
@@ -92,35 +117,56 @@ def find_sbatch_job_id(input_str: str):
 
 def job_view(request, pk):
     job = Job.objects.get(pk=pk)
-    status_dict = {
-        "R": "正在运行",
-        "PD": "正在排队",
-        "CG": "即将完成",
-        "CD": "已完成",
-    }
+    if request.method == "POST":
+        job.description = request.POST.get("description")
+        job.save()
+        return HttpResponse("Success", content_type="text/plain", status=200)
+    
+    image_name = "all_variables.png"
+    img1_path = f"{job.id}/{image_name}"
+    if Path.cwd().joinpath("tools/{img1_path}").exists():
+        return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+    
+    #    $ squeue  --job 34880     
     output = """
         JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-        34880  gpu-4080     test yuerongx  PD       0:12      1 MW06
+        34880  gpu-4080     test yuerongx  CG       0:12      1 MW06
     """
+    return_code = 0
     if os.environ.get("LOCAL_RUN", "False") == "False":
         completed_process = subprocess.run(
             [
                 "squeue",
+                "--job",
+                str(job.sbatch_job_id),
             ],
             text=True,
             capture_output=True,
         )
         output = completed_process.stdout
+        return_code = completed_process.returncode
         print(f"Return code: {completed_process.returncode}")
     print(f"Output: {output}")
+    
+    # $ squeue  --job 35671
+    # slurm_load_jobs error: Invalid job id specified    
+    if return_code != 0: # job is finished
+        job.status = status_dict.get("CD", "已完成")
+        job.save()
+        if Path.cwd().joinpath(f"tools/{job.id}").exists():
+            draw_all_variables(job.N0, job.N1, job.N2, job.N3, job.N4, job.N5, 
+                           Path.cwd()/f"tools/{job.id}")
+        else:
+            img1_path = "wip.jpg"            
+        return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+    
 
-    for line in output.split("\n"):
-        if str(job.sbatch_job_id) in line:
-            job.status = status_dict.get(line.split()[4], "未知状态")
-            print(job.status)
-            job.save()
-
-    return render(request, "job_view.html", {"job": job})
+    line = output.split("\n")[1]
+    if str(job.sbatch_job_id) in line:        
+        job.status = status_dict.get(line.split()[4], "未知状态")        
+        job.save()
+    img1_path = "wip.jpg"     
+    return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
 
 
 def job_create(request):

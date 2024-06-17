@@ -2,15 +2,47 @@
 
 {% block content %}
 
-
 <table>
-{% for job in jobs %}        
-    <div class="job">
-        <p>{{ job.name }},    {{ job.description }}, {{ job.created_at}}, {{job.status}}, 
-            <a href="{% url 'job_view' job.pk %}">查看</a>
-        </p>
-    </div>
-{% endfor %}    
+<tr>
+    <th>任务名称</th>
+    <th>任务描述</th>
+    <th>生成时间</th>
+    <th>任务状态</th>
+    <th>详细信息</th>
+</tr>  
+
+    {% for job in page_obj %}
+        <tr>
+            <td>{{ job.name }}</td>
+            <td>{{ job.description }}</td>
+            <td>{{ job.created_at }}</td>
+            <td>{{ job.status }}</td>
+            <td><a href="{% url 'job_view' job.pk %}">查看</a></td>
+        </tr>
+
+    {% endfor %}    
 </table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; 第一页</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">上一页</a>
+        {% endif %}
+        
+        <span class="current">
+            页码 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}.
+        </span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">下一页</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">最后一页 &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+<form method="get">
+    <input type="text" name="search" placeholder="Search jobs..." value="{{ search_query }}">
+    <button type="submit">Search</button>
+</form>
     
 {% endblock %}
