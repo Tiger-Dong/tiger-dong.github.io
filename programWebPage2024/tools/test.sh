@@ -21,3 +21,5 @@ cd "$SLURM_SUBMIT_DIR"
 
 python allsorts.molg --config 31.json
 python allsorts.py  --config 31.json
+python darw_cluster.py 
+python draw_all_variables.py
