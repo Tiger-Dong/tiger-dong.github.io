@@ -19,5 +19,7 @@ cd "$SLURM_SUBMIT_DIR"
 
 # 运行你的命令或脚本
 
-python allsorts.molg 
-python allsorts.py  
+python allsort.molg 
+python allsort.py  
+python darw_cluster.py 
+python draw_all_variables.py
