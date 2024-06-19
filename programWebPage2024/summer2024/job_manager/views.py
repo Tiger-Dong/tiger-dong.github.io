@@ -28,6 +28,20 @@ def job_list(request):
     return render(request, 'job_list.html', {'page_obj': page_obj, 'search_query': search_query})
 
 
+def delete_job(request, job_id):
+    if request.method == 'POST':
+        job = get_object_or_404(Job, pk=job_id)
+        # Optional: Check if the current user is allowed to delete this job
+        # if request.user != job.owner:
+        #     return HttpResponseForbidden('You are not allowed to delete this job.')
+        job.delete()
+        # Redirect to the job list page with a success message
+        return redirect('job_list')
+    else:
+        # If the request method is not POST, return an error (405 Method Not Allowed)
+        return HttpResponseNotAllowed(['POST'])
+
+
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
     return round(float(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
