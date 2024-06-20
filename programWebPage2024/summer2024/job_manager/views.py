@@ -8,7 +8,14 @@ import subprocess
 import os
 from .models import Job
 from django.http import HttpResponse
-# from math import floor
+from tools.draw_all_variables import draw_all_variables
+
+status_dict = {
+    "R":"正在运行",
+    "PD": "正在排队",
+    "CG": "即将完成",
+    "CD": "已完成",
+}
 
 
 def job_list(request):
@@ -57,6 +64,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     )
     job.save()
     parameters = {"job_id": job.id, "job_name": job.name}
+    parameters["Temperature"] = job.temperature
     parameters["N0"] = round(job.chemical_B_mass / job.chemical_B_molecular_mass)
     parameter_mapping = {
         "PTMG1000": "N1",

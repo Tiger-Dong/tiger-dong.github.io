@@ -132,10 +132,16 @@
                 <th>图1</th>
                 <th>图2</th>
             </tr>
-            <tr>
+            <!-- <tr>
                 <img src="rcluster.png" alt="rcluster.png">
                 <img src="pic_path.as_posix()" alt="All Variables Plot">
+            </tr> -->
+            <tr>
+                {% load static %}
+                <!-- 图一 -->
+                <td><img src="{% static img1_name %}" alt="图1" style="width: 100%;"></td> 
                 <!-- 图二 -->
+                <td><img src="{% static img1_name %}" alt="图2" style="width: 100%;"></td>                
             </tr>
                 
             <!-- 刷新与返回 -->
