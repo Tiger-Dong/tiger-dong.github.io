@@ -132,36 +132,52 @@ def job_view(request, pk):
         job.description = request.POST.get("description")
         job.save()
         return HttpResponse("Success", content_type="text/plain", status=200)
-    else:
-        status_dict = {
-            "R":"正在运行",
-            "PD": "正在排队",
-            "CG": "即将完成",
-            "CD": "已完成",
-        }
-        output = """
-            JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-            34880  gpu-4080     test yuerongx  CG       0:12      1 MW06
-        """
-        if os.environ.get("LOCAL_RUN", "False") == "False":
-            completed_process = subprocess.run(
-                [
-                    "squeue",
-                ],
-                text=True,
-                capture_output=True,
-            )
-            output = completed_process.stdout
-            print(f"Return code: {completed_process.returncode}")
-        print(f"Output: {output}")
+    
+    image_name = "all_variables.png"
+    img1_path = f"{job.id}/{image_name}"
+    if Path.cwd().joinpath("tools/{img1_path}").exists():
+        return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+    
+    #    $ squeue  --job 34880     
+    output = """
+        JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+        34880  gpu-4080     test yuerongx  CG       0:12      1 MW06
+    """
+    return_code = 0
+    if os.environ.get("LOCAL_RUN", "False") == "False":
+        completed_process = subprocess.run(
+            [
+                "squeue",
+                "--job",
+                str(job.sbatch_job_id),
+            ],
+            text=True,
+            capture_output=True,
+        )
+        output = completed_process.stdout
+        return_code = completed_process.returncode
+        print(f"Return code: {completed_process.returncode}")
+    print(f"Output: {output}")
+    
+    # $ squeue  --job 35671
+    # slurm_load_jobs error: Invalid job id specified    
+    if return_code != 0: # job is finished
+        job.status = status_dict.get("CD", "已完成")
+        job.save()
+        if Path.cwd().joinpath(f"tools/{job.id}").exists():
+            draw_all_variables(job.N0, job.N1, job.N2, job.N3, job.N4, job.N5, 
+                           Path.cwd()/f"tools/{job.id}")
+        else:
+            img1_path = "wip.jpg"            
+        return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+    
 
-        for line in output.split("\n"):
-            if str(job.sbatch_job_id) in line:
-                job.status = status_dict.get(line.split()[4], "未知状态")
-                print(job.status)
-                job.save()
-
-        return render(request, "job_view.html", {"job": job})
+    line = output.split("\n")[1]
+    if str(job.sbatch_job_id) in line:        
+        job.status = status_dict.get(line.split()[4], "未知状态")        
+        job.save()
+    img1_path = "wip.jpg"     
+    return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
 
 
 def job_create(request):
