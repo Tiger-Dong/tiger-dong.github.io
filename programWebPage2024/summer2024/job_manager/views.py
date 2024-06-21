@@ -9,6 +9,7 @@ import os
 from .models import Job
 from django.http import HttpResponse
 from tools.draw_all_variables import draw_all_variables
+from django.shortcuts import get_object_or_404
 
 status_dict = {
     "R":"正在运行",
@@ -132,12 +133,12 @@ def job_view(request, pk):
         job.description = request.POST.get("description")
         job.save()
         return HttpResponse("Success", content_type="text/plain", status=200)
-    
+
     image_name = "all_variables.png"
     img1_path = f"{job.id}/{image_name}"
     if Path.cwd().joinpath("tools/{img1_path}").exists():
         return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
-    
+
     #    $ squeue  --job 34880     
     output = """
         JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
@@ -158,7 +159,7 @@ def job_view(request, pk):
         return_code = completed_process.returncode
         print(f"Return code: {completed_process.returncode}")
     print(f"Output: {output}")
-    
+
     # $ squeue  --job 35671
     # slurm_load_jobs error: Invalid job id specified    
     if return_code != 0: # job is finished
@@ -170,7 +171,7 @@ def job_view(request, pk):
         else:
             img1_path = "wip.jpg"            
         return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
-    
+
 
     line = output.split("\n")[1]
     if str(job.sbatch_job_id) in line:        
