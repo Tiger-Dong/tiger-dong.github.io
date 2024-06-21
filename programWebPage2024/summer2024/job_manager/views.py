@@ -10,6 +10,7 @@ from .models import Job
 from django.http import HttpResponse
 from tools.draw_all_variables import draw_all_variables
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse, HttpResponseNotAllowed
 
 status_dict = {
     "R":"正在运行",
@@ -179,6 +180,26 @@ def job_view(request, pk):
         job.save()
     img1_path = "wip.jpg"     
     return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+
+    # if request.method == 'POST':
+    #     # Assuming 'job_id' is passed as a URL parameter and not in POST data
+    #     job = get_object_or_404(Job, pk=job_id)
+        
+    #     # Extract and validate POST data
+    #     description = request.POST.get('description')
+    #     if not description:
+    #         return JsonResponse({'error': 'Missing description'}, status=400)
+        
+    #     # Update the job object
+    #     job.description = description
+    #     job.save()
+        
+    #     # Return a success response
+    #     return JsonResponse({'message': 'Description updated successfully'})
+    # else:
+    #     # Optionally, handle non-POST requests here
+    #     # For example, return a method not allowed response
+    #     return HttpResponseNotAllowed(['POST'])
 
 
 def job_create(request):
