@@ -138,6 +138,8 @@ def job_view(request, pk):
     image_name = "all_variables.png"
     img1_path = f"{job.id}/{image_name}"
     if Path.cwd().joinpath("tools/{img1_path}").exists():
+        job.status = status_dict.get("CD", "已完成")
+        job.save()
         return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
 
     #    $ squeue  --job 34880     
