@@ -22,4 +22,4 @@ cd "$SLURM_SUBMIT_DIR"
 python allsort.molg 
 python allsort.py 
 python draw_all_variables.py
-python darw_cluster.py 
+python draw_cluster.py 

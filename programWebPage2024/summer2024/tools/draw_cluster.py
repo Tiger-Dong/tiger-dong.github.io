@@ -16,8 +16,14 @@ import matplotlib.pyplot as plt
 from itertools import combinations_with_replacement
 from collections import defaultdict, deque, Counter
 
-
-
+N001=0 #MDI
+N0=int(sys.argv[1]) #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
+N1=0 #mol1:PTMG1000
+N2=0 #mol2:PTMG2000
+N3=0 #mol3:330N
+N4=int(sys.argv[2]) #mol4:BDO
+N5=0 #mol5:水
+N6=0 #mol6:PCCD
 
 base_path = './'
 # 创建一个文件名数组
@@ -114,16 +120,66 @@ def find_clusters(adj_list):
 
 # 获取所有clusters
 clusters = find_clusters(adj_list)
+# 按大小（从大到小）排序clusters
+clusters.sort(key=len, reverse=True)
+unique_clusters_info = set()
+# print(clusters[11])
+# exit()
+NCO_= []
+BDO_ = []
+PPCD_= []
+for cluster in clusters:
+    acount = 0
+    bcount = 0 
+    ccount = 0
+    for element in cluster:
+        if element < 92 * N0 and element % 92 == 0 :
+            acount += 1  
+        if element >= 92 * N0 and element < (92 *N0+ 2* N4 ) and (element-92*N0) % 2 == 0 :
+            bcount += 1
+        if element >= (92 *N0+ 2* N4 ) and  (element-(92 *N0+ 2* N4 )) % 25 == 0 :
+            ccount += 1
+    # NCO_.append(acount)
+    # BDO_.append(bcount)   
+# print("NCO_",NCO_)   
+# print("BDO_",BDO_)
+# exit()          
+    # 将cluster大小和acount, bcount联系起来，并去重
+    unique_clusters_info.add((len(cluster), acount, bcount))            
+# 将unique_clusters_info转回列表并按大小（从大到小）排序
+unique_clusters_info = sorted(unique_clusters_info, key=lambda x: x[0], reverse=True)
+# print(unique_clusters_info)
 
-print(clusters[0])
-exit()
+# 从unique_clusters_info中提取NCO_和BDO_
+for info in unique_clusters_info:
+    cluster_size, acount, bcount = info
+    NCO_.append(acount)
+    BDO_.append(bcount)
+    PPCD_.append(ccount)
 
-# 统计clusters大小和数量
 cluster_sizes = [len(cluster) for cluster in clusters]
 size_count = Counter(cluster_sizes)
+sorted_size_count = sorted(size_count.items(), key=lambda x: x[0], reverse=True)
 
-# print("cluster_sizes",cluster_sizes)
-# print("size_count",size_count)
+# print("sorted_size_count",sorted_size_count)
+# exit()
+
+# 创建Markdown表格
+markdown_table = "| Cluster Size | Count | NCO | BDO | PPCD |\n|--------------|-------|-----|-----|-----|\n"
+for cluster_size, count in sorted_size_count:
+    acount = NCO_[cluster_size] if cluster_size < len(NCO_) else 0
+    bcount = BDO_[cluster_size] if cluster_size < len(BDO_) else 0
+    ccount = PPCD_[cluster_size] if cluster_size < len(PPCD_) else 0
+    markdown_table += f"| {cluster_size} | {count} | {acount} | {bcount} | {ccount} |\n"
+
+# 打印Markdown表格
+# print(cluster_size)
+# print(count)
+
+# 将Markdown表格写入文件
+with open("clusters_info.md", "w") as f:
+    f.write(markdown_table)
+
 # exit()
 # 分离横坐标（大小）和纵坐标（数目）
 x = list(size_count.keys())
@@ -138,19 +194,16 @@ spacing = 0.8  # 条形之间的间距比例
 
 # 将x轴值转换为对数刻度的位置
 log_x = np.log10(x)
-
 # 计算条形的实际位置
 bar_positions = log_x - bar_width / 2
 
-# 绘制条形图
 plt.figure(figsize=(10, 6))  # 设置图表大小
 plt.bar(bar_positions, y, color='skyblue', width=bar_width)
-
 # 设置x轴为对数刻度
 plt.yscale('log')
 
 # 设置x轴的取值范围
-x_min, x_max = 0.1, 3000
+x_min, x_max = 1, 3000
 plt.xlim(np.log10(x_min) - bar_width, np.log10(x_max) + bar_width)
 
 # 设置x轴的刻度和标签
@@ -167,7 +220,7 @@ plt.title('Cluster Size vs. Number of Clusters')
 plt.xlabel('Cluster Size')
 plt.ylabel('Number of Clusters')
 
-plt.savefig('rcluster.png', dpi=300)
+plt.savefig("rcluster.png", dpi=300)
 
 # 将数据保存到文本文件中
 # 将数据转换为numpy数组，并垂直堆叠为两列

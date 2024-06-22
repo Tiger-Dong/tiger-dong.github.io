@@ -129,7 +129,7 @@
         }
     };
     xhr.send("description=" + encodeURIComponent(editedText) + "&jobId={{job.id}}");
-    
+
     </script>
 
 </head>
@@ -152,7 +152,12 @@
                 <tr>
                     <th colspan="9"class="center-table-header">目前进度</th>
                 </tr>
-        
+            <!-- 刷新与返回 -->
+            <div class="form-footer">
+                <a href="{% url 'job_view' job.pk %}">刷新</a>
+                <a href="{% url 'job_list' %}">返回</a>
+            </div>
+            
             <!-- 任务名称/内容描述/Sbatch_id -->
                 <tr>
                     <th>任务名称</th>
@@ -175,7 +180,9 @@
                     <td>{{ job.sbatch_job_id }}</td>
 
                 </tr>
+            </table>
 
+            <table>
             <!-- 图片1-2 -->
             <tr>   
                 <th>图1</th>
@@ -188,14 +195,19 @@
                 <!-- 图二 -->
                 <td><img src="{% static img1_name %}" alt="图2" style="width: 100%;"></td>                
             </tr>
-                
-            <!-- 刷新与返回 -->
-                <div class="form-footer">
-                    <a href="{% url 'job_view' job.pk %}">刷新</a>
-                    <a href="{% url 'job_list' %}">返回</a>
-                </div>
-
             </table>
+
+            <table>
+            <!-- md 表格 -->
+            <tr>   
+                <th>md 表格</th>
+            </tr>
+            <!-- <tr>
+                {% load static %}
+                <td><img src="{% static img1_name %}" alt="图1" style="width: 100%;"></td>               
+            </tr> -->
+            </table>
+
         </form>
         <footer>
             <p>© 2024 Job Management - 铁科翼辰计算平台</p>
