@@ -22,7 +22,7 @@ Temperature = config.get('Temperature',30)  #k
 
 job_id = str(config['job_id'])
 output_dir = Path.cwd()/job_id
-output_dir.mkdir(parents=True, exist_ok=True)
+assert  output_dir.exists(), f"dir {output_dir.as_posix()} doesn't exist"
 
 print(f"N0: {N0}, N1: {N1}, N2: {N2}, N3: {N3}, N4: {N4}, N5: {N5}, output_dir: {output_dir}") 
 # ----------- end  -----------

@@ -8,10 +8,10 @@ import subprocess
 import os
 from .models import Job
 from django.http import HttpResponse
-from tools.draw_all_variables import draw_all_variables
+from loguru import logger
 
 status_dict = {
-    "R":"正在运行",
+    "R": "正在运行",
     "PD": "正在排队",
     "CG": "即将完成",
     "CD": "已完成",
@@ -19,20 +19,24 @@ status_dict = {
 
 
 def job_list(request):
-    search_query = request.GET.get('search', '')  # Capture the search query
+    search_query = request.GET.get("search", "")  # Capture the search query
     if search_query:
         # Filter jobs based on the search query
-        jobs_list = Job.objects.filter(name__icontains=search_query)  # Adjust the filter based on your needs
+        jobs_list = Job.objects.filter(
+            name__icontains=search_query
+        )  # Adjust the filter based on your needs
     else:
         jobs_list = Job.objects.all()  # 获取所有 jobs
 
     paginator = Paginator(jobs_list, 10)  # 每页10个 jobs
 
-    page_number = request.GET.get('page')  # 从请求中获取页码
+    page_number = request.GET.get("page")  # 从请求中获取页码
     page_obj = paginator.get_page(page_number)  # 获取当前页码的 jobs
 
     # Include the search query in the context so it can be reused in the template
-    return render(request, 'job_list.html', {'page_obj': page_obj, 'search_query': search_query})
+    return render(
+        request, "job_list.html", {"page_obj": page_obj, "search_query": search_query}
+    )
 
 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
@@ -86,10 +90,10 @@ def calculate_parameter(job: Job, chemical_As: list):
     # write parameter to parameter file
     with parameter_file.open("w") as f:
         json.dump(parameters, f)
-        
+
     if os.environ.get("LOCAL_RUN", "False") == "True":
         output = "Submitted batch job 34880"
-    else:        
+    else:
         completed_process = subprocess.run(
             [
                 "sbatch",
@@ -98,7 +102,8 @@ def calculate_parameter(job: Job, chemical_As: list):
             cwd=tool_path.as_posix(),
             text=True,
             capture_output=True,
-        )        
+        )
+
         output = completed_process.stdout
         print(f"Return code: {completed_process.returncode}")
         print(f"Output: {output}")
@@ -121,17 +126,20 @@ def job_view(request, pk):
         job.description = request.POST.get("description")
         job.save()
         return HttpResponse("Success", content_type="text/plain", status=200)
-    
-    image_name = "all_variables.png"
-    img1_path = f"{job.id}/{image_name}"
-    if Path.cwd().joinpath("tools/{img1_path}").exists():
-        return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
-    
-    #    $ squeue  --job 34880     
-    output = """
-        JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-        34880  gpu-4080     test yuerongx  CG       0:12      1 MW06
-    """
+
+    wip_path = "wip.jpg"
+    img1_path = f"{job.id}/all_variables.png"
+    img2_path = f"{job.id}/rcluster.png"
+    if Path.cwd().joinpath(f"tools/{img1_path}").exists():
+        if job.status != status_dict.get("CD", "已完成"):
+            job.status = status_dict.get("CD", "已完成")
+            job.save
+        snd_img_path = img2_path if not Path.cwd().joinpath("tools/{img2_path}").exists() else wip_path
+        return render(request, "job_view.html", {"job": job, "img1_name": img1_path, "img2_name": snd_img_path})
+
+    #    $ squeue  --job 34880
+    output = """JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+                34880  gpu-4080     test yuerongx  CG       0:12      1 MW06"""
     return_code = 0
     if os.environ.get("LOCAL_RUN", "False") == "False":
         completed_process = subprocess.run(
@@ -147,26 +155,21 @@ def job_view(request, pk):
         return_code = completed_process.returncode
         print(f"Return code: {completed_process.returncode}")
     print(f"Output: {output}")
-    
-    # $ squeue  --job 35671
-    # slurm_load_jobs error: Invalid job id specified    
-    if return_code != 0: # job is finished
-        job.status = status_dict.get("CD", "已完成")
-        job.save()
-        if Path.cwd().joinpath(f"tools/{job.id}").exists():
-            draw_all_variables(job.N0, job.N1, job.N2, job.N3, job.N4, job.N5, 
-                           Path.cwd()/f"tools/{job.id}")
-        else:
-            img1_path = "wip.jpg"            
-        return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
-    
 
-    line = output.split("\n")[1]
-    if str(job.sbatch_job_id) in line:        
-        job.status = status_dict.get(line.split()[4], "未知状态")        
-        job.save()
-    img1_path = "wip.jpg"     
-    return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+    # $ squeue  --job 35671
+    # slurm_load_jobs error: Invalid job id specified
+    if return_code != 0:  # job is finished
+        job.status = status_dict.get("CD", "已完成")
+    else:
+        line = output.split("\n")[1]
+        if str(job.sbatch_job_id) in line:
+            job.status = status_dict.get(line.split()[4], "未知状态")
+            job.save()
+        else:
+            logger.error(f"job id {job.sbatch_job_id} is not in the output: {output}")
+
+    
+    return render(request, "job_view.html", {"job": job, "img1_name": wip_path, "img2_name": wip_path})
 
 
 def job_create(request):
