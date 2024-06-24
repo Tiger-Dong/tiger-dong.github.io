@@ -115,9 +115,6 @@ def find_clusters(adj_list):
 # 获取所有clusters
 clusters = find_clusters(adj_list)
 
-print(clusters[0])
-exit()
-
 # 统计clusters大小和数量
 cluster_sizes = [len(cluster) for cluster in clusters]
 size_count = Counter(cluster_sizes)
@@ -167,7 +164,7 @@ plt.title('Cluster Size vs. Number of Clusters')
 plt.xlabel('Cluster Size')
 plt.ylabel('Number of Clusters')
 
-plt.savefig('rcluster.png', dpi=300)
+plt.savefig('cluster.png', dpi=300)
 
 # 将数据保存到文本文件中
 # 将数据转换为numpy数组，并垂直堆叠为两列

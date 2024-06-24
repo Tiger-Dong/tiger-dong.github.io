@@ -51,7 +51,7 @@ def delete_job(request, job_id):
         return HttpResponseNotAllowed(['POST'])
 
 
-def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
+def calculate_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
     return round(float(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
         / chemical_A.molecular_mass)
@@ -78,7 +78,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     for chemical_A in chemical_As:
         for key, value in parameter_mapping.items():
             if key in chemical_A.name:
-                parameters[value] = calcualte_N(job, chemical_A, total_shares_A)
+                parameters[value] = calculate_N(job, chemical_A, total_shares_A)
 
     job.N0 = parameters.get("N0", 0) 
     job.N1 = parameters.get("N1", 0)
@@ -89,7 +89,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     job.save()
 
     # dump the parameters to a json file
-    tool_path = Path.cwd().parent / "tools"
+    tool_path = Path.cwd()/ "tools"
     assert (
         tool_path.exists()
     ), f"{tool_path} does not exist, the test.sh, *.molg and py should be in this folder"
@@ -135,12 +135,18 @@ def job_view(request, pk):
         job.save()
         return HttpResponse("Success", content_type="text/plain", status=200)
 
-    image_name = "all_variables.png"
-    img1_path = f"{job.id}/{image_name}"
+    image1_name = "all_variables.png"
+    img1_path = f"{job.id}/{image1_name}"
+    image2_name = "cluster.png"
+    img2_path = f"{job.id}/{image2_name}"
     if Path.cwd().joinpath("tools/{img1_path}").exists():
         job.status = status_dict.get("CD", "已完成")
         job.save()
         return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+    if Path.cwd().joinpath("tools/{img2_path}").exists():
+        job.status = status_dict.get("CD", "已完成")
+        job.save()
+        return render(request, "job_view.html", {"job": job, "img2_name": img2_path})
 
     #    $ squeue  --job 34880     
     output = """
@@ -180,8 +186,9 @@ def job_view(request, pk):
     if str(job.sbatch_job_id) in line:        
         job.status = status_dict.get(line.split()[4], "未知状态")        
         job.save()
-    img1_path = "wip.jpg"     
-    return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+    img1_path = "wip.jpg" 
+    img2_path = "wip.jpg"      
+    return render(request, "job_view.html", {"job": job, "img1_name": img1_path, "img2_name": img2_path})
 
     # if request.method == 'POST':
     #     # Assuming 'job_id' is passed as a URL parameter and not in POST data

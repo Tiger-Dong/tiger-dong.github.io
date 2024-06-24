@@ -16,20 +16,44 @@ import matplotlib.pyplot as plt
 from itertools import combinations_with_replacement
 from collections import defaultdict, deque, Counter
 
+# ----------- start 读取配置文件, 生成 output folder -----------
+import json
+from pathlib import Path
+
+with open("config.json") as f:
+    config = json.load(f)
+### 待传入参数：数目
+N0 = config.get('N0',0)   # N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
+N1 = config.get('N1',0)  # N1=5 #mol1:PTMG1000
+N2 = config.get('N2',0)  # N2=0 #mol2:PTMG2000
+N3 = config.get('N3',0)  # N3=10 #mol3:330N
+N4 = config.get('N4',0)  # N4=0 #mol4:BDO
+N5 = config.get('N5',0)  # N5=0 #mol5:水
+Temperature = config.get('Temperature',30)  #k
+
+job_id = str(config['job_id'])
+output_dir = Path.cwd()/job_id
+assert  output_dir.exists(), f"dir {output_dir.as_posix()} doesn't exist"
+
+print(f"N0: {N0}, N1: {N1}, N2: {N2}, N3: {N3}, N4: {N4}, N5: {N5}, output_dir: {output_dir}") 
+# ----------- end  -----------
+
+
 N001=0 #MDI
-N0=int(sys.argv[1]) #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
-N1=0 #mol1:PTMG1000
-N2=0 #mol2:PTMG2000
-N3=0 #mol3:330N
-N4=int(sys.argv[2]) #mol4:BDO
-N5=0 #mol5:水
+# N0=int(sys.argv[1]) #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
+# N1=0 #mol1:PTMG1000
+# N2=0 #mol2:PTMG2000
+# N3=0 #mol3:330N
+# N4=int(sys.argv[2]) #mol4:BDO
+# N5=0 #mol5:水
 N6=0 #mol6:PCCD
 
+image1_name:str='cluster.png'
 base_path = './'
 # 创建一个文件名数组
 file_names = []
 for i in range(1000000,201000001, 1000000):  # 从 0 到 20100000
-    filename = f"particles.{i:010d}.xml"  # 格式化文件名，使数字部分有 10 位，前面补零
+    filename = f"{job_id}.{i:010d}.xml"  # 格式化文件名，使数字部分有 10 位，前面补零
     filepath = os.path.join(base_path, filename)  # 构建完整路径
     if os.path.isfile(filepath):  # 检查文件是否存在
         file_names.append(filename)  # 如果文件存在，则添加到文件名数组
@@ -177,7 +201,8 @@ for cluster_size, count in sorted_size_count:
 # print(count)
 
 # 将Markdown表格写入文件
-with open("clusters_info.md", "w") as f:
+cluster_path = f"{job_id}/clusters_info.md"
+with open("{cluster_path}", "w") as f:
     f.write(markdown_table)
 
 # exit()
@@ -220,7 +245,7 @@ plt.title('Cluster Size vs. Number of Clusters')
 plt.xlabel('Cluster Size')
 plt.ylabel('Number of Clusters')
 
-plt.savefig("rcluster.png", dpi=300)
+plt.savefig("cluster.png", dpi=300)
 
 # 将数据保存到文本文件中
 # 将数据转换为numpy数组，并垂直堆叠为两列

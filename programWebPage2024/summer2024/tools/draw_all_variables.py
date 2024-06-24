@@ -12,7 +12,7 @@ from pathlib import Path
 # N5=0 #mol5:水
 
 def draw_all_variables(N0:int, N1:int,N2:int ,N3:int, N4:int ,N5:int, base_path:Path,
-                       image_name:str='all_variables.png'):
+                       image1_name:str='all_variables.png'):
     init_NCO=N0*2
     init_PTMG1000=N1*2
     init_PTMG2000=N2*2
@@ -127,8 +127,8 @@ def draw_all_variables(N0:int, N1:int,N2:int ,N3:int, N4:int ,N5:int, base_path:
     # plt.text(0.5, -0.15, text, transform=plt.gca().transAxes, ha='center')
     plt.grid(True)
     plt.legend()  
-    pic_path = base_path / image_name
-    plt.savefig( pic_path.as_posix())  
+    pic1_path = base_path / image1_name
+    plt.savefig( pic1_path.as_posix())  
     return
 
 

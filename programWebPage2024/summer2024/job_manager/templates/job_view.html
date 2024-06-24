@@ -135,9 +135,9 @@
 </head>
 <body>
     <div class="container">
-        <h2>作业状态</h2>
+        <h2>任务状态</h2>
         <div>
-            <h4>当前作业状态: {{job.status}}</h4>
+            <h4>当前任务状态: {{job.status}}</h4>
             <button onclick="printPage()">打印/保存为PDF</button>
 
             <script>
@@ -157,7 +157,7 @@
                 <a href="{% url 'job_view' job.pk %}">刷新</a>
                 <a href="{% url 'job_list' %}">返回</a>
             </div>
-            
+
             <!-- 任务名称/内容描述/Sbatch_id -->
                 <tr>
                     <th>任务名称</th>
@@ -193,7 +193,7 @@
                 <!-- 图一 -->
                 <td><img src="{% static img1_name %}" alt="图1" style="width: 100%;"></td> 
                 <!-- 图二 -->
-                <td><img src="{% static img1_name %}" alt="图2" style="width: 100%;"></td>                
+                <td><img src="{% static img2_name %}" alt="图2" style="width: 100%;"></td>                
             </tr>
             </table>
 
