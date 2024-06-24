@@ -32,10 +32,10 @@ N5 = config.get('N5',0)  # N5=0 #mol5:水
 Temperature = config.get('Temperature',30)  #k
 
 job_id = str(config['job_id'])
-output_dir = Path.cwd()/job_id
-assert  output_dir.exists(), f"dir {output_dir.as_posix()} doesn't exist"
+base_path = job_id
+assert  Path(base_path).exists(), f"dir {base_path} doesn't exist"
 
-print(f"N0: {N0}, N1: {N1}, N2: {N2}, N3: {N3}, N4: {N4}, N5: {N5}, output_dir: {output_dir}") 
+print(f"N0: {N0}, N1: {N1}, N2: {N2}, N3: {N3}, N4: {N4}, N5: {N5}, output_dir: {base_path}") 
 # ----------- end  -----------
 
 
@@ -53,7 +53,7 @@ base_path = './'
 # 创建一个文件名数组
 file_names = []
 for i in range(1000000,201000001, 1000000):  # 从 0 到 20100000
-    filename = f"{job_id}.{i:010d}.xml"  # 格式化文件名，使数字部分有 10 位，前面补零
+     filename = f"particles.{i:010d}.xml"  # 格式化文件名，使数字部分有 10 位，前面补零
     filepath = os.path.join(base_path, filename)  # 构建完整路径
     if os.path.isfile(filepath):  # 检查文件是否存在
         file_names.append(filename)  # 如果文件存在，则添加到文件名数组
@@ -201,8 +201,7 @@ for cluster_size, count in sorted_size_count:
 # print(count)
 
 # 将Markdown表格写入文件
-cluster_path = f"{job_id}/clusters_info.md"
-with open("{cluster_path}", "w") as f:
+with open(f"{base_path}/clusters_info.md", "w") as f:
     f.write(markdown_table)
 
 # exit()
@@ -245,12 +244,12 @@ plt.title('Cluster Size vs. Number of Clusters')
 plt.xlabel('Cluster Size')
 plt.ylabel('Number of Clusters')
 
-plt.savefig("cluster.png", dpi=300)
+plt.savefig(f"{base_path}/rcluster.png", dpi=300)
 
 # 将数据保存到文本文件中
 # 将数据转换为numpy数组，并垂直堆叠为两列
 data = np.vstack((x, y)).T
-filename = "cluster distribution.txt"
+filename = f"{base_path}/cluster_distribution.txt"
 header = "Cluster Size\tNumber of Clusters"
 np.savetxt(filename, data, fmt='%.6f', header=header, comments='', delimiter='\t')
 exit()

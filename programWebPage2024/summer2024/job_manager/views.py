@@ -11,13 +11,16 @@ from django.http import HttpResponse
 from tools.draw_all_variables import draw_all_variables
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponseNotAllowed
+from loguru import logger
+
 
 status_dict = {
-    "R":"正在运行",
+    "R": "正在运行",
     "PD": "正在排队",
     "CG": "即将完成",
     "CD": "已完成",
 }
+
 
 
 def job_list(request):
@@ -117,7 +120,8 @@ def calculate_parameter(job: Job, chemical_As: list):
         print(f"Output: {output}")
 
     # Search job_id
-    job.sbatch_job_id =  find_sbatch_job_id(output)
+    job.sbatch_job_id = find_sbatch_job_id(output)
+    job.status = status_dict.get("R", "正在运行")
     job.save()
 
 
@@ -135,25 +139,21 @@ def job_view(request, pk):
         job.save()
         return HttpResponse("Success", content_type="text/plain", status=200)
 
-    image1_name = "all_variables.png"
-    img1_path = f"{job.id}/{image1_name}"
-    image2_name = "cluster.png"
-    img2_path = f"{job.id}/{image2_name}"
-    if Path.cwd().joinpath("tools/{img1_path}").exists():
-        job.status = status_dict.get("CD", "已完成")
-        job.save()
-        return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
-    if Path.cwd().joinpath("tools/{img2_path}").exists():
-        job.status = status_dict.get("CD", "已完成")
-        job.save()
-        return render(request, "job_view.html", {"job": job, "img2_name": img2_path})
+    wip_path = "wip.jpg"
+    img1_path = f"{job.id}/all_variables.png"
+    img2_path = f"{job.id}/rcluster.png"
+    if Path.cwd().joinpath(f"tools/{img1_path}").exists():
+        if job.status != status_dict.get("CD", "已完成"):
+            job.status = status_dict.get("CD", "已完成")
+            job.save
+        snd_img_path = img2_path if not Path.cwd().joinpath("tools/{img2_path}").exists() else wip_path
+        return render(request, "job_view.html", {"job": job, "img1_name": img1_path, "img2_name": snd_img_path})
 
-    #    $ squeue  --job 34880     
-    output = """
-        JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-        34880  gpu-4080     test yuerongx  CG       0:12      1 MW06
-    """
+    #    $ squeue  --job 34880
+    output = """JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+                34880  gpu-4080     test yuerongx  CG       0:12      1 MW06"""
     return_code = 0
+
     if os.environ.get("LOCAL_RUN", "False") == "False":
         completed_process = subprocess.run(
             [
@@ -170,46 +170,19 @@ def job_view(request, pk):
     print(f"Output: {output}")
 
     # $ squeue  --job 35671
-    # slurm_load_jobs error: Invalid job id specified    
-    if return_code != 0: # job is finished
+    # slurm_load_jobs error: Invalid job id specified
+    if return_code != 0:  # job is finished
         job.status = status_dict.get("CD", "已完成")
-        job.save()
-        if Path.cwd().joinpath(f"tools/{job.id}").exists():
-            draw_all_variables(job.N0, job.N1, job.N2, job.N3, job.N4, job.N5, 
-                           Path.cwd()/f"tools/{job.id}")
+    else:
+        line = output.split("\n")[1]
+        if str(job.sbatch_job_id) in line:
+            job.status = status_dict.get(line.split()[4], "未知状态")
+            job.save()
         else:
-            img1_path = "wip.jpg"            
-        return render(request, "job_view.html", {"job": job, "img1_name": img1_path})
+            logger.error(f"job id {job.sbatch_job_id} is not in the output: {output}")
 
-
-    line = output.split("\n")[1]
-    if str(job.sbatch_job_id) in line:        
-        job.status = status_dict.get(line.split()[4], "未知状态")        
-        job.save()
-    img1_path = "wip.jpg" 
-    img2_path = "wip.jpg"      
-    return render(request, "job_view.html", {"job": job, "img1_name": img1_path, "img2_name": img2_path})
-
-    # if request.method == 'POST':
-    #     # Assuming 'job_id' is passed as a URL parameter and not in POST data
-    #     job = get_object_or_404(Job, pk=job_id)
-        
-    #     # Extract and validate POST data
-    #     description = request.POST.get('description')
-    #     if not description:
-    #         return JsonResponse({'error': 'Missing description'}, status=400)
-        
-    #     # Update the job object
-    #     job.description = description
-    #     job.save()
-        
-    #     # Return a success response
-    #     return JsonResponse({'message': 'Description updated successfully'})
-    # else:
-    #     # Optionally, handle non-POST requests here
-    #     # For example, return a method not allowed response
-    #     return HttpResponseNotAllowed(['POST'])
-
+    
+    return render(request, "job_view.html", {"job": job, "img1_name": wip_path, "img2_name": wip_path})
 
 def job_create(request):
     prefix = "chemicals"

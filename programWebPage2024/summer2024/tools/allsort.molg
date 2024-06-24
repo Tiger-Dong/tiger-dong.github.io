@@ -5,35 +5,48 @@ import string
 import math
 import re
 import random
-lx = 100
-ly = 100
-lz = 100
+lx = 30.0
+ly = 30.0
+lz = 30.0
 
 # ----------- start 读取配置文件, 生成 output folder -----------
+import argparse
 import json
 from pathlib import Path
+
+# Create the parser
+parser = argparse.ArgumentParser(description='Read a config file.')
+parser.add_argument('--config', type=str, help='Path to the config file')
+args = parser.parse_args()
+if not args.config:
+    print("ERROR: config file is not provided!")
+    exit()
 
 with open("config.json") as f:
     config = json.load(f)
 ### 待传入参数：数目
-N0 = config.get('N0',0)   # N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
-N1 = config.get('N1',0)  # N1=5 #mol1:PTMG1000
-N2 = config.get('N2',0)  # N2=0 #mol2:PTMG2000
-N3 = config.get('N3',0)  # N3=10 #mol3:330N
-N4 = config.get('N4',0)  # N4=0 #mol4:BDO
-N5 = config.get('N5',0)  # N5=0 #mol5:水
+N0 = config['N0']  # N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
+N1 = config['N1']  # N1=5 #mol1:PTMG1000
+N2 = config['N2']  # N2=0 #mol2:PTMG2000
+N3 = config['N3']  # N3=10 #mol3:330N
+N4 = config['N4']  # N4=0 #mol4:BDO
+N5 = config['N5']  # N5=0 #mol5:水
 
 job_id = str(config['job_id'])
 output_dir = Path.cwd()/job_id
 output_dir.mkdir(parents=True, exist_ok=True)
-# backup config file
-with output_dir.joinpath("config.json").open("w") as f:
-    json.dump(config, f)
+
+import sys
+# Remove '--config' and its value, to avoid conflict with poetry
+if '--config' in sys.argv:
+    index = sys.argv.index('--config')
+    sys.argv.pop(index)  # Removes '--config'
+    sys.argv.pop(index)  # Removes '123.json'
 
 print(f"N0: {N0}, N1: {N1}, N2: {N2}, N3: {N3}, N4: {N4}, N5: {N5}, output_dir: {output_dir}")    
 # ----------- end  -----------
 
-
+from poetry import molgen
 
 #######################################################################
 #          mol1:PTMG1000

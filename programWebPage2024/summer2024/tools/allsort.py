@@ -6,61 +6,79 @@ import time
 start_time = time.time()  # 获取开始时间  
 
 # ----------- start 读取配置文件, 生成 output folder -----------
+import argparse
 import json
 from pathlib import Path
+# Create the parser
+parser = argparse.ArgumentParser(description='Read a config file.')
+parser.add_argument('--config', type=str, help='Path to the config file')
+args = parser.parse_args()
+if not args.config:
+    print("ERROR: config file is not provided!")
+    exit()
 
-with open("config.json") as f:
+with open(args.config) as f:
     config = json.load(f)
 ### 待传入参数：数目
-N0 = config.get('N0',0)   # N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
-N1 = config.get('N1',0)  # N1=5 #mol1:PTMG1000
-N2 = config.get('N2',0)  # N2=0 #mol2:PTMG2000
-N3 = config.get('N3',0)  # N3=10 #mol3:330N
-N4 = config.get('N4',0)  # N4=0 #mol4:BDO
-N5 = config.get('N5',0)  # N5=0 #mol5:水
+N0 = config['N0']  # N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
+N1 = config['N1']  # N1=5 #mol1:PTMG1000
+N2 = config['N2']  # N2=0 #mol2:PTMG2000
+N3 = config['N3']  # N3=10 #mol3:330N
+N4 = config['N4']  # N4=0 #mol4:BDO
+N5 = config['N5']  # N5=0 #mol5:水
 Temperature = config.get('Temperature',30)  #k
 
 job_id = str(config['job_id'])
 output_dir = Path.cwd()/job_id
-assert  output_dir.exists(), f"dir {output_dir.as_posix()} doesn't exist"
+output_dir.mkdir(parents=True, exist_ok=True)
+
+import sys
+# Remove '--config' and its value, to avoid conflict with poetry
+if '--config' in sys.argv:
+    index = sys.argv.index('--config')
+    sys.argv.pop(index)  # Removes '--config'
+    sys.argv.pop(index)  # Removes '123.json'
 
 print(f"N0: {N0}, N1: {N1}, N2: {N2}, N3: {N3}, N4: {N4}, N5: {N5}, output_dir: {output_dir}") 
 # ----------- end  -----------
 
+from poetry import cu_gala as gala 
+from poetry import _options
 ##待传入参数1.数目 2.温度 3.反应概率
-# N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
-# N1=5 #mol1:PTMG1000
-# N2=0 #mol2:PTMG2000
-# N3=10 #mol3:330N
-# N4=10 #mol4:BDO
-# N5=0 #mol5:水
+N0=100 #mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
+N1=5 #mol1:PTMG1000
+N2=0 #mol2:PTMG2000
+N3=10 #mol3:330N
+N4=10 #mol4:BDO
+N5=0 #mol5:水
+
+T=1.0
 
 
+# dt = 0.005
+# # Temperature = 30  #k
+# T = (Temperature+273.15)*8.3143/1000.0#reduced unit
+# Pressure =1
+# P =Pressure/16.3882449645417
 
-dt = 0.005
-# Temperature = 30  #k
-T = (Temperature+273.15)*8.3143/1000.0#reduced unit
-Pressure =1
-P =Pressure/16.3882449645417
+# Ea_active=50
+# k_b=8.314*10**(-3)
+# T0=273.15+50
+# Ea0=33
+# probability=math.exp(Ea0/(k_b*T0))*math.exp(-Ea_active/(k_b* (Temperature+273.15)))
+# print(probability)
+# # exit()
 
-Ea_active=50
-k_b=8.314*10**(-3)
-T0=273.15+50
-Ea0=33
-probability=math.exp(Ea0/(k_b*T0))*math.exp(-Ea_active/(k_b* (Temperature+273.15)))
-print(probability)
-# exit()
-
-N1_Pr=0.8  #PTMG1000
-N2_Pr=0.8  #PTMG2000
-N3_Pr1=0.08  #330N
-N3_Pr2=0.6
-N3_Pr3 =0.1
-N4_Pr =probability   #BDO
-N5_Pr=0.8   #水 
-N6_Pr=1   #氨基甲酸分解
-N7_Pr=0.6   #胺
-N8_Pr=0.5   #脲  
+N1_Pr=1  #PTMG1000
+N2_Pr=0.5  #PTMG2000
+N3_Pr1=0.6  #330N
+N3_Pr2=0.7
+N3_Pr3 =0.8
+N4_Pr =0.9   #BDO
+N5_Pr=0.4   #水 
+N6_Pr=0.1   #氨基甲酸分解
+N7_Pr=0.2   #胺
+N8_Pr=0.3   #脲   
 
 reaction_probabilities = {
     ('E', 'F'): N1_Pr,
@@ -83,8 +101,10 @@ N4_switch = int(N4 != 0)
 N5_switch = int(N5 != 0)
 
 
+dt = 0.002
+P=1.0
 filename = "NCO_"+ str(N0) +"_PTMG1000_"+str(N1)+"_PTMG2000_"+str(N2)+"_330N_"+str(N3)+"_BDO_"+str(N4)+"_H2O_"+str(N5)+'.xml'
-build_method = gala.XMLReader(output_dir.joinpath(filename).as_posix())
+build_method = gala.XMLReader(filename)
 perform_config = gala.PerformConfig(_options.gpu)
 all_info = gala.AllInfo(build_method, perform_config)
 app = gala.Application(all_info, dt)  # build up an application with system information and integration time-step
@@ -98,9 +118,9 @@ k=30
 r0=1.5   #最大键长                                      
 b0=0.97  #平衡键长
 epsilon0=5
-rcut1=(2)**(1./6.) #cut- off of wca potential
+# rcut1=(2)**(1./6.) #cut- off of wca potential
 
-rcut2=2.5
+# rcut2=2.5
 
 #异氰酸酯NCO
 N0_particles=["E","B","A"]
@@ -108,7 +128,7 @@ N0_bond=["E-B","B-A","B-B","A-A"]
 N0_change_type=["E"]
 N0_new_bond=["B-E1"]
 N0_soft_particles=["A"]
-N0_hard_particles=["E","B", "E1"]
+N0_hard_particles=["B", "E", "E1"]
 
 
 #PTMG1000
@@ -118,7 +138,7 @@ N1_bond=["F-G","G-G"]
 N1_change_type=["F"]
 N1_new_bond=["E1-F1"]
 N1_soft_particles=["G"]
-N1_hard_particles=["F1"]
+# N1_hard_particles=["F1"]
 
 #PTMG2000
 N2_Pr=N2_Pr
@@ -127,7 +147,7 @@ N2_bond=["L-M","M-M"]
 N2_change_type=["L"]
 N2_new_bond=["E1-L1"]
 N2_soft_particles=["M"]
-N2_hard_particles=["L1"]
+# N2_hard_particles=["L1"]
 
 #330N
 N3_Pr1=N3_Pr1
@@ -138,17 +158,17 @@ N3_bond=["I-J","J-J","J-K01","J-K02","J-K03"]
 N3_change_type=["K01", "K02", "K03"]
 N3_new_bond=["E1-K011","E1-K021","E1-K031"]
 N3_soft_particles=["J"]
-N3_hard_particles=["K011","K021","K031"]
+# N3_hard_particles=["K011","K021","K031"]
 
 
 #BDO
 N4_Pr=N4_Pr
-N4_particles=["C"]
-N4_bond=["C-C"]
+N4_particles=["C","D"]
+N4_bond=["C-D"]
 N4_change_type=["C"]
-N4_new_bond=["E1-C1","C1-C1","C-C1"]
+N4_new_bond=["E1-C1"]
 N4_soft_particles=["C"]
-N4_hard_particles=["C1"]
+# N4_hard_particles=["C1"]
 
 #水
 N5_Pr=N5_Pr
@@ -164,7 +184,7 @@ N5_new_bond4=["O4-E2", "E1-O4"]  #脲+异氰酸酯=缩二脲
 N5_new_type=N5_new_type1+N5_new_type2
 N5_new_bond= N5_new_bond1+ N5_new_bond2+ N5_new_bond3+ N5_new_bond4
 N5_soft_particles=["O"]
-N5_hard_particles=["O3"]
+N5_hard_particles=["E1"]
 
 
 #######################################################################
@@ -177,14 +197,13 @@ new_bond= N0_switch * N0_new_bond + N1_switch * N1_new_bond + N2_switch * N2_new
 
 ChangeTypeInReaction1=  N0_switch * N0_change_type + N1_switch * N1_change_type + N2_switch * N2_change_type + N3_switch * N3_change_type + N4_switch * N4_change_type+ N5_switch *N5_change_type1
 
-hard_particles=N0_switch*N0_hard_particles+ N4_switch*N4_hard_particles+N5_switch*N5_hard_particles
+hard_particles=N0_switch*N0_hard_particles+ N5_switch*N5_hard_particles
 soft_particles=N0_switch * N0_soft_particles + N1_switch * N1_soft_particles + N2_switch * N2_soft_particles + N3_switch * N3_soft_particles + N4_switch * N4_soft_particles + N5_switch * N5_soft_particles
 # print("old_particles:",old_particles)
 # print("old_bond:",old_bond)
 # print("change_typelist:",change_typelist1)
 # print("new_bond:",new_bond)
 # print("hard_particles:",hard_particles)
-
 # print("soft_particles:",soft_particles)
 # exit()
 #######################################################################
@@ -231,10 +250,10 @@ for new_particles in new_list:
     all_info.addParticleType(new_particles)
 #     print("all_info.addParticleType",new_particles)
 # exit()
-all_particles=hard_particles+soft_particles+old_particles+new_list
+all_particles=old_particles+new_list
 all_bond=old_bond+ new_bond
-# 使用列表推导式和条件语句去重，并保持原始顺序
-all_particles = [x for i, x in enumerate(all_particles) if x not in all_particles[:i]]
+# # 使用列表推导式和条件语句去重，并保持原始顺序
+# all_particles = [x for i, x in enumerate(all_particles) if x not in all_particles[:i]]
 
 # 打印去重后的列表
 # print("all_particles:",all_particles)
@@ -243,49 +262,49 @@ all_particles = [x for i, x in enumerate(all_particles) if x not in all_particle
 neighbor_list = gala.NeighborList(all_info, 2.5 ,0.25)#(,rcut,rbuffer)
 
 #######################################################################
-#          WCA1--Fully mixed
-#######################################################################
-WCA1= gala.LJForce(all_info, neighbor_list,  rcut1*sigma)
-for i in range(len(all_particles)):
-    for j in range(i, len(all_particles)):
-        particle1 = all_particles[i]
-        # if i != j:
-        particle2 = all_particles[j] 
-        if (particle1, particle2) in HH_pairs:
-            epsilon = epsilonHH
-        elif (particle1, particle2) in HS_pairs:
-            epsilon = epsilonSH
-        else:
-            epsilon = epsilonSS
-        WCA1.setParams(f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
-        print("WCA1.setParams"f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
+#          LJForce 
+# #######################################################################
+# WCA1= gala.LJForce(all_info, neighbor_list,  rcut1*sigma)
+# for i in range(len(all_particles)):
+#     for j in range(i, len(all_particles)):
+#         particle1 = all_particles[i]
+#         # if i != j:
+#         particle2 = all_particles[j] 
+#         if (particle1, particle2) in HH_pairs:
+#             epsilon = epsilonHH
+#         elif (particle1, particle2) in HS_pairs:
+#             epsilon = epsilonSH
+#         else:
+#             epsilon = epsilonSS
+#         WCA1.setParams(f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
+#         print("WCA1.setParams"f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
 
-WCA1.setEnergy_shift()
-app.add(WCA1)
+# WCA1.setEnergy_shift()
+# app.add(WCA1)
 
+# #######################################################################
+# #          WCA2--ordinary particles
+# #######################################################################
+# WCA2= gala.LJForce(all_info, neighbor_list,  rcut1*sigma)
+# for i in range(len(all_particles)):
+#     for j in range(i, len(all_particles)):
+#         particle1 = all_particles[i]
+#         # if i != j:
+#         particle2 = all_particles[j] 
+#         if (particle1, particle2) in HH_pairs:
+#             epsilon = 0
+#         elif (particle1, particle2) in HS_pairs:
+#             epsilon = 0
+#         else:
+#             epsilon = epsilonSS
+#         WCA2.setParams(f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
+#         print("WCA2.setParams"f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
+# WCA2.setEnergy_shift()
+# # app.add(WCA2)
+# #######################################################################
+# #          LJForce--Hydrogen bond
 #######################################################################
-#          WCA2--ordinary particles
-#######################################################################
-WCA2= gala.LJForce(all_info, neighbor_list,  rcut1*sigma)
-for i in range(len(all_particles)):
-    for j in range(i, len(all_particles)):
-        particle1 = all_particles[i]
-        # if i != j:
-        particle2 = all_particles[j] 
-        if (particle1, particle2) in HH_pairs:
-            epsilon = 0
-        elif (particle1, particle2) in HS_pairs:
-            epsilon = 0
-        else:
-            epsilon = epsilonSS
-        WCA2.setParams(f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
-        print("WCA2.setParams"f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
-WCA2.setEnergy_shift()
-# app.add(WCA2)
-#######################################################################
-#          LJForce--Hydrogen bond
-#######################################################################
-LJ = gala.LJForce(all_info, neighbor_list, rcut2*sigma) #( , , rcut)
+LJ = gala.LJForce(all_info, neighbor_list, 2.5) #( , , rcut)
 # 循环遍历列表，并为每个元素与其自身配对
 # print(sigma)
 for i in range(len(all_particles)):
@@ -298,17 +317,17 @@ for i in range(len(all_particles)):
         elif (particle1, particle2) in HS_pairs:
             epsilon = epsilonSH
         else:
-            epsilon = 0
-        LJ.setParams(f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
-        print("lj.setParams"f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
+             epsilon = epsilonSS
+        LJ.setParams(f"{particle1}", f"{particle2}", epsilonSS ,sigma ,alpha)
+        # print("lj.setParams"f"{particle1}", f"{particle2}", epsilon ,sigma ,alpha)
 # exit()
-# app.add(LJ)
+app.add(LJ)
 #######################################################################
 #          FENE 
 #######################################################################
 all_info.addBondTypeByPairs()
 FENE = gala.BondForceFENE(all_info) # bond stretching interaction by harmonic potential
-
+#反应物本身的化学键
 for i in range(len(all_bond)):
     bond=all_bond[i]
     FENE.setParams(f"{bond}",k, r0)
@@ -319,8 +338,8 @@ app.add(FENE)
 group = gala.ParticleSet(all_info, "all")# a collection of particles
 comp_info = gala.ComputeInfo(all_info, group)  # calculating system informations, such as temperature, pressure, and momentum
 
-lnvt = gala.LangevinNVT(all_info, group, T, 123)
-app.add(lnvt)
+npt = gala.NPT(all_info, group, comp_info, comp_info,T, P, 0.5 ,1.0) #( 温度，压力,tauT, tauP)
+app.add(npt)
 
 sort_method = gala.Sort(all_info) # memory sorting to improve data reading performance 
 sort_method.setPeriod(80)
@@ -330,37 +349,38 @@ zm = gala.ZeroMomentum(all_info)
 zm.setPeriod(100) 
 app.add(zm) 
 
+name="NCO_"+ str(N0) +"_PTMG1000_"+str(N1)+"_PTMG2000_"+str(N2)+"_330N_"+str(N3)+"_BDO_"+str(N4)+"_H2O_"+str(N5)
 
-DInfo = gala.DumpInfo(all_info, comp_info, f'{job_id}/data.log')
+DInfo = gala.DumpInfo(all_info, comp_info, 'data.log')
 DInfo.setPeriod(500)# (period)
 DInfo.dumpBoxSize()
-# DInfo.dumpVirial(LJ)
-# DInfo.dumpVirial(FENE)
+DInfo.dumpVirial(LJ)
+DInfo.dumpVirial(FENE)
 DInfo.dumpVirialMatrix(LJ)
 DInfo.dumpVirialMatrix(FENE)
 app.add(DInfo)
 
 #write bin file
-binary2 = gala.BinaryDump(all_info, f"{job_id}/particles")
+binary2 = gala.BinaryDump(all_info, name)
 binary2.setPeriod(10000)# (period)
 binary2.setOutput(['image', 'bond'])
 binary2.setOutputForRestart()
 app.add(binary2)
  
 
-xml = gala.XMLDump(all_info, f"{job_id}/particles") # output the configuration files in xml formatxml.setPeriod(100000)# (period)
-xml.setPeriod(100000)# (period)
+xml = gala.XMLDump(all_info, "allparticles") # output the configuration files in xml formatxml.setPeriod(100000)# (period)
+xml.setPeriod(1000)# (period)
 xml.setOutputType(True)
 xml.setOutputBond(True)
-# xml.setOutputImage(True)
-# xml.setOutputVelocity(True)
-# xml.setOutputInit(True)
-# xml.setOutputCris(True)
-# xml.setOutputPotential(True)
+xml.setOutputImage(True)
+xml.setOutputVelocity(True)
+xml.setOutputInit(True)
+xml.setOutputCris(True)
+xml.setOutputPotential(True)
 # xml.setOutputLocalVirial(True)
 # xml.setOutputMass(True)
 app.add(xml)
-app.run(500000)
+app.run(10000)
 
 #######################################################################
 #          resize box
@@ -446,7 +466,7 @@ for type in ChangeTypeInReaction1:
 
 reaction1.setPeriod(200)
 
-xml.setPeriod(1000000)
+xml.setPeriod(2000)
 app.add(reaction1)
 
 
@@ -482,18 +502,17 @@ if N5_switch == 1:
     reaction4.setMaxCris("O3",  3)
     reaction4.setNewBondTypeByPairs()
     reaction4.setChangeTypeInReaction("O3", "O4")
-    reaction4.setChangeTypeInReaction("E", "E1")
     reaction4.setPeriod(200)
   
     app.add(reaction3)
     app.add(reaction2)
     app.add(reaction4)
 
-app.run(200000000)
+app.run(200000)
 
 neighbor_list.printStats()
 
 end_time = time.time()  # 获取结束时间  
   
-elapsed_time = (end_time - start_time)/60  # 计算运行时间  
-print(f"代码运行时间: {elapsed_time}分")
+elapsed_time = end_time - start_time  # 计算运行时间  
+print(f"代码运行时间: {elapsed_time}秒")
