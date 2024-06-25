@@ -48,7 +48,7 @@ for i in range(1000000,201000001, 1000000):  # 从 0 到 20100000
     filename = f"particles.{i:010d}.xml"  # 格式化文件名，使数字部分有 10 位，前面补零
     filepath = os.path.join(base_path, filename)  # 构建完整路径
     if os.path.isfile(filepath):  # 检查文件是否存在
-        file_names.append(filename)  # 如果文件存在，则添加到文件名数组
+        file_names.append(filepath)  # 如果文件存在，则添加到文件名数组
 # print("所有文件名：", file_names)
 
 frame = file_names[-1]
