@@ -184,7 +184,8 @@ def job_view(request, pk):
     if return_code != 0:  # job is finished
         job.status = status_dict.get("CD", "已完成")
     else:
-        line = output.split("\n")[1]
+        line = output.split("\n")[1] 
+        logger.info(f"line is {line}")
         if str(job.sbatch_job_id) in line:
             job.status = status_dict.get(line.split()[4], "未知状态")
             job.save()
