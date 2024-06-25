@@ -138,6 +138,9 @@
                 <!-- 图二 -->
                 <td><img src="{% static img2_name %}" alt="图2" style="width: 100%;"></td>                
             </tr>
+            <tr>
+                {{ markdown_content |safe}}
+            </tr>
                 
             <!-- 刷新与返回 -->
                 <div class="form-footer">

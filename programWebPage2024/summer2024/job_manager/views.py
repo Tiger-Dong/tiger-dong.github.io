@@ -9,6 +9,7 @@ import os
 from .models import Job
 from django.http import HttpResponse
 from loguru import logger
+import markdown
 
 status_dict = {
     "R": "正在运行",
@@ -130,12 +131,21 @@ def job_view(request, pk):
     wip_path = "wip.jpg"
     img1_path = f"{job.id}/all_variables.png"
     img2_path = f"{job.id}/rcluster.png"
+    markdown_path = Path.cwd().joinpath(f"tools/{job.id}/clusters_info.md")
+    markdown_content = ""
     if Path.cwd().joinpath(f"tools/{img1_path}").exists():
         if job.status != status_dict.get("CD", "已完成"):
             job.status = status_dict.get("CD", "已完成")
             job.save
         snd_img_path = img2_path if not Path.cwd().joinpath("tools/{img2_path}").exists() else wip_path
-        return render(request, "job_view.html", {"job": job, "img1_name": img1_path, "img2_name": snd_img_path})
+        if markdown_path.exists():
+            with markdown_path.open() as f:
+                markdown_content = markdown.markdown(f.read(),extensions=['tables'])
+                    
+        return render(request, "job_view.html", {"job": job, 
+                                                 "img1_name": img1_path, 
+                                                 "img2_name": snd_img_path,
+                                                 "markdown_content": markdown_content})
 
     #    $ squeue  --job 34880
     output = """JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
@@ -169,7 +179,10 @@ def job_view(request, pk):
             logger.error(f"job id {job.sbatch_job_id} is not in the output: {output}")
 
     
-    return render(request, "job_view.html", {"job": job, "img1_name": wip_path, "img2_name": wip_path})
+    return render(request, "job_view.html", {"job": job, 
+                                             "img1_name": wip_path, 
+                                             "img2_name": wip_path,
+                                             "markdown_content": markdown_content})
 
 
 def job_create(request):
