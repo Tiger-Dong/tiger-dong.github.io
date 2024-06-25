@@ -149,7 +149,6 @@ plt.title('Variation of Variables with timesteps')
 # plt.text(0.5, -0.15, text, transform=plt.gca().transAxes, ha='center')
 plt.grid(True)
 plt.legend()  
-pic1_path = base_path / image1_name
 plt.savefig(image_path)  
 
 

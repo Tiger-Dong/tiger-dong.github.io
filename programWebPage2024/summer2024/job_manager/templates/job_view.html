@@ -99,8 +99,8 @@
         // AJAX request to send editedText to the server
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "{% url 'job_view' job.id %}", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.setRequestHeader("X-CSRFTOKEN", "{{ csrf_token }}");
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); //跟服务器通讯，用的 url 编码，用的 form 形式，
+                xhr.setRequestHeader("X-CSRFToken", "{{csrf_token }}");
         xhr.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                 // Handle successful update here, e.g., show a success message
@@ -150,7 +150,7 @@
         {% csrf_token %}
             <table>
                 <tr>
-                    <th colspan="9"class="center-table-header">目前进度</th>
+                    <th colspan="9"class="center-table-header">{{ job.id }}: 目前进度 </th>
                 </tr>
             <!-- 刷新与返回 -->
             <div class="form-footer">
@@ -202,10 +202,7 @@
             <tr>   
                 <th>md 表格</th>
             </tr>
-            <!-- <tr>
-                {% load static %}
-                <td><img src="{% static img1_name %}" alt="图1" style="width: 100%;"></td>               
-            </tr> -->
+            {{ markdown_content |safe}}
             </table>
 
         </form>

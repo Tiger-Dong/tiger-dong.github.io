@@ -8,11 +8,8 @@ import subprocess
 import os
 from .models import Job
 from django.http import HttpResponse
-from tools.draw_all_variables import draw_all_variables
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, HttpResponseNotAllowed
 from loguru import logger
-
+import markdown
 
 status_dict = {
     "R": "正在运行",
@@ -22,22 +19,25 @@ status_dict = {
 }
 
 
-
 def job_list(request):
-    search_query = request.GET.get('search', '')  # Capture the search query
+    search_query = request.GET.get("search", "")  # Capture the search query
     if search_query:
         # Filter jobs based on the search query
-        jobs_list = Job.objects.filter(name__icontains=search_query)  # Adjust the filter based on your needs
+        jobs_list = Job.objects.filter(
+            name__icontains=search_query
+        )  # Adjust the filter based on your needs
     else:
         jobs_list = Job.objects.all()  # 获取所有 jobs
 
     paginator = Paginator(jobs_list, 10)  # 每页10个 jobs
 
-    page_number = request.GET.get('page')  # 从请求中获取页码
+    page_number = request.GET.get("page")  # 从请求中获取页码
     page_obj = paginator.get_page(page_number)  # 获取当前页码的 jobs
 
     # Include the search query in the context so it can be reused in the template
-    return render(request, 'job_list.html', {'page_obj': page_obj, 'search_query': search_query})
+    return render(
+        request, "job_list.html", {"page_obj": page_obj, "search_query": search_query}
+    )
 
 
 def delete_job(request, job_id):
@@ -54,10 +54,11 @@ def delete_job(request, job_id):
         return HttpResponseNotAllowed(['POST'])
 
 
-def calculate_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
+def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
     return round(float(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
         / chemical_A.molecular_mass)
+
 
 def calculate_parameter(job: Job, chemical_As: list):
     total_shares_A = sum([chemical_A.shares for chemical_A in chemical_As])
@@ -81,7 +82,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     for chemical_A in chemical_As:
         for key, value in parameter_mapping.items():
             if key in chemical_A.name:
-                parameters[value] = calculate_N(job, chemical_A, total_shares_A)
+                parameters[value] = calcualte_N(job, chemical_A, total_shares_A)
 
     job.N0 = parameters.get("N0", 0) 
     job.N1 = parameters.get("N1", 0)
@@ -142,12 +143,21 @@ def job_view(request, pk):
     wip_path = "wip.jpg"
     img1_path = f"{job.id}/all_variables.png"
     img2_path = f"{job.id}/rcluster.png"
+    markdown_path = Path.cwd().joinpath(f"tools/{job.id}/clusters_info.md")
+    markdown_content = ""
     if Path.cwd().joinpath(f"tools/{img1_path}").exists():
         if job.status != status_dict.get("CD", "已完成"):
             job.status = status_dict.get("CD", "已完成")
             job.save
         snd_img_path = img2_path if not Path.cwd().joinpath("tools/{img2_path}").exists() else wip_path
-        return render(request, "job_view.html", {"job": job, "img1_name": img1_path, "img2_name": snd_img_path})
+        if markdown_path.exists():
+            with markdown_path.open() as f:
+                markdown_content = markdown.markdown(f.read(),extensions=['tables'])
+                    
+        return render(request, "job_view.html", {"job": job, 
+                                                 "img1_name": img1_path, 
+                                                 "img2_name": snd_img_path,
+                                                 "markdown_content": markdown_content})
 
     #    $ squeue  --job 34880
     output = """JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
@@ -182,7 +192,10 @@ def job_view(request, pk):
             logger.error(f"job id {job.sbatch_job_id} is not in the output: {output}")
 
     
-    return render(request, "job_view.html", {"job": job, "img1_name": wip_path, "img2_name": wip_path})
+    return render(request, "job_view.html", {"job": job, 
+                                             "img1_name": wip_path, 
+                                             "img2_name": wip_path,
+                                             "markdown_content": markdown_content})
 
 def job_create(request):
     prefix = "chemicals"
