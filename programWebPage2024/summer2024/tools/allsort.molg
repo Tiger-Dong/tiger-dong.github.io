@@ -32,7 +32,6 @@ with output_dir.joinpath("config.json").open("w") as f:
 
 print(f"N0: {N0}, N1: {N1}, N2: {N2}, N3: {N3}, N4: {N4}, N5: {N5}, output_dir: {output_dir}")    
 # ----------- end  -----------
-from poetry import molgen
 
 #######################################################################
 #          mol1:PTMG1000
