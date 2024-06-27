@@ -131,7 +131,7 @@ def calculate_parameter(job: Job, chemical_As: list):
 def find_sbatch_job_id(input_str: str):
     text_before_id = "Submitted batch job "
     start_index = input_str.find(text_before_id) + len(text_before_id)
-    sbatch_id = input_str[start_index:]
+    sbatch_id = input_str[start_index:].strip()
     return sbatch_id
 
 
@@ -187,7 +187,7 @@ def job_view(request, pk):
         job.status = status_dict.get("CD", "已完成")
     else:
         line = output.split("\n")[1] 
-        logger.info(f"line is {line}")
+        logger.info(f"job_id is:{job.sbatch_job_id} , line is {line}")
         if str(job.sbatch_job_id) in line:
             job.status = status_dict.get(line.split()[4], "未知状态")
             job.save()
