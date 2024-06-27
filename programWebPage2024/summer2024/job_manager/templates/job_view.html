@@ -137,9 +137,9 @@
     <div class="container">
         <h2>任务状态</h2>
         <div>
+            <td>{{ job.id }}</td>
             <h4>当前任务状态: {{job.status}}</h4>
             <button onclick="printPage()">打印/保存为PDF</button>
-
             <script>
                 function printPage() {
                     window.print();

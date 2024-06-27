@@ -65,10 +65,12 @@ def calculate_parameter(job: Job, chemical_As: list):
     total_hydroxyl_A = float(
         sum([chemical_A.hydroxyl * chemical_A.shares for chemical_A in chemical_As])
     )
+    # 计算 理论投料比(B/A）
     job.theory_shares_ratio = (
         4202.0 / (float(job.chemical_B_NCO) * total_shares_A) * total_hydroxyl_A / 56100
     )
     job.save()
+
     parameters = {"job_id": job.id, "job_name": job.name}
     parameters["Temperature"] = job.temperature
     parameters["N0"] = round(job.chemical_B_mass / job.chemical_B_molecular_mass)
@@ -149,7 +151,7 @@ def job_view(request, pk):
         if job.status != status_dict.get("CD", "已完成"):
             job.status = status_dict.get("CD", "已完成")
             job.save
-        snd_img_path = img2_path if not Path.cwd().joinpath("tools/{img2_path}").exists() else wip_path
+        snd_img_path = img2_path if Path.cwd().joinpath("tools/{img2_path}").exists() else wip_path
         if markdown_path.exists():
             with markdown_path.open() as f:
                 markdown_content = markdown.markdown(f.read(),extensions=['tables'])
@@ -232,30 +234,3 @@ def job_create(request):
             "chemical_A_dict": Chemical_A.chemicalData_A,
         },
     )
-
-
-def edit_job(request, pk):
-    job = Job.objects.get(pk=pk)
-    if request.method == "POST":
-        job.name = request.POST.get("name")
-        job.description = request.POST.get("description")
-        job.theory_shares_ratio = request.POST.get("theory_shares_ratio")
-        job.chemical_B_NCO = request.POST.get("chemical_B_NCO")
-        job.chemical_B_functionality = request.POST.get("chemical_B_functionality")
-        job.chemical_B_molecular_mass = request.POST.get("chemical_B_molecular_mass")
-        job.chemical_B_shares = request.POST.get("chemical_B_shares")
-        job.temperature = request.POST.get("temperature")
-        job.save()
-        chemical_A = Chemical_A.objects.get(job=job)
-        chemical_A.name = request.POST.get("chemical_A_name")
-        chemical_A.chemical_A_functionality = request.POST.get(
-            "chemical_A_functionality"
-        )
-        chemical_A.chemical_A_hydroxyl = request.POST.get("chemical_A_hydroxyl")
-        chemical_A.chemical_A_molecular_mass = request.POST.get(
-            "chemical_A_molecular_mass"
-        )
-        chemical_A.chemical_A_shares = request.POST.get("chemical_A_shares")
-        chemical_A.save()
-        return render(request, "edit_job.html", {"job": job, "chemical_A": chemical_A})
-    return render(request, "edit_job.html", {"job": job})

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=test
+#SBATCH --job-name=tiger-test    # 任务名
 #SBATCH --partition=gpu-4080     # 指定分区为cpu-13900,gpu-4080
 #SBATCH --nodelist=               # 指定的节点名，如MW06
 #SBATCH --nodes=1                    # 使用1个节点
