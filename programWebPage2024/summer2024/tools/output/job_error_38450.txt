@@ -1,0 +1,36 @@
+
+***Warning! BondForceFENE, bond 'E-E' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'E-A' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'E-C' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'E-E1' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'E-C1' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'B-C' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'B-C1' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'A-C' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'A-E1' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'A-C1' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'C-E1' has not been given parameters!
+
+
+***Warning! BondForceFENE, bond 'E1-E1' has not been given parameters!
+

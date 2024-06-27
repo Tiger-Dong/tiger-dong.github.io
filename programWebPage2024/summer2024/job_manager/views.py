@@ -151,7 +151,9 @@ def job_view(request, pk):
         if job.status != status_dict.get("CD", "已完成"):
             job.status = status_dict.get("CD", "已完成")
             job.save
-        snd_img_path = img2_path if Path.cwd().joinpath("tools/{img2_path}").exists() else wip_path
+        snd_img_path = img2_path if Path.cwd().joinpath(f"tools/{img2_path}").exists() else wip_path
+        logger.info(f"snd_img_path:{snd_img_path}, image_path:{img2_path}")
+
         if markdown_path.exists():
             with markdown_path.open() as f:
                 markdown_content = markdown.markdown(f.read(),extensions=['tables'])

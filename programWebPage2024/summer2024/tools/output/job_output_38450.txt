@@ -1,0 +1,298 @@
+MOLGEN -- Molecule Generator Plug-Ins
+PYGAMD 1
+PYGAMD - Python GPU-Accelerated Molecular Dynamics Software
+COPYRIGHT
+	PYGAMD Copyright (c) (2021) You-Liang Zhu, Zhong-Yuan Lu
+LICENSE
+	This program is a free software: you can redistribute it and/or 
+	modify it under the terms of the GNU General Public License.
+	This program is distributed in the hope that it will be useful, 
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANT ABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+	See the General Public License v3 for more details.
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+DISCLAIMER
+	The authors of PYGAMD do not guarantee that this program and its 
+	derivatives are free from error. In no event shall the copyright 
+	holder or contributors be liable for any indirect, incidental,
+	special, exemplary, or consequential loss or damage that results 
+	from its use. We also have no responsibility for providing the 
+	service of functional extension of this program to general users.
+USER OBLIGATION 
+	If any results obtained with PYGAMD are published in the scientific 
+	literature, the users have an obligation to distribute this program 
+	and acknowledge our efforts by citing the paper "Y.-L. Zhu et al.,
+	J. Comput. Chem. 2013, 34, 2197-2211" in their article.
+CORRESPONDENCE
+	Dr. You-Liang Zhu,
+	Email: ylzhu@pygamd.com
+Molecule: 92-E[2]B[6]A[84]-348-530
+-- statistics --
+The number of particles: 92
+The number of types: 3
+E
+B
+A
+The number of bonds in a molecule: 91
+The number of types of bonds: 4
+E-B
+B-A
+A-A
+B-B
+The number of angles in a molecule:  0
+The number of types of angles: 0
+The number of dihedrals in a molecule: 0
+The number of types of dihedrals: 0
+generating ...
+complete 1%
+complete 3%
+complete 5%
+complete 6%
+complete 8%
+complete 10%
+complete 11%
+complete 13%
+complete 15%
+complete 16%
+complete 18%
+complete 20%
+complete 21%
+complete 23%
+complete 25%
+complete 26%
+complete 28%
+complete 30%
+complete 31%
+complete 33%
+complete 35%
+complete 36%
+complete 38%
+complete 40%
+complete 41%
+complete 43%
+complete 45%
+complete 46%
+complete 48%
+complete 50%
+Molecule: 2-C[2]-0-2
+-- statistics --
+The number of particles: 2
+The number of types: 1
+C
+The number of bonds in a molecule: 1
+The number of types of bonds: 1
+C-C
+The number of angles in a molecule:  0
+The number of types of angles: 0
+The number of dihedrals in a molecule: 0
+The number of types of dihedrals: 0
+generating ...
+complete 51%
+complete 53%
+complete 55%
+complete 56%
+complete 58%
+complete 60%
+complete 61%
+complete 63%
+complete 65%
+complete 66%
+complete 68%
+complete 70%
+complete 71%
+complete 73%
+complete 75%
+complete 76%
+complete 78%
+complete 80%
+complete 81%
+complete 83%
+complete 85%
+complete 86%
+complete 88%
+complete 90%
+complete 91%
+complete 93%
+complete 95%
+complete 96%
+complete 98%
+complete 100%
+Output xml ...
+Success
+N0: 30, N1: 0, N2: 0, N3: 0, N4: 30, N5: 0, output_dir: /home/yuerongxin/railway_platform/ver_12/tools/15
+GALAMOST v4.0.5
+Compiled at 2023.11.12
+GALAMOST - GPU-Accelerated Large-Scale Molecular Simulation Toolkit
+COPYRIGHT
+	GALAMOST Copyright (c) (2013) You-Liang Zhu and Zhong-Yuan Lu
+LICENSE
+	With the permission given by You-Liang Zhu or Zhong-Yuan Lu 
+DISCLAIMER
+	The authors of GALAMOST do not guarantee that this program and its 
+	derivatives are free from error. In no event shall the copyright 
+	holder or contributors be liable for any indirect, incidental,
+	special, exemplary, or consequential loss or damage that results 
+	from its use. We also have no responsibility for providing the 
+	service of functional extension of this program to general users.
+USER OBLIGATION 
+	If any results obtained with GALAMOST are published in the scientific 
+	literature, the users have an obligation to distribute this program 
+	and acknowledge our efforts by citing the paper "Y.-L. Zhu, H. Liu,
+	Z.-W. Li, H.-J. Qian, G. Milano, and Z.-Y. Lu, J. Comput. Chem. 2013,
+	34, 2197-2211" in their article.
+CORRESPONDENCE
+	College of Chemistry, Jilin University
+	Dr. You-Liang Zhu
+	Email: youliangzhu@jlu.edu.cn
+---- Maintainer --- You-Liang Zhu
+INFO : Reading /home/yuerongxin/railway_platform/ver_12/tools/15/NCO_30_PTMG1000_0_PTMG2000_0_330N_0_BDO_30_H2O_0.xml...
+INFO : Parsing galamost_xml node!
+INFO : --- galamost_xml file read summary
+INFO : 2820 positions at timestep 0
+INFO : 4 particle types
+INFO : 2820 masses
+INFO : 2820 images
+INFO : 2820 inits
+INFO : 2820 crises
+INFO : 2760 bonds
+INFO : --- GALAMOST is running on the following GPUs:
+INFO : GPU id [0]NVIDIA GeForce RTX 4080  76 SM_8.9 @ 2.51 GHz, 16072 MiB DRAM
+INFO : Basic Info object has been created
+INFO : Cell List object has been created
+INFO : NeighborList object has been created
+INFO : LJForce has been created
+INFO : LJForce has been created
+INFO : LJForce has been created
+INFO : Bond Info object has been created
+Preset bond type: E-E, ID: 5
+Preset bond type: E-A, ID: 6
+Preset bond type: E-C, ID: 7
+Preset bond type: E-E1, ID: 8
+Preset bond type: E-C1, ID: 9
+Preset bond type: B-C, ID: 10
+Preset bond type: B-E1, ID: 11
+Preset bond type: B-C1, ID: 12
+Preset bond type: A-C, ID: 13
+Preset bond type: A-E1, ID: 14
+Preset bond type: A-C1, ID: 15
+Preset bond type: C-E1, ID: 16
+Preset bond type: C-C1, ID: 17
+Preset bond type: E1-E1, ID: 18
+Preset bond type: E1-C1, ID: 19
+Preset bond type: C1-C1, ID: 20
+INFO : BondForceFENE has been created
+INFO : Build a set of particles, success, containing 2820 particle members
+INFO : ComputeInfo object has been created, with the number of particles 2820
+INFO : LangevinNVT object has been created
+INFO : Sort object has been created
+INFO : ZeroMomentum has been created for all particles
+INFO : DumpInfo has been created 
+Info : Notice! Creating dump info file '15/data.log'
+INFO : XMLDump has been created 
+INFO : --- Start to run
+INFO : From 0 timestep to 50000 timestep
+INFO : | TPS 1197.43  | Time step 10537  | Remaining time 00:00:32
+INFO : | TPS 1213.42  | Time step 34486  | Remaining time 00:00:12
+INFO : | Average TPS : 1205.43
+INFO : AxialStretching has been created
+INFO : --- Start to run
+INFO : From 50000 timestep to 100000 timestep
+INFO : | TPS 1154.05  | Time step 58755  | Remaining time 00:00:35
+INFO : | TPS 1066.15  | Time step 81837  | Remaining time 00:00:17
+INFO : | Average TPS : 1157.76
+INFO : remove LangevinNVT from application!
+INFO : remove AxialStretching from application!
+INFO : Integration Info object has been created
+INFO : NPT object has been created
+INFO : remove LJForce from application!
+INFO : Angle Info object has been created
+INFO : Dihedral Info object has been created
+INFO : Polymerization has been created
+INFO : Polymerization statistics, 2760 initiators
+INFO : Polymerization statistics, 2820 free monomers
+INFO : --- Start to run
+INFO : From 100000 timestep to 120000 timestep
+INFO : Step Growth Addition Polymerization mode!
+INFO : | TPS 1007.69  | Time step 103161  | Remaining time 00:00:16
+INFO : | Average TPS : 1127.75
+INFO : --- NeighborList status:
+INFO : 28666 normal updates / 1501 forced updates / 0 dangerous updates
+INFO : n_neigh_min: 1 / n_neigh_max: 58 / n_neigh_avg: 23.2851 / n_delay_timesteps: 0
+N0: 30, N1: 0, N2: 0, N3: 0, N4: 30, N5: 0, output_dir: /home/yuerongxin/railway_platform/ver_12/tools/15
+0.000523308479691008
+WCA1.setParamsE E 6 1 1
+WCA1.setParamsE B 6 1 1
+WCA1.setParamsE E1 6 1 1
+WCA1.setParamsE C1 6 1 1
+WCA1.setParamsE A 2.449 1 1
+WCA1.setParamsE C 2.449 1 1
+WCA1.setParamsB B 6 1 1
+WCA1.setParamsB E1 6 1 1
+WCA1.setParamsB C1 6 1 1
+WCA1.setParamsB A 2.449 1 1
+WCA1.setParamsB C 2.449 1 1
+WCA1.setParamsE1 E1 6 1 1
+WCA1.setParamsE1 C1 6 1 1
+WCA1.setParamsE1 A 2.449 1 1
+WCA1.setParamsE1 C 2.449 1 1
+WCA1.setParamsC1 C1 6 1 1
+WCA1.setParamsC1 A 2.449 1 1
+WCA1.setParamsC1 C 2.449 1 1
+WCA1.setParamsA A 1 1 1
+WCA1.setParamsA C 1 1 1
+WCA1.setParamsC C 1 1 1
+WCA2.setParamsE E 0 1 1
+WCA2.setParamsE B 0 1 1
+WCA2.setParamsE E1 0 1 1
+WCA2.setParamsE C1 0 1 1
+WCA2.setParamsE A 0 1 1
+WCA2.setParamsE C 0 1 1
+WCA2.setParamsB B 0 1 1
+WCA2.setParamsB E1 0 1 1
+WCA2.setParamsB C1 0 1 1
+WCA2.setParamsB A 0 1 1
+WCA2.setParamsB C 0 1 1
+WCA2.setParamsE1 E1 0 1 1
+WCA2.setParamsE1 C1 0 1 1
+WCA2.setParamsE1 A 0 1 1
+WCA2.setParamsE1 C 0 1 1
+WCA2.setParamsC1 C1 0 1 1
+WCA2.setParamsC1 A 0 1 1
+WCA2.setParamsC1 C 0 1 1
+WCA2.setParamsA A 1 1 1
+WCA2.setParamsA C 1 1 1
+WCA2.setParamsC C 1 1 1
+lj.setParamsE E 6 1 1
+lj.setParamsE B 6 1 1
+lj.setParamsE E1 6 1 1
+lj.setParamsE C1 6 1 1
+lj.setParamsE A 2.449 1 1
+lj.setParamsE C 2.449 1 1
+lj.setParamsB B 6 1 1
+lj.setParamsB E1 6 1 1
+lj.setParamsB C1 6 1 1
+lj.setParamsB A 2.449 1 1
+lj.setParamsB C 2.449 1 1
+lj.setParamsE1 E1 6 1 1
+lj.setParamsE1 C1 6 1 1
+lj.setParamsE1 A 2.449 1 1
+lj.setParamsE1 C 2.449 1 1
+lj.setParamsC1 C1 6 1 1
+lj.setParamsC1 A 2.449 1 1
+lj.setParamsC1 C 2.449 1 1
+lj.setParamsA A 0 1 1
+lj.setParamsA C 0 1 1
+lj.setParamsC C 0 1 1
+E-B 30 1.5
+B-A 30 1.5
+B-B 30 1.5
+A-A 30 1.5
+C-C 30 1.5
+B-E1 30 1.5
+E1-C1 30 1.5
+C1-C1 30 1.5
+C-C1 30 1.5
+代码运行时间: 1.9106858094533286分
+N0: 30, N1: 0, N2: 0, N3: 0, N4: 30, N5: 0, output_dir: 15
+N0: 30, N1: 0, N2: 0, N3: 0, N4: 30, N5: 0, output_dir: 15

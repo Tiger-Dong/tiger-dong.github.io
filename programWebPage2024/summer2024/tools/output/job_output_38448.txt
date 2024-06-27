@@ -1,0 +1,305 @@
+MOLGEN -- Molecule Generator Plug-Ins
+PYGAMD 1
+PYGAMD - Python GPU-Accelerated Molecular Dynamics Software
+COPYRIGHT
+	PYGAMD Copyright (c) (2021) You-Liang Zhu, Zhong-Yuan Lu
+LICENSE
+	This program is a free software: you can redistribute it and/or 
+	modify it under the terms of the GNU General Public License.
+	This program is distributed in the hope that it will be useful, 
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANT ABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+	See the General Public License v3 for more details.
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+DISCLAIMER
+	The authors of PYGAMD do not guarantee that this program and its 
+	derivatives are free from error. In no event shall the copyright 
+	holder or contributors be liable for any indirect, incidental,
+	special, exemplary, or consequential loss or damage that results 
+	from its use. We also have no responsibility for providing the 
+	service of functional extension of this program to general users.
+USER OBLIGATION 
+	If any results obtained with PYGAMD are published in the scientific 
+	literature, the users have an obligation to distribute this program 
+	and acknowledge our efforts by citing the paper "Y.-L. Zhu et al.,
+	J. Comput. Chem. 2013, 34, 2197-2211" in their article.
+CORRESPONDENCE
+	Dr. You-Liang Zhu,
+	Email: ylzhu@pygamd.com
+Molecule: 92-E[2]B[6]A[84]-348-530
+-- statistics --
+The number of particles: 92
+The number of types: 3
+E
+B
+A
+The number of bonds in a molecule: 91
+The number of types of bonds: 4
+E-B
+B-A
+A-A
+B-B
+The number of angles in a molecule:  0
+The number of types of angles: 0
+The number of dihedrals in a molecule: 0
+The number of types of dihedrals: 0
+generating ...
+complete 1%
+complete 3%
+complete 5%
+complete 6%
+complete 8%
+complete 10%
+complete 11%
+complete 13%
+complete 15%
+complete 16%
+complete 18%
+complete 20%
+complete 21%
+complete 23%
+complete 25%
+complete 26%
+complete 28%
+complete 30%
+complete 31%
+complete 33%
+complete 35%
+complete 36%
+complete 38%
+complete 40%
+complete 41%
+complete 43%
+complete 45%
+complete 46%
+complete 48%
+complete 50%
+Molecule: 2-C[2]-0-2
+-- statistics --
+The number of particles: 2
+The number of types: 1
+C
+The number of bonds in a molecule: 1
+The number of types of bonds: 1
+C-C
+The number of angles in a molecule:  0
+The number of types of angles: 0
+The number of dihedrals in a molecule: 0
+The number of types of dihedrals: 0
+generating ...
+complete 51%
+complete 53%
+complete 55%
+complete 56%
+complete 58%
+complete 60%
+complete 61%
+complete 63%
+complete 65%
+complete 66%
+complete 68%
+complete 70%
+complete 71%
+complete 73%
+complete 75%
+complete 76%
+complete 78%
+complete 80%
+complete 81%
+complete 83%
+complete 85%
+complete 86%
+complete 88%
+complete 90%
+complete 91%
+complete 93%
+complete 95%
+complete 96%
+complete 98%
+complete 100%
+Output xml ...
+Success
+N0: 30, N1: 0, N2: 0, N3: 0, N4: 30, N5: 0, output_dir: /home/yuerongxin/railway_platform/ver_12/tools/13
+GALAMOST v4.0.5
+Compiled at 2023.11.12
+GALAMOST - GPU-Accelerated Large-Scale Molecular Simulation Toolkit
+COPYRIGHT
+	GALAMOST Copyright (c) (2013) You-Liang Zhu and Zhong-Yuan Lu
+LICENSE
+	With the permission given by You-Liang Zhu or Zhong-Yuan Lu 
+DISCLAIMER
+	The authors of GALAMOST do not guarantee that this program and its 
+	derivatives are free from error. In no event shall the copyright 
+	holder or contributors be liable for any indirect, incidental,
+	special, exemplary, or consequential loss or damage that results 
+	from its use. We also have no responsibility for providing the 
+	service of functional extension of this program to general users.
+USER OBLIGATION 
+	If any results obtained with GALAMOST are published in the scientific 
+	literature, the users have an obligation to distribute this program 
+	and acknowledge our efforts by citing the paper "Y.-L. Zhu, H. Liu,
+	Z.-W. Li, H.-J. Qian, G. Milano, and Z.-Y. Lu, J. Comput. Chem. 2013,
+	34, 2197-2211" in their article.
+CORRESPONDENCE
+	College of Chemistry, Jilin University
+	Dr. You-Liang Zhu
+	Email: youliangzhu@jlu.edu.cn
+---- Maintainer --- You-Liang Zhu
+INFO : Reading /home/yuerongxin/railway_platform/ver_12/tools/13/NCO_30_PTMG1000_0_PTMG2000_0_330N_0_BDO_30_H2O_0.xml...
+INFO : Parsing galamost_xml node!
+INFO : --- galamost_xml file read summary
+INFO : 2820 positions at timestep 0
+INFO : 4 particle types
+INFO : 2820 masses
+INFO : 2820 images
+INFO : 2820 inits
+INFO : 2820 crises
+INFO : 2760 bonds
+INFO : --- GALAMOST is running on the following GPUs:
+INFO : GPU id [0]NVIDIA GeForce RTX 4080  76 SM_8.9 @ 2.51 GHz, 16072 MiB DRAM
+INFO : Basic Info object has been created
+INFO : Cell List object has been created
+INFO : NeighborList object has been created
+INFO : LJForce has been created
+INFO : LJForce has been created
+INFO : LJForce has been created
+INFO : Bond Info object has been created
+Preset bond type: E-E, ID: 5
+Preset bond type: E-A, ID: 6
+Preset bond type: E-C, ID: 7
+Preset bond type: E-E1, ID: 8
+Preset bond type: E-C1, ID: 9
+Preset bond type: B-C, ID: 10
+Preset bond type: B-E1, ID: 11
+Preset bond type: B-C1, ID: 12
+Preset bond type: A-C, ID: 13
+Preset bond type: A-E1, ID: 14
+Preset bond type: A-C1, ID: 15
+Preset bond type: C-E1, ID: 16
+Preset bond type: C-C1, ID: 17
+Preset bond type: E1-E1, ID: 18
+Preset bond type: E1-C1, ID: 19
+Preset bond type: C1-C1, ID: 20
+INFO : BondForceFENE has been created
+INFO : Build a set of particles, success, containing 2820 particle members
+INFO : ComputeInfo object has been created, with the number of particles 2820
+INFO : LangevinNVT object has been created
+INFO : Sort object has been created
+INFO : ZeroMomentum has been created for all particles
+INFO : DumpInfo has been created 
+Info : Notice! Creating dump info file '13/data.log'
+INFO : BinaryDump has been created 
+INFO : XMLDump has been created 
+INFO : --- Start to run
+INFO : From 0 timestep to 500000 timestep
+INFO : | TPS 1198.53  | Time step 9840  | Remaining time 00:06:48
+INFO : | TPS 1214.14  | Time step 33811  | Remaining time 00:06:23
+INFO : | TPS 1214.85  | Time step 58094  | Remaining time 00:06:03
+INFO : | TPS 1214.79  | Time step 82392  | Remaining time 00:05:43
+INFO : | TPS 1213.92  | Time step 106688  | Remaining time 00:05:24
+INFO : | TPS 1214.85  | Time step 130967  | Remaining time 00:05:03
+INFO : | TPS 1214.69  | Time step 155264  | Remaining time 00:04:43
+INFO : | TPS 1215.2  | Time step 179558  | Remaining time 00:04:23
+INFO : | TPS 1214.49  | Time step 203862  | Remaining time 00:04:03
+INFO : | TPS 1215.42  | Time step 228152  | Remaining time 00:03:43
+INFO : | TPS 1216.4  | Time step 252461  | Remaining time 00:03:23
+INFO : | TPS 1215.45  | Time step 276789  | Remaining time 00:03:03
+INFO : | TPS 1214.84  | Time step 301098  | Remaining time 00:02:43
+INFO : | TPS 1214.73  | Time step 325395  | Remaining time 00:02:23
+INFO : | TPS 1214.81  | Time step 349690  | Remaining time 00:02:03
+INFO : | TPS 1214.03  | Time step 373987  | Remaining time 00:01:43
+INFO : | TPS 1213.92  | Time step 398268  | Remaining time 00:01:23
+INFO : | TPS 1213.61  | Time step 422547  | Remaining time 00:01:03
+INFO : | TPS 1215.13  | Time step 446820  | Remaining time 00:00:43
+INFO : | TPS 1214.34  | Time step 471123  | Remaining time 00:00:23
+INFO : | TPS 1214.86  | Time step 495410  | Remaining time 00:00:03
+INFO : | Average TPS : 1213.95
+INFO : AxialStretching has been created
+INFO : --- Start to run
+INFO : From 500000 timestep to 1000000 timestep
+INFO : | TPS 1093.43  | Time step 519708  | Remaining time 00:07:19
+INFO : | TPS 1068.05  | Time step 541577  | Remaining time 00:07:09
+INFO : | TPS 1068.64  | Time step 562939  | Remaining time 00:06:48
+INFO : | TPS 1068.81  | Time step 584312  | Remaining time 00:06:28
+INFO : | TPS 1068.92  | Time step 605689  | Remaining time 00:06:08
+INFO : | TPS 1068.9  | Time step 627068  | Remaining time 00:05:48
+INFO : | TPS 1068.42  | Time step 648447  | Remaining time 00:05:29
+INFO : | TPS 1069.76  | Time step 669816  | Remaining time 00:05:08
+INFO : | TPS 1069.9  | Time step 691212  | Remaining time 00:04:48
+INFO : | TPS 1068.1  | Time step 712611  | Remaining time 00:04:29
+INFO : | TPS 1069.38  | Time step 733974  | Remaining time 00:04:08
+INFO : | TPS 1068.73  | Time step 755362  | Remaining time 00:03:48
+INFO : | TPS 1068.97  | Time step 776737  | Remaining time 00:03:28
+INFO : | TPS 1069.92  | Time step 798117  | Remaining time 00:03:08
+INFO : | TPS 1074.58  | Time step 819516  | Remaining time 00:02:47
+INFO : | TPS 1063.38  | Time step 841008  | Remaining time 00:02:29
+INFO : | TPS 1063.38  | Time step 862276  | Remaining time 00:02:09
+INFO : | TPS 1062.58  | Time step 883544  | Remaining time 00:01:49
+INFO : | TPS 1062.89  | Time step 904796  | Remaining time 00:01:29
+INFO : | TPS 1062.83  | Time step 926054  | Remaining time 00:01:09
+INFO : | TPS 1061.71  | Time step 947311  | Remaining time 00:00:49
+INFO : | TPS 1062.58  | Time step 968546  | Remaining time 00:00:29
+INFO : | TPS 1062.21  | Time step 989798  | Remaining time 00:00:09
+INFO : | Average TPS : 1137.71
+INFO : remove LangevinNVT from application!
+INFO : remove AxialStretching from application!
+INFO : Integration Info object has been created
+INFO : NPT object has been created
+INFO : remove LJForce from application!
+INFO : Angle Info object has been created
+INFO : Dihedral Info object has been created
+INFO : Polymerization has been created
+INFO : Polymerization statistics, 2760 initiators
+INFO : Polymerization statistics, 2820 free monomers
+INFO : --- Start to run
+INFO : From 1000000 timestep to 201000000 timestep
+INFO : Step Growth Addition Polymerization mode!
+INFO : | TPS 880.543  | Time step 1011043  | Remaining time 63:05:19
+INFO : | TPS 762.209  | Time step 1028654  | Remaining time 72:52:37
+INFO : | TPS 761.867  | Time step 1043899  | Remaining time 72:54:15
+INFO : | TPS 761.034  | Time step 1059137  | Remaining time 72:58:42
+INFO : | TPS 760.549  | Time step 1074358  | Remaining time 73:01:10
+INFO : | TPS 760.806  | Time step 1089569  | Remaining time 72:59:21
+INFO : | TPS 760.577  | Time step 1104786  | Remaining time 73:00:20
+INFO : | TPS 760.058  | Time step 1119998  | Remaining time 73:03:00
+INFO : | TPS 760.617  | Time step 1135200  | Remaining time 72:59:26
+INFO : | TPS 761.072  | Time step 1150413  | Remaining time 72:56:29
+INFO : | TPS 761.156  | Time step 1165635  | Remaining time 72:55:40
+INFO : | TPS 760.743  | Time step 1180859  | Remaining time 72:57:43
+INFO : | TPS 760.876  | Time step 1196074  | Remaining time 72:56:37
+INFO : | TPS 763.896  | Time step 1211292  | Remaining time 72:38:59
+INFO : | TPS 766.049  | Time step 1226570  | Remaining time 72:26:24
+INFO : | TPS 764.486  | Time step 1241891  | Remaining time 72:34:57
+INFO : | TPS 766.152  | Time step 1257181  | Remaining time 72:25:09
+INFO : | TPS 766.586  | Time step 1272505  | Remaining time 72:22:21
+INFO : | TPS 766.595  | Time step 1287837  | Remaining time 72:21:58
+INFO : | TPS 766.294  | Time step 1303169  | Remaining time 72:23:20
+INFO : | TPS 765.971  | Time step 1318495  | Remaining time 72:24:50
+INFO : | TPS 765.69  | Time step 1333815  | Remaining time 72:26:06
+INFO : | TPS 765.236  | Time step 1349129  | Remaining time 72:28:21
+INFO : | TPS 765.524  | Time step 1364434  | Remaining time 72:26:22
+INFO : | TPS 765.871  | Time step 1379745  | Remaining time 72:24:04
+INFO : | TPS 765.531  | Time step 1395063  | Remaining time 72:25:40
+INFO : | TPS 766.001  | Time step 1410374  | Remaining time 72:22:40
+INFO : | TPS 766.294  | Time step 1425695  | Remaining time 72:20:40
+INFO : | TPS 765.73  | Time step 1441021  | Remaining time 72:23:32
+INFO : | TPS 765.712  | Time step 1456336  | Remaining time 72:23:18
+INFO : | TPS 765.687  | Time step 1471651  | Remaining time 72:23:07
+INFO : | TPS 765.968  | Time step 1486965  | Remaining time 72:21:11
+INFO : | TPS 765.454  | Time step 1502285  | Remaining time 72:23:46
+INFO : | TPS 766.229  | Time step 1517595  | Remaining time 72:19:03
+INFO : | TPS 765.634  | Time step 1532920  | Remaining time 72:22:05
+INFO : | TPS 764.166  | Time step 1548233  | Remaining time 72:30:05
+INFO : | TPS 764.066  | Time step 1563517  | Remaining time 72:30:19
+INFO : | TPS 764.437  | Time step 1578799  | Remaining time 72:27:53
+INFO : | TPS 764.109  | Time step 1594088  | Remaining time 72:29:25
+INFO : | TPS 763.255  | Time step 1609371  | Remaining time 72:33:57
+INFO : | TPS 764.652  | Time step 1624637  | Remaining time 72:25:40
+INFO : | TPS 764.169  | Time step 1639931  | Remaining time 72:28:04
+INFO : | TPS 763.828  | Time step 1655215  | Remaining time 72:29:41
+INFO : | TPS 763.917  | Time step 1670492  | Remaining time 72:28:50
+INFO : | TPS 764.254  | Time step 1685771  | Remaining time 72:26:35
+INFO : | TPS 763.075  | Time step 1701057  | Remaining time 72:32:58
+INFO : | TPS 763.974  | Time step 1716319  | Remaining time 72:27:31
+INFO : | TPS 763.943  | Time step 1731599  | Remaining time 72:27:21

@@ -23,8 +23,6 @@ N3 = config.get('N3',0)  # N3=10 #mol3:330N
 N4 = config.get('N4',0)  # N4=0 #mol4:BDO
 N5 = config.get('N5',0)  # N5=0 #mol5:水
 
-N6 = config.get('N6',0)  # N6=0 #mol6:PCCD
-
 job_id = str(config['job_id'])
 output_dir = Path.cwd()/job_id
 output_dir.mkdir(parents=True, exist_ok=True)
@@ -82,15 +80,6 @@ mol5_topology_str="0-1"
 mol5_particaltypes="O, H"
 
 #######################################################################
-#          mol6:PCCD221
-#######################################################################
-mol6_particalnum=25
-#PsetParticleTypes  R-(P-Q)*11+Q+R
-mol6_particaltypes = "R,"+11*"P,Q,"+"Q,"+"R"
-
-#setTopology 0-1,...,26-27
-mol6_topology_str = ",".join([f"{i}-{i+1}" for i in range(mol6_particalnum-1)])
-#######################################################################
 #          mol0:异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E 
 #######################################################################
 mol0_particalnum=92
@@ -147,15 +136,6 @@ mol5.setInit(0)
 mol5.setCris(0)
 
 
-#PPCD221
-mol6=molgen.Molecule(mol6_particalnum)
-mol6.setTopology(mol6_topology_str)
-mol6.setParticleTypes(mol6_particaltypes)
-mol6.setBondLength(1.0)
-mol6.setInit(0)
-mol6.setCris(0)
-
-
 #异氰酸酯预聚体 NCO值=12.8  E(BA28B)3E
 mol0=molgen.Molecule(mol0_particalnum)
 mol0.setTopology(mol0_topology_str)
@@ -175,31 +155,8 @@ gen0.addMolecule(mol2,N2)
 gen0.addMolecule(mol3,N3)
 gen0.addMolecule(mol4,N4)
 gen0.addMolecule(mol5,N5)
-gen0.addMolecule(mol6,N6)
 
-# filename="NCO_"+ str(N0) +"_PTMG1000_"+str(N1)+"_PTMG2000_"+str(N2)+"_330N_"+str(N3)+"_BDO_"+str(N4)+"_H2O_"+str(N5)
-# # 根据摩尔数是否为0来确定布尔开关
-# N001_switch = int(N001 != 0)
-N0_switch = int(N0 != 0)  # 如果N0不为0，则为1，否则为0
-N1_switch = int(N1 != 0)
-N2_switch = int(N2 != 0)
-N3_switch = int(N3 != 0)
-N4_switch = int(N4 != 0)
-N5_switch = int(N5 != 0)
-N6_switch = int(N6 != 0)
-
-# prat001=N001_switch*("MDI_"+ str(N001))
-prat0=N0_switch*("prepolymer_"+ str(N0))
-prat1=N1_switch*("_PTMG1000_"+str(N1))
-prat2=N2_switch*("_PTMG2000_"+str(N2))
-prat3=N3_switch*("_330N_"+str(N3))
-prat4=N4_switch*("_BDO_"+str(N4))
-prat5=N5_switch*("_H2O_"+str(N5))
-prat6=N6_switch*("_PPCD_"+str(N6))
-
-# filename="NCO_"+ str(N0) +"_PTMG1000_"+str(N1)+"_PTMG2000_"+str(N2)+"_330N_"+str(N3)+"_BDO_"+str(N4)+"_H2O_"+str(N5)
-filename= prat0+ prat1+ prat2+ prat3+ prat4+ prat5+ prat6
-
+filename="NCO_"+ str(N0) +"_PTMG1000_"+str(N1)+"_PTMG2000_"+str(N2)+"_330N_"+str(N3)+"_BDO_"+str(N4)+"_H2O_"+str(N5)
 filename = output_dir.joinpath(filename).as_posix()
 gen0.setDimension(3)
 gen0.setMinimumDistance(0.9)
