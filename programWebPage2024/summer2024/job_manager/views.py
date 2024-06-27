@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 import os
 from .models import Job
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
 from loguru import logger
 import markdown
@@ -151,7 +152,7 @@ def job_view(request, pk):
         if job.status != status_dict.get("CD", "已完成"):
             job.status = status_dict.get("CD", "已完成")
             job.save
-        snd_img_path = img2_path if Path.cwd().joinpath("tools/{img2_path}").exists() else wip_path
+        snd_img_path = img2_path if Path.cwd().joinpath(f"tools/{img2_path}").exists() else wip_path
         if markdown_path.exists():
             with markdown_path.open() as f:
                 markdown_content = markdown.markdown(f.read(),extensions=['tables'])
