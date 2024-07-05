@@ -1,3 +1,7 @@
+<!-- 任务生成界面 -->
+
+
+<!-- 引用 base.html -->
 {% extends 'base.html' %}
 
 {% block content %}
@@ -31,6 +35,7 @@
             <th>投料份数</th>
           </tr>
 
+          <!-- 获取 A料 数据 并呈现于此 -->
           <fieldset style="border: 0;">
             {{ chemical_A_formset.management_form }}
             {% for form in chemical_A_formset %}
@@ -45,6 +50,8 @@
           </fieldset>
         </table>
 
+
+        <!-- 获取 B料 数据 并呈现于此 -->
         <table>
           <tr>
             <th colspan="6" class="center-table-header">B料: 异氰酸酯预聚体</th>
@@ -74,7 +81,7 @@
           </tr>
 
           </tr>
-          <!-- ... -->
+          <!-- 提交任务 -->
         </table>
         <div class="form-footer">
           <input type="submit" value="提交配方">
@@ -84,7 +91,7 @@
 </form>
 
 <script>
-  // 化学数据
+  // A料 数据
   const chemicalData = {
             "PTMG1000": { functionality: "2", hydroxyl_value: "112.2", molecule_quality: "1000" },
             "PTMG2000": { functionality: "2", hydroxyl_value: "56.1", molecule_quality: "2000" },
@@ -97,6 +104,7 @@
             "catalyst_2": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
         };
 
+   // 让用户以 下拉式菜单 选择所需 A料，并规定不得重复选择
   $(document).ready(function () {
     $('select').on('change', function () {
       $('select').not(this).find('option[value="' + $(this).val() + '"]').prop('disabled', true);

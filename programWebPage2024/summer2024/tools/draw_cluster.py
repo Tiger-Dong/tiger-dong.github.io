@@ -1,3 +1,5 @@
+# 生成反应物生成物官能团随反应时间变化图
+
 #!/usr/bin/python3
 # import hoomd
 # import hoomd.md

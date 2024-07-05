@@ -1,9 +1,13 @@
+<!-- 任务查看界面 -->
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>参数设置</title>
+
+    <!-- 此查看界面的格式 -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,6 +81,7 @@
         }
     </style>
 
+<!-- 本界面所引用/赋值的内容 -->
     <script>
     function editDescription() {
         console.log("Editing description...");
@@ -139,6 +144,8 @@
         <div>
             <td>{{ job.id }}</td>
             <h4>当前任务状态: {{job.status}}</h4>
+
+            <!-- 打印按钮 -->
             <button onclick="printPage()">打印/保存为PDF</button>
             <script>
                 function printPage() {
@@ -173,8 +180,8 @@
                         <div class="job">
                             <p id="descriptionText">{{ job.description }}</p>
                             <textarea id="descriptionEdit" style="display:none;">{{ job.description }}</textarea>
-                            <button type="button" onclick="editDescription()" id="editDescriptionBtn">Edit</button>
-                            <button type="button" onclick="saveDescription()" id="saveDescriptionBtn" style="display:none;">Save</button>
+                            <button type="button" onclick="editDescription()" id="editDescriptionBtn">修改描述</button>
+                            <button type="button" onclick="saveDescription()" id="saveDescriptionBtn" style="display:none;">保存修改</button>
                         </div>
                     </td>
                     <td>{{ job.sbatch_job_id }}</td>
@@ -190,15 +197,16 @@
             </tr>
             <tr>
                 {% load static %}
-                <!-- 图一 -->
+                <!-- 反应物生成物官能团随反应时间变化图 -->
                 <td><img src="{% static img1_name %}" alt="图1" style="width: 100%;"></td> 
-                <!-- 图二 -->
+                <!-- 反应生成分子链分布情况 -->
                 <td><img src="{% static img2_name %}" alt="图2" style="width: 100%;"></td>                
             </tr>
             </table>
 
             <table>
-            <!-- md 表格 -->
+            
+            <!-- 分子链分布与组成表格 -->
             <tr>   
                 <th>分子链分布与组成</th>
             </tr>

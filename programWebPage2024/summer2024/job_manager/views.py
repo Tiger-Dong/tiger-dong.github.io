@@ -1,3 +1,5 @@
+# 为了更好的管理代码，我们将视图函数放在这个文件中， 并定义/赋值/计算了一些辅助函数
+
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .models import Job, Chemical_A
@@ -11,6 +13,7 @@ from django.http import HttpResponse
 from loguru import logger
 import markdown
 
+# 四种运行状态
 status_dict = {
     "R": "正在运行",
     "PD": "正在排队",
@@ -18,7 +21,7 @@ status_dict = {
     "CD": "已完成",
 }
 
-
+# 此处影响 任务列表 ｜ 为任务列表添加了 搜索，翻页 功能
 def job_list(request):
     search_query = request.GET.get("search", "")  # Capture the search query
     if search_query:
@@ -40,6 +43,7 @@ def job_list(request):
     )
 
 
+# 删除任务
 def delete_job(request, job_id):
     if request.method == 'POST':
         job = get_object_or_404(Job, pk=job_id)
@@ -54,12 +58,13 @@ def delete_job(request, job_id):
         return HttpResponseNotAllowed(['POST'])
 
 
+# 计算 
 def calcualte_N(job: Job, chemical_A: Chemical_A, total_shares_A) -> int:
     return round(float(job.chemial_A_mass)
         * (chemical_A.shares / total_shares_A)
         / chemical_A.molecular_mass)
 
-
+# 计算
 def calculate_parameter(job: Job, chemical_As: list):
     total_shares_A = sum([chemical_A.shares for chemical_A in chemical_As])
     total_hydroxyl_A = float(
@@ -85,7 +90,7 @@ def calculate_parameter(job: Job, chemical_As: list):
         for key, value in parameter_mapping.items():
             if key in chemical_A.name:
                 parameters[value] = calcualte_N(job, chemical_A, total_shares_A)
-
+    # 为N0-N5赋值, 若没有则为0，然后保存
     job.N0 = parameters.get("N0", 0) 
     job.N1 = parameters.get("N1", 0)
     job.N2 = parameters.get("N2", 0)
@@ -106,6 +111,7 @@ def calculate_parameter(job: Job, chemical_As: list):
     with parameter_file.open("w") as f:
         json.dump(parameters, f)
 
+    # 如果不是本地运行，则提交任务
     if os.environ.get("LOCAL_RUN", "False") == "True":
         output = "Submitted batch job 34880"
     else:        
@@ -127,14 +133,14 @@ def calculate_parameter(job: Job, chemical_As: list):
     job.status = status_dict.get("R", "正在运行")
     job.save()
 
-
+# 寻找 sbatch job id
 def find_sbatch_job_id(input_str: str):
     text_before_id = "Submitted batch job "
     start_index = input_str.find(text_before_id) + len(text_before_id)
     sbatch_id = input_str[start_index:].strip()
     return sbatch_id
 
-
+# 为job_view 准备数据
 def job_view(request, pk):
     job = Job.objects.get(pk=pk)
     if request.method == "POST":
@@ -142,6 +148,7 @@ def job_view(request, pk):
         job.save()
         return HttpResponse("Success", content_type="text/plain", status=200)
 
+    # 图片路径/传递给前端
     wip_path = "wip.jpg"
     img1_path = f"{job.id}/all_variables.png"
     img2_path = f"{job.id}/rcluster.png"
@@ -202,6 +209,7 @@ def job_view(request, pk):
                                              "img2_name": wip_path,
                                              "markdown_content": markdown_content})
 
+# 影响 任务创造 界面
 def job_create(request):
     prefix = "chemicals"
     if request.method == "POST":

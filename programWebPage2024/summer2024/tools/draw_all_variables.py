@@ -1,3 +1,5 @@
+# 生成反应物生成物官能团随反应时间变化图
+
 import xml.etree.ElementTree as ET
 import numpy as np
 import os  #处理文件和目录

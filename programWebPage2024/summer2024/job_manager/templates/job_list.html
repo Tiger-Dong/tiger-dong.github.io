@@ -1,3 +1,7 @@
+<!-- 任务列表界面 -->
+
+
+<!-- 引用 base.html -->
 {% extends 'base.html' %}
 
 {% block content %}
@@ -20,7 +24,7 @@
             <td>{{ job.status }}</td>
             <td><a href="{% url 'job_view' job.pk %}">查看</a></td>
             <td>
-                <!-- Delete Job Form -->
+                <!-- 删除任务 -->
                 <form action="{% url 'job_delete' job.pk %}" method="post" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" onclick="return confirm('确定要删除这个任务吗？');">删除</button>
@@ -31,6 +35,7 @@
     {% endfor %}    
 </table>
 
+<!-- 创建翻页功能 -->
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -48,6 +53,7 @@
         {% endif %}
     </span>
 </div>
+<!-- 创建搜索功能 -->
 <form method="get">
     <input type="text" name="search" placeholder="Search jobs..." value="{{ search_query }}">
     <button type="submit">Search</button>

@@ -1,3 +1,5 @@
+# 调用 画图程序
+
 #!/bin/bash
 
 #SBATCH --job-name=tiger

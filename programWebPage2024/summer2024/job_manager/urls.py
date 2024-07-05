@@ -1,3 +1,5 @@
+# 为 templates（前台/用户页面）中的每个页面创建一个 URL 映射
+
 from django.urls import path
 from . import views
 

@@ -1,11 +1,14 @@
+<!-- 基本格式 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Management</title>
-    <!-- Add your CSS files here -->
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
+
+
+    <!-- 页面格式 -->
     <style>
         body {
             
@@ -101,7 +104,7 @@
 </head>
 <body>
     <header>              
-        <!-- Add your navigation links here -->
+        <!-- 进入任务列表/创建任务界面链接 -->
         <nav class="job-links">
             <a href="{% url 'job_list' %}">全部任务列表</a>
             <a href="{% url 'job_create' %}">新建任务</a>
@@ -110,7 +113,7 @@
 
     <main>
         {% block content %}
-        <!-- Content of the child templates will be inserted here -->
+        <!-- base.html 被引用后 所引用界面展示内容 将被呈现于此 -->
         {% endblock %}
     </main>
 

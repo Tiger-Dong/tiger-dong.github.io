@@ -1,6 +1,8 @@
+# A料 和 B料 的 表单/数值数据 
+
 from django.db import models
 
-# Create your models here.
+# b料 的数据，并定义类别
 class Job(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -15,7 +17,8 @@ class Job(models.Model):
     chemical_B_functionality = models.IntegerField(default=chemicalData_B["functionality"])
     chemical_B_molecular_mass = models.IntegerField(default=chemicalData_B["molecule_quality"])
     chemical_B_mass = models.IntegerField(default=0)
-    
+
+    # 定义 温度和N0-N5 的类别
     temperature = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,6 +30,7 @@ class Job(models.Model):
     N4 = models.IntegerField(null = True)
     N5 = models.IntegerField(null = True)
 
+    # 定义 sbatch_job_id 的类别
     sbatch_job_id = models.CharField(max_length=20, null = True)
     status = models.CharField(max_length=40, default="created")
     
@@ -35,6 +39,7 @@ class Job(models.Model):
         return self.name
     
     
+# A料 的数据，并定义类别
 class Chemical_A(models.Model):
     chemicalData_A = {
             "PTMG1000": { "name": "PTMG1000", "functionality": 2, "hydroxyl_value": 112.2, "molecule_quality": 1000 },
