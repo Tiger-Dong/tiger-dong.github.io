@@ -8,8 +8,9 @@ import json
 from pathlib import Path
 import subprocess
 import os
-from .models import Job
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponseNotAllowed, HttpResponseForbidden
+from .models import Job 
 from loguru import logger
 import markdown
 
@@ -196,7 +197,7 @@ def job_view(request, pk):
         job.status = status_dict.get("CD", "已完成")
     else:
         line = output.split("\n")[1] 
-        logger.info(f"job_id is:{job.sbatch_job_id} , line is {line}")
+        logger.info(f"job_id is:{job.id} , line is {line}")
         if str(job.sbatch_job_id) in line:
             job.status = status_dict.get(line.split()[4], "未知状态")
             job.save()

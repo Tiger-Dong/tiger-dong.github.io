@@ -1,4 +1,3 @@
-# 画图数据生成
 
 #!/usr/bin/python
 from poetry import molgen
