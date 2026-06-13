@@ -1,0 +1,58 @@
+{% extends 'projects/base.html' %}
+
+{% block content %}
+{% comment %}
+  <ul>
+    {% for project in projects %}
+      <li>
+        <h2>{{ project.Name }}</h2>
+        <p>{{ project.LoB }}</p>
+        <p>{{ project.DRI }}</p>
+      </li>
+    {% empty %}
+      <li>No projects yet.</li>
+    {% endfor %}
+  </ul>
+{% endcomment %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Project List</h1>
+    </div>
+    <div class="col-md-4 text-right">
+      <a href="{% url 'project_create' %}" class="btn btn-primary">Register</a>
+    </div>
+  </div>
+
+  <h1>Projects</h1>
+  <table>
+      <tr>
+          <th>project ID</th>
+          <th>LoB</th>
+          <th>Site</th>
+          <th>DRI</th>
+          <th>Creator</th>
+          <th>Description</th>
+          <th>Created_Time</th>
+          <th>Update_Time</th>
+          <th>Stage</th>
+          <th>Action</th>
+      </tr>
+      {% for project in projects %}
+      <tr>
+          <td>{{ project.id }}</td>
+          <td>{{ project.LoB }}</td>
+          <td>{{ project.Site }}</td>
+          <td>{{ project.DRI }}</td>
+          <td>{{ project.Creator }} </td>
+          <td>{{ project.Description }}</td>
+          <td>{{ project.CreatedTime }}</td>
+          <td>{{ project.UpdatedTime }}</td>
+          <td>{{ project.latest_stage }}</td>
+          <td><a href="{% url 'edit_project' project.id %}">Edit</a></td>
+      </tr>
+      {% endfor %}      
+  </table> 
+</div>
+{% endblock %}

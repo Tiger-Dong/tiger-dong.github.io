@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>仪器参数表单</title>
+    <style>
+        /* 使用Flexbox居中表单 */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* 使表单内部的元素也居中 */
+            font-family: Arial, sans-serif; /* 设置字体，提高可读性 */
+        }
+        form {
+            width: 100%;
+            max-width: 400px; /* 设置表单的最大宽度 */
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 添加一点阴影效果 */
+        }
+        h2 {
+            margin-bottom: 20px; /* 标题和表单内容之间的间距 */
+        }
+        label, input, select {
+            width: 100%; /* 使标签、输入框和下拉菜单宽度自适应 */
+            margin-bottom: 10px; /* 设置表单项之间的间距 */
+        }
+        input[type="submit"] {
+            cursor: pointer; /* 鼠标悬停时显示手形图标 */
+            background-color: #4CAF50; /* 设置提交按钮的颜色 */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049; /* 鼠标悬停时按钮颜色变深 */
+        }
+    </style>
+</head>
+<body>
+    <h2>仪器参数表单</h2>
+    <form action="{% url 'submit_instrument' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <div font-color:red> {{form.instrument_name}}</div>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

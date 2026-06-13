@@ -1,0 +1,18 @@
+<!-- add chemical A dynamically -->
+<button type="button" id="add_more_chemical_A">Add more</button>
+<script>    
+    $(document).ready(function() {      
+        $('#add_more_chemical_A').click(function() {
+            var form_idx = $('#id_{{prefix}}-TOTAL_FORMS').val();
+            if (form_idx == $('#id_{{prefix}}-MAX_NUM_FORMS').val()) {
+                alert("You've reached the maximum number of forms.");
+                return false;
+            }
+            $('#chemical_A_formset_container').append($('#chemical_A_formset_container').children().first().clone());
+            $('#chemical_A_formset_container').children().last().html(function(i, oldHTML) {
+                return oldHTML.replace(/{{prefix}}-0/g, '{{prefix}}-' + form_idx);
+            });
+            $('#id_{{prefix}}-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+        });
+    });
+</script>

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <form method="POST">
+    {% csrf_token %}
+    <h2>参数设置</h2>
+    <div>
+      <h4>任务名称：{{job_form.name}}</h4>
+      <div>
+      <h4>任务描述：{{job_form.description}}</h4>
+      <div>
+      <h4>理论投料比(B/A):{{job_form.theory_shares_ratio}}</h4>
+
+    </div>
+      <form method="post">
+        <table>
+          <tr>
+            <th colspan="5" class="center-table-header">A料</th>
+          </tr>
+          </tr>
+          <th colspan="1">A料质量(克):</th>
+            <td>{{job_form.chemial_A_mass}}</td>
+          </tr>
+          
+          <tr>
+            <th>A料名称</th>
+            <th>官能度</th>
+            <th>羟值</th>
+            <th>相对分子质量</th>
+            <th>投料份数</th>
+          </tr>
+
+          <fieldset style="border: 0;">
+            {{ chemical_A_formset.management_form }}
+            {% for form in chemical_A_formset %}
+            <tr>
+              <td>{{ form.name }}</td>
+              <td>{{ form.functionality}} </td>
+              <td>{{ form.hydroxyl}} </td>
+              <td>{{ form.molecular_mass}} </td>
+              <td>{{ form.shares}} </td>
+            </tr>
+            {% endfor %}          
+          </fieldset>
+        </table>
+
+        <table>
+          <tr>
+            <th colspan="6" class="center-table-header">B料: 异氰酸酯预聚体</th>
+          </tr>
+          <tr>
+            <th>NCO值</th>
+            <th>官能度</th>
+            <th>相对分子质量</th>
+            <th>投料质量</th>
+          </tr>
+          <!--. B料 01 .-->
+          <tr>
+            <td>{{job_form.chemical_B_NCO}}</td>
+            <td>{{job_form.chemical_B_functionality}}</td>
+            <td>{{job_form.chemical_B_molecular_mass}}</td>
+            <td>{{job_form.chemical_B_mass}}</td>
+          </tr>
+        </table>
+        <!-- 反应设置 -->
+        <table>
+          <tr>
+            <th colspan="6" class="center-table-header">反应设置</th>
+          </tr>
+          <tr>
+            <th>反应温度（℃）</th>
+            <td>{{ job_form.temperature}}</td>
+          </tr>
+
+          </tr>
+          <!-- ... -->
+        </table>
+        <div class="form-footer">
+          <input type="submit" value="提交配方">
+        </div>
+      </form>
+</div>
+</form>
+
+<script>
+  // 化学数据
+  const chemicalData = {
+            "PTMG1000": { functionality: "2", hydroxyl_value: "112.2", molecule_quality: "1000" },
+            "PTMG2000": { functionality: "2", hydroxyl_value: "56.1", molecule_quality: "2000" },
+            "330N": { functionality: "3", hydroxyl_value: "35", molecule_quality: "4800" },
+            "BDO": { functionality: "2", hydroxyl_value: "1247", molecule_quality: "90" },
+            "water": { functionality: "2", hydroxyl_value: "6233", molecule_quality: "18" },
+            "silicone_oil": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "color_paster": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "catalyst_1": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+            "catalyst_2": { functionality: "0", hydroxyl_value: "0", molecule_quality: "0" },
+        };
+
+  $(document).ready(function () {
+    $('select').on('change', function () {
+      $('select').not(this).find('option[value="' + $(this).val() + '"]').prop('disabled', true);
+      
+      const selectedChemical = chemicalData[this.value];      
+      const prefix = this.id.slice(0, 0 - "name".length);      
+      if (selectedChemical) {        
+          document.getElementById(prefix + 'functionality').value = selectedChemical.functionality;                        
+          document.getElementById(prefix + 'molecular_mass').value = selectedChemical.molecule_quality;          
+          document.getElementById(prefix +'hydroxyl').value = selectedChemical.hydroxyl_value ;          
+      }
+    });
+  });
+</script>
+
+{% endblock %}

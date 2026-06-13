@@ -1,8 +1,8 @@
 from django import forms
+from .models import ChemicalMaterial
 
-class MaterialForm(forms.Form):
-    resource_name = forms.CharField()
-    functionality = forms.IntegerField()
-    hydroxyl_value = forms.FloatField(required=False)
-    molecule_quality = forms.FloatField()
-    batch_amount = forms.FloatField()
+class MaterialForm(forms.ModelForm):
+    
+    class Meta:
+        model = ChemicalMaterial
+        fields = '__all__'
