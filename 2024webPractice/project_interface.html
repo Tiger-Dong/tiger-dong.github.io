@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiger Dong | Projects</title>
+    <style>
+        :root {
+            --surface: rgba(255, 252, 246, 0.96);
+            --surface-strong: #fffdf8;
+            --ink: #1f1b18;
+            --muted: #675d55;
+            --line: rgba(56, 44, 35, 0.12);
+            --accent: #8a3f12;
+            --accent-soft: #efe0d0;
+            --accent-deep: #5e2406;
+            --accent-dark: #241d18;
+            --shadow: 0 22px 52px rgba(55, 38, 24, 0.10);
+            --shadow-soft: 0 12px 28px rgba(55, 38, 24, 0.06);
+            --radius: 24px;
+            --max: 1120px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Avenir Next", "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(138, 63, 18, 0.10), transparent 24%),
+                radial-gradient(circle at 85% 12%, rgba(94, 36, 6, 0.08), transparent 22%),
+                linear-gradient(180deg, #f8f5ef 0%, #f2ece3 56%, #f6f2ec 100%);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .lang-zh {
+            display: none;
+        }
+
+        body.locale-zh .lang-en {
+            display: none;
+        }
+
+        body.locale-zh .lang-zh {
+            display: block;
+        }
+
+        body.locale-en .lang-en {
+            display: block;
+        }
+
+        body.locale-en .lang-zh {
+            display: none;
+        }
+
+        .wrap {
+            width: min(var(--max), calc(100% - 28px));
+            margin: 18px auto 44px;
+        }
+
+        .page-layout {
+            display: grid;
+            grid-template-columns: 220px minmax(0, 1fr);
+            gap: 18px;
+            margin-top: 18px;
+            align-items: start;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 14px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 18px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255, 252, 246, 0.84);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 24px rgba(55, 38, 24, 0.05);
+        }
+
+        .brand {
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 84px;
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background: rgba(255, 252, 246, 0.84);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar h3 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            color: var(--accent-deep);
+            letter-spacing: 0.02em;
+        }
+
+        .sidebar-nav {
+            display: grid;
+            gap: 8px;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 10px 12px;
+            border-radius: 14px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.58);
+            border: 1px solid rgba(56, 44, 35, 0.06);
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+        }
+
+        .main-content {
+            min-width: 0;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav a,
+        .lang-toggle {
+            padding: 9px 14px;
+            border-radius: 999px;
+            color: var(--muted);
+            font: inherit;
+        }
+
+        .nav a.active,
+        .nav a:hover,
+        .lang-toggle:hover {
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+            font-weight: 700;
+        }
+
+        .lang-toggle {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.72);
+            cursor: pointer;
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: "Iowan Old Style", "Times New Roman", serif;
+            letter-spacing: -0.02em;
+        }
+
+        .hero,
+        .overview-card,
+        .project,
+        .material-card {
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background: linear-gradient(140deg, rgba(255, 252, 246, 0.96), rgba(244, 235, 224, 0.92));
+            box-shadow: var(--shadow);
+        }
+
+        .hero {
+            margin-top: 18px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            right: -72px;
+            bottom: -88px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(138, 63, 18, 0.14), transparent 68%);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            margin: 18px 0 12px;
+            max-width: 760px;
+            font-size: clamp(2.3rem, 4vw, 4.4rem);
+            line-height: 0.95;
+        }
+
+        .hero-copy,
+        .section-head p,
+        .stats-panel p,
+        .hero-note p,
+        .overview-card p,
+        .project p,
+        .material-card p,
+        .footer {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 18px;
+            margin-top: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-panel,
+        .hero-note {
+            padding: 22px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(56, 44, 35, 0.08);
+            background: rgba(255, 255, 255, 0.62);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 2rem;
+            color: var(--accent-deep);
+            font-family: "Iowan Old Style", "Times New Roman", serif;
+        }
+
+        .section {
+            margin-top: 22px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+        }
+
+        .overview-grid,
+        .materials {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .overview-card,
+        .material-card {
+            padding: 22px;
+            background: var(--surface-strong);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .overview-card h3,
+        .material-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .projects {
+            display: grid;
+            gap: 16px;
+        }
+
+        .timeline {
+            position: relative;
+            display: grid;
+            gap: 18px;
+            padding-left: 34px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 12px;
+            top: 4px;
+            bottom: 4px;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(138, 63, 18, 0.45), rgba(138, 63, 18, 0.10));
+        }
+
+        .project {
+            position: relative;
+            padding: 22px;
+            background: var(--surface-strong);
+        }
+
+        .project::before {
+            content: "";
+            position: absolute;
+            left: -30px;
+            top: 28px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-deep);
+            box-shadow: 0 0 0 6px rgba(138, 63, 18, 0.10);
+        }
+
+        .project-top {
+            display: grid;
+            grid-template-columns: 132px 1fr;
+            gap: 18px;
+        }
+
+        .year {
+            padding: 16px;
+            border-radius: 20px;
+            background: linear-gradient(180deg, #fcf7ef, #f2e4d3);
+        }
+
+        .year strong {
+            display: block;
+            font-family: "Iowan Old Style", "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--accent-deep);
+        }
+
+        .year span {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: 0.94rem;
+        }
+
+        .project h3 {
+            margin: 0 0 6px;
+            font-size: 1.6rem;
+        }
+
+        .role {
+            margin-bottom: 12px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .chips,
+        .links,
+        .text-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip,
+        .pill,
+        .text-pill {
+            padding: 8px 13px;
+            border-radius: 999px;
+            font-size: 0.92rem;
+        }
+
+        .chip {
+            background: #f7ede2;
+            color: #6f4427;
+        }
+
+        .pill {
+            background: var(--accent-dark);
+            color: #fffaf5;
+        }
+
+        .text-pill {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.62);
+            color: var(--muted);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .detail-card {
+            padding: 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 44, 35, 0.08);
+            background: rgba(255, 255, 255, 0.60);
+        }
+
+        .detail-card h4 {
+            margin: 0 0 10px;
+            font-size: 1.08rem;
+        }
+
+        .detail-card ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .detail-card li + li {
+            margin-top: 6px;
+        }
+
+        .project-footer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(56, 44, 35, 0.10);
+        }
+
+        .materials {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .footer {
+            margin-top: 24px;
+            padding: 18px;
+            text-align: center;
+            font-size: 0.94rem;
+        }
+
+        @media (max-width: 920px) {
+            .page-layout,
+            .hero-grid,
+            .overview-grid,
+            .materials,
+            .project-top,
+            .detail-grid,
+            .evidence-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .topbar,
+            .topbar-actions,
+            .section-head {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .hero,
+            .overview-card,
+            .project,
+            .material-card {
+                padding: 18px;
+                border-radius: 22px;
+            }
+
+            .wrap {
+                width: min(var(--max), calc(100% - 18px));
+            }
+        }
+    </style>
+</head>
+<body class="locale-en">
+    <div class="wrap">
+        <header class="topbar">
+            <div class="brand">Tiger Dong</div>
+            <div class="topbar-actions">
+                <nav class="nav">
+                    <a href="index.html">
+                        <span class="lang-en">Home</span>
+                        <span class="lang-zh">主页</span>
+                    </a>
+                    <a class="active" href="project_interface.html">
+                        <span class="lang-en">Projects</span>
+                        <span class="lang-zh">项目</span>
+                    </a>
+                    <a href="history_update.html">
+                        <span class="lang-en">History Updates</span>
+                        <span class="lang-zh">历史更新</span>
+                    </a>
+                </nav>
+                <button id="lang-toggle" class="lang-toggle" type="button">中文</button>
+            </div>
+        </header>
+
+        <div class="page-layout">
+            <aside class="sidebar">
+                <h3>
+                    <span class="lang-en">On This Page</span>
+                    <span class="lang-zh">当前页面</span>
+                </h3>
+                <nav class="sidebar-nav">
+                    <a href="#overview">
+                        <span class="lang-en">Overview</span>
+                        <span class="lang-zh">项目概览</span>
+                    </a>
+                    <a href="#timeline">
+                        <span class="lang-en">Timeline</span>
+                        <span class="lang-zh">时间轴</span>
+                    </a>
+                    <a href="#materials">
+                        <span class="lang-en">Materials</span>
+                        <span class="lang-zh">材料索引</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+        <section class="hero">
+            <span class="eyebrow">
+                <span class="lang-en">PROJECTS</span>
+                <span class="lang-zh">项目展示</span>
+            </span>
+            <h1>
+                <span class="lang-en">Selected Projects</span>
+                <span class="lang-zh">代表项目</span>
+            </h1>
+            <div class="hero-copy">
+                <span class="lang-en">This page presents a selected set of projects across experimental assistance, agent services, industrial simulation frontend work, and collective behavior simulation. The content is written in a formal structure so it can support portfolios, applications, and future expansion into a fuller project archive.</span>
+                <span class="lang-zh">这份页面汇总我在实验辅助、智能体服务、工业模拟前端和群体行为仿真上的代表项目。内容采用更正式的写法，便于用于展示经历、申请材料或后续扩展成完整作品集。</span>
+            </div>
+            <div class="hero-grid">
+                <div class="stats-panel">
+                    <div class="stats">
+                        <div class="stat">
+                            <strong>4</strong>
+                            <p>
+                                <span class="lang-en">core projects</span>
+                                <span class="lang-zh">核心项目</span>
+                            </p>
+                        </div>
+                        <div class="stat">
+                            <strong>2024-2026</strong>
+                            <p>
+                                <span class="lang-en">continuous practice window</span>
+                                <span class="lang-zh">持续实践时间段</span>
+                            </p>
+                        </div>
+                        <div class="stat">
+                            <strong>Cross-disciplinary</strong>
+                            <p>
+                                <span class="lang-en">hardware, frontend, simulation, agents</span>
+                                <span class="lang-zh">硬件、前端、仿真、智能体</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <aside class="hero-note">
+                    <p>
+                        <span class="lang-en">This structure balances context, ownership, and impact while remaining readable for external audiences.</span>
+                        <span class="lang-zh">当前结构重点平衡项目背景、我做的内容和项目价值，同时保持对外展示时的清晰度和正式度。</span>
+                    </p>
+                </aside>
+            </div>
+        </section>
+
+        <section class="section" id="overview">
+            <div class="section-head">
+                <h2>
+                    <span class="lang-en">Project Overview</span>
+                    <span class="lang-zh">项目概览</span>
+                </h2>
+                <p>
+                    <span class="lang-en">The overview highlights what these projects have in common before moving into the detailed sections below.</span>
+                    <span class="lang-zh">先用概览说明这些项目的共同特点，再进入每个项目更详细的展示区块。</span>
+                </p>
+            </div>
+            <div class="overview-grid">
+                <article class="overview-card">
+                    <h3>
+                        <span class="lang-en">Problem-led</span>
+                        <span class="lang-zh">问题导向</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">Most of these projects start from practical problems such as difficult experimental operation, fragmented information access, complex industrial workflows, or research models that are hard to verify intuitively.</span>
+                        <span class="lang-zh">这些项目大多从真实问题出发，例如实验操作不便、信息查询割裂、工业流程复杂或论文模型难以直观验证。</span>
+                    </p>
+                </article>
+                <article class="overview-card">
+                    <h3>
+                        <span class="lang-en">Implementation Path</span>
+                        <span class="lang-zh">实现路径</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">The implementations span Arduino control, model-based services, frontend development, and simulation programs, showing a continuous path from prototype to usable tool.</span>
+                        <span class="lang-zh">实现方式覆盖 Arduino 控制、模型服务调用、前端界面搭建和仿真程序开发，体现从原型到工具的连续实践。</span>
+                    </p>
+                </article>
+                <article class="overview-card">
+                    <h3>
+                        <span class="lang-en">Usage Context</span>
+                        <span class="lang-zh">应用场景</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">These projects address experimental assistance, personal tools, industrial computing platforms, and research-inspired modeling, which gives them strong transferability across contexts.</span>
+                        <span class="lang-zh">项目面向实验教学、个人工具、工业计算平台和科研启发式建模等不同场景，具有较强的迁移性和延展空间。</span>
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="timeline">
+            <div class="section-head">
+                <h2>
+                    <span class="lang-en">Timeline</span>
+                    <span class="lang-zh">时间轴</span>
+                </h2>
+                <p>
+                    <span class="lang-en">Projects are arranged in reverse chronological order, with the most recent work placed first.</span>
+                    <span class="lang-zh">项目按照时间倒序排列，越接近现在的项目越靠前，越早期的项目越靠后。</span>
+                </p>
+            </div>
+
+            <div class="timeline">
+                <article class="project">
+                    <div class="project-top">
+                        <div class="year">
+                            <strong>2026</strong>
+                            <span>
+                                <span class="lang-en">embodied intelligence<br>experimental assistance<br>Arduino control</span>
+                                <span class="lang-zh">具身智能<br>实验辅助<br>Arduino 控制</span>
+                            </span>
+                        </div>
+                        <div>
+                            <h3>Arduino + Michelson Interferometer</h3>
+                            <div class="role">
+                                <span class="lang-en">Embodied Intelligence / Arduino-based Experimental Assistance Module</span>
+                                <span class="lang-zh">具身智能 / Arduino 实验辅助模块</span>
+                            </div>
+                            <p>
+                                <span class="lang-en">This project focuses on assisted operation for a Michelson interferometer. By using Arduino to control adjustment mechanisms and execution steps, the system can respond to voice and text commands and reduce repetitive manual intervention. The goal is to improve precision, lower the barrier to operation, and enable more independent experimentation for users with physical disabilities.</span>
+                                <span class="lang-zh">这个项目围绕迈克耳孙干涉仪的实验辅助展开，重点是通过 Arduino 控制旋钮与执行动作，使设备能够响应语音和文字输入指令，从而减少人工反复调节。项目希望同时提升实验精度、降低操作门槛，并为身体残疾者提供更独立的实验完成方式。</span>
+                            </p>
+                            <div class="chips" style="margin-top: 12px;">
+                                <span class="chip">Arduino</span>
+                                <span class="chip">Michelson interferometer</span>
+                                <span class="chip">Accessibility</span>
+                                <span class="chip">Embodied Intelligence</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-card">
+                            <h4>
+                                <span class="lang-en">My Contribution</span>
+                                <span class="lang-zh">我做的内容</span>
+                            </h4>
+                            <ul>
+                                <li><span class="lang-en">Translated the experimental control idea into an Arduino-assisted module.</span><span class="lang-zh">将实验控制思路转化为可执行的 Arduino 辅助模块。</span></li>
+                                <li><span class="lang-en">Designed device control logic around voice and text input.</span><span class="lang-zh">围绕语音和文字输入设计设备控制逻辑。</span></li>
+                                <li><span class="lang-en">Focused on accessibility and independent operation to make the experiment more stable and usable.</span><span class="lang-zh">强调可达性与独立操作，让实验更友好、更稳定。</span></li>
+                            </ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4>
+                                <span class="lang-en">Project Value</span>
+                                <span class="lang-zh">项目价值</span>
+                            </h4>
+                            <ul>
+                                <li><span class="lang-en">Reduces dependence on delicate hand operation and improves accessibility in precision experiments.</span><span class="lang-zh">减少对精细手动调节的依赖，提升精密实验的可达性。</span></li>
+                                <li><span class="lang-en">Improves operational stability by lowering disturbance from direct manual contact.</span><span class="lang-zh">通过减少直接手动接触对仪器造成的干扰，提高实验操作稳定性。</span></li>
+                                <li><span class="lang-en">Shows how voice interaction and mechatronic control can be applied to classical optical experiments.</span><span class="lang-zh">展示了语音交互与机电控制如何应用到经典光学实验中。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="evidence-grid">
+                        <div class="detail-card">
+                            <h4><span class="lang-en">System Structure</span><span class="lang-zh">系统结构</span></h4>
+                            <ul>
+                                <li><span class="lang-en">The system combines command parsing, motor control, mechanical actuation, and multi-axis adjustment for interferometer operation.</span><span class="lang-zh">系统将指令解析、电机控制、机械执行和多轴调节结合起来，用于干涉仪操作。</span></li>
+                                <li><span class="lang-en">Its control scope covers coarse adjustment, fine adjustment, and mirror alignment across multiple channels.</span><span class="lang-zh">它的控制范围覆盖粗调、细调以及镜面多通道对准。</span></li>
+                            </ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4><span class="lang-en">Purpose and Intended Use</span><span class="lang-zh">用途与目标</span></h4>
+                            <ul>
+                                <li><span class="lang-en">The project is designed to support more independent experiment operation for users with limited hand mobility.</span><span class="lang-zh">这个项目旨在帮助手部操作受限的使用者更独立地完成实验。</span></li>
+                                <li><span class="lang-en">It also serves as a path toward more automated and teachable optical experiment workflows.</span><span class="lang-zh">同时，它也为更自动化、更适合教学推广的光学实验流程提供了方向。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <div class="text-pills">
+                            <span class="text-pill"><span class="lang-en">Local materials: input/Arduino + Michelson interferometer/</span><span class="lang-zh">本地资料：input/Arduino + Michelson interferometer/</span></span>
+                            <span class="text-pill"><span class="lang-en">Local materials: input/Arduino_实体辅助模块_项目总结.docx</span><span class="lang-zh">本地资料：input/Arduino_实体辅助模块_项目总结.docx</span></span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project">
+                    <div class="project-top">
+                        <div class="year">
+                            <strong>2025</strong>
+                            <span>
+                                <span class="lang-en">agent service<br>weather queries<br>geolocation</span>
+                                <span class="lang-zh">智能体服务<br>天气查询<br>地理信息</span>
+                            </span>
+                        </div>
+                        <div>
+                            <h3>agent_service</h3>
+                            <div class="role">
+                                <span class="lang-en">Ollama-based Agent Service for Weather and Geolocation</span>
+                                <span class="lang-zh">基于 Ollama 的天气与地理智能体服务</span>
+                            </div>
+                            <p>
+                                <span class="lang-en">This project combines Ollama's Qwen3 model with weather and geolocation modules to build a lightweight agent service that supports mixed Chinese-English queries. Given a place name or a natural-language request, the system can retrieve address details, coordinates, target-time weather information, and corresponding clothing suggestions.</span>
+                                <span class="lang-zh">这个项目通过调用 Ollama 的 Qwen3 模型，并结合天气模块和地理模块，构建了一个支持中英文混合提问的轻量智能体服务。用户给出地点名称或问题后，系统可以进一步查询地址、经纬度、目标时间天气，并给出匹配的穿着建议。</span>
+                            </p>
+                            <div class="chips" style="margin-top: 12px;">
+                                <span class="chip">Ollama</span>
+                                <span class="chip">Qwen3</span>
+                                <span class="chip">Weather</span>
+                                <span class="chip">Geolocation</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-card">
+                            <h4><span class="lang-en">My Contribution</span><span class="lang-zh">我做的内容</span></h4>
+                            <ul>
+                                <li><span class="lang-en">Integrated model inference, weather lookup, and geolocation parsing.</span><span class="lang-zh">整合大模型调用、天气查询和地理解析逻辑。</span></li>
+                                <li><span class="lang-en">Designed a lightweight interaction flow for mixed Chinese-English input.</span><span class="lang-zh">面向中英混合输入设计轻量服务交互方式。</span></li>
+                                <li><span class="lang-en">Turned location and weather output into practical clothing suggestions.</span><span class="lang-zh">把地点解析结果与天气信息进一步转为穿着建议。</span></li>
+                            </ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4><span class="lang-en">Project Value</span><span class="lang-zh">项目价值</span></h4>
+                            <ul>
+                                <li><span class="lang-en">Combines several fragmented lookups into one natural-language workflow.</span><span class="lang-zh">把多个分散查询过程整合为一个自然语言工作流。</span></li>
+                                <li><span class="lang-en">Reduces the effort required to connect location, weather, and practical planning.</span><span class="lang-zh">降低了把地点、天气和日常决策联系起来所需的操作成本。</span></li>
+                                <li><span class="lang-en">Demonstrates how a model-backed tool can become directly useful in everyday scenarios.</span><span class="lang-zh">展示了一个模型驱动工具如何直接服务于日常使用场景。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <div class="links">
+                            <a class="pill" href="https://github.com/Tiger-Dong/agent_service" target="_blank" rel="noreferrer">GitHub Repository</a>
+                        </div>
+                        <div class="text-pills" style="margin-top: 12px;">
+                            <span class="text-pill"><span class="lang-en">Positioning: lightweight practical agent service</span><span class="lang-zh">定位：轻量且可直接使用的智能体服务</span></span>
+                            <span class="text-pill"><span class="lang-en">Supports mixed Chinese-English interaction</span><span class="lang-zh">支持中英混合输入交互</span></span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project">
+                    <div class="project-top">
+                        <div class="year">
+                            <strong>2024</strong>
+                            <span>
+                                <span class="lang-en">industrial frontend<br>reaction simulation<br>process monitoring</span>
+                                <span class="lang-zh">工业前端<br>反应模拟<br>过程监控</span>
+                            </span>
+                        </div>
+                        <div>
+                            <h3>polyurethane reaction frontend</h3>
+                            <div class="role">
+                                <span class="lang-en">Frontend for a Polyurethane Reaction Simulation Platform</span>
+                                <span class="lang-zh">聚氨酯缩聚反应计算平台前端</span>
+                            </div>
+                            <p>
+                                <span class="lang-en">This project is the frontend component I built for a factory-oriented backend system focused on polyurethane condensation reaction simulation. The platform supports process observation and progress monitoring, helping users follow the transition from reactants to final products and analyze how process conditions influence polymerization outcomes.</span>
+                                <span class="lang-zh">这是我为一个工厂后端系统配套完成的前端项目，目标是为聚氨酯缩聚反应计算平台提供界面支持，用于模拟反应并监控反应进程。平台需要帮助使用者观测从反应物初始状态到最终产物形成的过程，并辅助分析工艺条件对聚合反应的影响。</span>
+                            </p>
+                            <div class="chips" style="margin-top: 12px;">
+                                <span class="chip">Frontend</span>
+                                <span class="chip">Industrial Simulation</span>
+                                <span class="chip">Polyurethane</span>
+                                <span class="chip">Reaction Monitoring</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-card">
+                            <h4><span class="lang-en">My Contribution</span><span class="lang-zh">我做的内容</span></h4>
+                            <ul>
+                                <li><span class="lang-en">Built the frontend layer to present and organize the backend simulation workflow.</span><span class="lang-zh">负责前端界面与交互层，承接后端计算平台的展示需求。</span></li>
+                                <li><span class="lang-en">Helped complex reaction processes become more observable and understandable.</span><span class="lang-zh">帮助复杂反应过程以更清晰的方式被观察和理解。</span></li>
+                                <li><span class="lang-en">Adjusted the interface for real industrial use rather than presentation-only output.</span><span class="lang-zh">围绕工业场景调整页面组织，使其更偏向实际使用而非纯演示。</span></li>
+                            </ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4><span class="lang-en">Project Value</span><span class="lang-zh">项目价值</span></h4>
+                            <ul>
+                                <li><span class="lang-en">Helps reduce material waste, trial-and-error cost, and experimental turnaround time.</span><span class="lang-zh">有助于减少材料浪费、试错成本和实验周期。</span></li>
+                                <li><span class="lang-en">Makes simulation results easier to access for users beyond specialist researchers.</span><span class="lang-zh">让模拟结果不再只服务专业研究者，也更容易被普通使用者理解和使用。</span></li>
+                                <li><span class="lang-en">Supports more digital and data-driven workflows in traditional manufacturing settings.</span><span class="lang-zh">支持传统制造场景向更数字化、数据化的工作流程转变。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="evidence-grid">
+                        <div class="detail-card">
+                            <h4><span class="lang-en">Platform Structure</span><span class="lang-zh">平台结构</span></h4>
+                            <ul>
+                                <li><span class="lang-en">The platform is structured around task creation, task management, and task detail pages.</span><span class="lang-zh">这个平台围绕任务创建、任务管理和任务详情三类页面来组织使用流程。</span></li>
+                                <li><span class="lang-en">It connects frontend input with backend computation, plots, and tables for simulation output.</span><span class="lang-zh">它把前端输入与后台计算、图像生成和表格输出连接成一个完整链路。</span></li>
+                            </ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4><span class="lang-en">Purpose and Application</span><span class="lang-zh">用途与应用</span></h4>
+                            <ul>
+                                <li><span class="lang-en">The platform is positioned around polyurethane elastic pad materials used in railway-related engineering contexts.</span><span class="lang-zh">平台的应用背景直接指向铁路相关工程中的聚氨酯弹性垫板材料。</span></li>
+                                <li><span class="lang-en">Its purpose is to make reaction simulation, parameter adjustment, and result interpretation more efficient and more accessible.</span><span class="lang-zh">它的目标是让反应模拟、参数调整和结果解读变得更高效，也更容易被使用。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <div class="links">
+                            <a class="pill" href="https://github.com/Tiger-Dong/lab-frontend" target="_blank" rel="noreferrer">GitHub Repository</a>
+                        </div>
+                        <div class="text-pills" style="margin-top: 12px;">
+                            <span class="text-pill"><span class="lang-en">Local materials: input/演示-聚氨酯弹性体材料模型建立与性能模拟 .pptx</span><span class="lang-zh">本地资料：input/演示-聚氨酯弹性体材料模型建立与性能模拟 .pptx</span></span>
+                            <span class="text-pill"><span class="lang-en">Local materials: input/软著提交/</span><span class="lang-zh">本地资料：input/软著提交/</span></span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project">
+                    <div class="project-top">
+                        <div class="year">
+                            <strong><span class="lang-en">High School</span><span class="lang-zh">高中时期</span></strong>
+                            <span>
+                                <span class="lang-en">paper-inspired<br>collective behavior<br>simulation</span>
+                                <span class="lang-zh">论文启发<br>群体行为<br>计算模拟</span>
+                            </span>
+                        </div>
+                        <div>
+                            <h3>wolf_sheep simulation</h3>
+                            <div class="role">
+                                <span class="lang-en">Collective Predation and Escape Simulation</span>
+                                <span class="lang-zh">狼与羊群体追逐和逃逸现象仿真</span>
+                            </div>
+                            <p>
+                                <span class="lang-en">Inspired by the paper "Collective Predation and Escape Strategies," this project explores how pursuit and escape outcomes change when many predators chase many prey, and what kinds of escape patterns may be more effective. I turned the research idea into a simulation program that models wolves and sheep under ordinary movement, pursuit, and escape scenarios.</span>
+                                <span class="lang-zh">这个项目受到论文《Collective Predation and Escape Strategies》启发，关注当大量捕食者追逐大量猎物时，捕食成功与逃脱成功会呈现什么规律，以及猎物怎样逃跑更有效。我把论文中的集体捕食与逃逸问题做成了仿真程序，用来模拟狼和羊在常态、被追逐等不同情境下的行为变化。</span>
+                            </p>
+                            <div class="chips" style="margin-top: 12px;">
+                                <span class="chip">Python</span>
+                                <span class="chip">Simulation</span>
+                                <span class="chip">Collective Behavior</span>
+                                <span class="chip">Paper-inspired Project</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-card">
+                            <h4><span class="lang-en">My Contribution</span><span class="lang-zh">我做的内容</span></h4>
+                            <ul>
+                                <li><span class="lang-en">Turned a paper-inspired research question into an executable simulation.</span><span class="lang-zh">从论文问题出发，主动将理论模型转化为程序化仿真。</span></li>
+                                <li><span class="lang-en">Organized the simulation logic and runtime structure for wolves and sheep behavior.</span><span class="lang-zh">组织狼与羊群体行为的模拟逻辑与运行结构。</span></li>
+                                <li><span class="lang-en">Made an abstract research topic observable and testable through code.</span><span class="lang-zh">让抽象研究问题变成可观察、可调整、可运行的程序结果。</span></li>
+                            </ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4><span class="lang-en">Project Value</span><span class="lang-zh">项目价值</span></h4>
+                            <ul>
+                                <li><span class="lang-en">Provides a computational way to explore collective pursuit and escape behavior beyond reading the paper alone.</span><span class="lang-zh">为群体追逐与逃逸问题提供了一个可计算、可观察的研究方式，而不只是停留在论文阅读层面。</span></li>
+                                <li><span class="lang-en">Helps make abstract behavioral rules more visible through simulation.</span><span class="lang-zh">让抽象的行为规则通过仿真变得更直观。</span></li>
+                                <li><span class="lang-en">Shows how research inspiration can be translated into a runnable computational model.</span><span class="lang-zh">展示了如何把研究启发转化为一个可运行的计算模型。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="evidence-grid">
+                        <div class="detail-card">
+                            <h4><span class="lang-en">Simulation Structure</span><span class="lang-zh">仿真结构</span></h4>
+                            <ul>
+                                <li><span class="lang-en">The project defines behavior through explicit formulas for alignment, repulsion, chase interaction, and final velocity update.</span><span class="lang-zh">项目通过明确公式定义了取向、排斥、追逐交互以及最终速度更新。</span></li>
+                                <li><span class="lang-en">It is supported by configuration files, tests, and a notebook rather than being only a visual concept.</span><span class="lang-zh">它不仅是概念展示，还配有配置文件、测试和 notebook 支撑。</span></li>
+                            </ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4><span class="lang-en">Purpose and Research Motivation</span><span class="lang-zh">用途与研究动机</span></h4>
+                            <ul>
+                                <li><span class="lang-en">The project is motivated by a research question about what happens when many predators pursue many prey together.</span><span class="lang-zh">项目的出发点，是研究当很多捕食者一起追逐很多猎物时会出现什么规律。</span></li>
+                                <li><span class="lang-en">It aims to make those collective behavior questions testable through code and simulation.</span><span class="lang-zh">它的目的，是通过代码和仿真让这些群体行为问题变得可以被测试和观察。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <div class="links">
+                            <a class="pill" href="https://github.com/Tiger-Dong/wolf_sheep" target="_blank" rel="noreferrer">GitHub Repository</a>
+                        </div>
+                        <div class="text-pills" style="margin-top: 12px;">
+                            <span class="text-pill"><span class="lang-en">Local materials: input/wolf-sheep/README.md</span><span class="lang-zh">本地资料：input/wolf-sheep/README.md</span></span>
+                            <span class="text-pill"><span class="lang-en">Local materials: input/wolf-sheep/Collective Predation and Escape Strategies_wolf_sheep.pdf</span><span class="lang-zh">本地资料：input/wolf-sheep/Collective Predation and Escape Strategies_wolf_sheep.pdf</span></span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="materials">
+            <div class="section-head">
+                <h2>
+                    <span class="lang-en">Material Index</span>
+                    <span class="lang-zh">材料索引</span>
+                </h2>
+                <p>
+                    <span class="lang-en">This section keeps local material entry points ready for future screenshots, paper excerpts, demo videos, and extended documentation.</span>
+                    <span class="lang-zh">这部分保留本地资料入口，方便后续继续补充截图、论文摘录、演示视频和更详细的文档说明。</span>
+                </p>
+            </div>
+            <div class="materials">
+                <article class="material-card">
+                    <h3>
+                        <span class="lang-en">Experimental Assistance & Hardware</span>
+                        <span class="lang-zh">实验辅助与硬件</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">The Arduino and Michelson interferometer project already has summary documents, component notes, and speech materials, making it a good candidate for a fuller case-study expansion.</span>
+                        <span class="lang-zh">Arduino + Michelson interferometer 目前已有项目总结、元件说明和演讲稿，后续很适合扩写成背景、方案设计和演示流程。</span>
+                    </p>
+                </article>
+                <article class="material-card">
+                    <h3>
+                        <span class="lang-en">Industrial Simulation & Modeling</span>
+                        <span class="lang-zh">工业模拟与仿真</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">The polyurethane project includes presentation and software-registration materials, while wolf_sheep already contains code, documentation, and reference material that can support future visual additions.</span>
+                        <span class="lang-zh">聚氨酯项目已保留演示文稿与软著材料，wolf_sheep 项目则有代码、说明和论文，对后续加入截图和结果展示很有帮助。</span>
+                    </p>
+                </article>
+            </div>
+        </section>
+            </main>
+        </div>
+
+        <div class="footer">
+            <span class="lang-en">The current version now provides more detailed project sections suitable for formal presentation.</span>
+            <span class="lang-zh">当前版本已扩展为更详细的项目页，更适合正式展示。</span>
+        </div>
+    </div>
+    <script>
+        (function () {
+            const toggle = document.getElementById("lang-toggle");
+            const storageKey = "site-language";
+            const titles = {
+                en: "Tiger Dong | Projects",
+                zh: "Tiger Dong | 项目"
+            };
+
+            function applyLanguage(lang) {
+                document.body.classList.remove("locale-en", "locale-zh");
+                document.body.classList.add(lang === "zh" ? "locale-zh" : "locale-en");
+                document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+                document.title = titles[lang] || titles.en;
+                toggle.textContent = lang === "zh" ? "English" : "中文";
+                localStorage.setItem(storageKey, lang);
+            }
+
+            const initial = localStorage.getItem(storageKey) || "en";
+            applyLanguage(initial);
+
+            toggle.addEventListener("click", function () {
+                const next = document.body.classList.contains("locale-zh") ? "en" : "zh";
+                applyLanguage(next);
+            });
+        }());
+    </script>
+</body>
+</html>

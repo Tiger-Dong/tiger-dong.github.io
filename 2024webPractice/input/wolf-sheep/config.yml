@@ -1,0 +1,26 @@
+N_WOLF: 10  # number of  many wolves
+N_SHEEP: 10 # number of  many sheep
+ALPHA: 0.1 # 取向力系数
+BETA: 500   # 排斥力系数
+Gamma: 500  # 狼羊 吸引力系数
+OMEGA: 2   # 领导力每次增加倍数
+LEADER_RATIO: 9  # 领导狼占总狼群 比例，e.g 1/9
+MAP_SCOPE: 1000  # 地图大小
+INIT_SPEED: 5  # 5m/s: 18km/h, 狼羊初始化速度
+RADIUS_ALIGNMENT: 100  # 取向力半径
+RADIUS_REPEL: 5   # 排斥力半径
+RADIUS_CAUGHT: 10  # 狼抓住羊的距离
+RADIUS_SIGHT: 200  # 狼羊吸引力半径
+
+ANGLE_DIRECTION: 20  # !!! 0 for debugging math.pi/18 # +- 10 degrees  普通狼扰动角度
+DELTA_T: 0.05  # set as 1 for debugging, normally should be 0.01 or less
+MAX_ITERATION: 80000  # 最大迭代次数
+iteration_per_frame: 50  # run n steps then draw next frame # 每一帧图像跑多少次迭代
+
+Wolf_normal_speed_ratio: 1.1  # 普通狼速度与 INIT_SPEED 比值
+Wolf_normal_sight_ratio: 0.6  # 普通狼视野范围 比例 与 RADIUS_SIGHT
+
+
+seed: 1000  # fix the random series 随机数种子，确定某一值会固定狼和羊的初始化位置，速度。正式运行时 设置为0
+
+draw_animation: False

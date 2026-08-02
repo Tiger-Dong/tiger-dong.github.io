@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiger Dong | Home</title>
+    <style>
+        :root {
+            --surface: rgba(255, 252, 246, 0.94);
+            --surface-strong: #fffdf8;
+            --surface-tint: rgba(244, 235, 224, 0.78);
+            --ink: #1f1b18;
+            --muted: #675d55;
+            --line: rgba(56, 44, 35, 0.12);
+            --accent: #8a3f12;
+            --accent-soft: #efe0d0;
+            --accent-deep: #5e2406;
+            --accent-dark: #241d18;
+            --shadow: 0 22px 52px rgba(55, 38, 24, 0.10);
+            --shadow-soft: 0 12px 28px rgba(55, 38, 24, 0.06);
+            --radius: 24px;
+            --max: 1120px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Avenir Next", "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(138, 63, 18, 0.10), transparent 24%),
+                radial-gradient(circle at 85% 12%, rgba(94, 36, 6, 0.08), transparent 22%),
+                linear-gradient(180deg, #f8f5ef 0%, #f2ece3 56%, #f6f2ec 100%);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .lang-zh {
+            display: none;
+        }
+
+        body.locale-zh .lang-en {
+            display: none;
+        }
+
+        body.locale-zh .lang-zh {
+            display: block;
+        }
+
+        body.locale-en .lang-en {
+            display: block;
+        }
+
+        body.locale-en .lang-zh {
+            display: none;
+        }
+
+        .wrap {
+            width: min(var(--max), calc(100% - 28px));
+            margin: 18px auto 44px;
+        }
+
+        .page-layout {
+            display: grid;
+            grid-template-columns: 220px minmax(0, 1fr);
+            gap: 18px;
+            margin-top: 18px;
+            align-items: start;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 14px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 18px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255, 252, 246, 0.84);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 24px rgba(55, 38, 24, 0.05);
+        }
+
+        .brand {
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 84px;
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background: rgba(255, 252, 246, 0.84);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar h3 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            color: var(--accent-deep);
+            letter-spacing: 0.02em;
+        }
+
+        .sidebar-nav {
+            display: grid;
+            gap: 8px;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 10px 12px;
+            border-radius: 14px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.58);
+            border: 1px solid rgba(56, 44, 35, 0.06);
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+        }
+
+        .main-content {
+            min-width: 0;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav a,
+        .lang-toggle {
+            padding: 9px 14px;
+            border-radius: 999px;
+            color: var(--muted);
+            font: inherit;
+        }
+
+        .nav a.active,
+        .nav a:hover,
+        .lang-toggle:hover {
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+            font-weight: 700;
+        }
+
+        .lang-toggle {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.72);
+            cursor: pointer;
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: "Iowan Old Style", "Times New Roman", serif;
+            letter-spacing: -0.02em;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .section {
+            margin-top: 22px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+        }
+
+        .section-head p,
+        .hero-copy,
+        .card p,
+        .project-brief p,
+        .footer,
+        .mini-contact p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .hero-main,
+        .hero-side,
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background: linear-gradient(140deg, rgba(255, 252, 246, 0.96), rgba(244, 235, 224, 0.92));
+            box-shadow: var(--shadow);
+        }
+
+        .hero-main {
+            padding: 34px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-main::after {
+            content: "";
+            position: absolute;
+            right: -72px;
+            bottom: -88px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(138, 63, 18, 0.14), transparent 68%);
+            pointer-events: none;
+        }
+
+        .hero-side {
+            padding: 22px;
+            display: grid;
+            gap: 16px;
+        }
+
+        h1 {
+            margin: 18px 0 12px;
+            max-width: 680px;
+            font-size: clamp(2.4rem, 4vw, 4.4rem);
+            line-height: 0.96;
+        }
+
+        .hero-copy {
+            max-width: 700px;
+            font-size: 1.03rem;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .primary,
+        .secondary {
+            padding: 11px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .primary {
+            background: var(--accent-dark);
+            color: #fffaf5;
+        }
+
+        .secondary {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.62);
+            color: var(--muted);
+        }
+
+        .hero-notes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .hero-note {
+            padding: 8px 13px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.62);
+            color: var(--muted);
+            border: 1px solid var(--line);
+            font-size: 0.92rem;
+        }
+
+        .side-panel {
+            padding: 18px;
+            border-radius: 22px;
+            border: 1px solid rgba(56, 44, 35, 0.08);
+            background: rgba(255, 255, 255, 0.62);
+        }
+
+        .side-panel h3 {
+            margin: 0 0 8px;
+            font-size: 1.12rem;
+        }
+
+        .side-panel strong {
+            display: block;
+            font-size: 1.9rem;
+            color: var(--accent-deep);
+        }
+
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 16px;
+        }
+
+        .card {
+            padding: 24px;
+            background: var(--surface-strong);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card h3 {
+            margin: 0 0 12px;
+            font-size: 1.24rem;
+        }
+
+        .mini-contact {
+            display: grid;
+            gap: 12px;
+        }
+
+        .mini-contact-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(56, 44, 35, 0.08);
+            background: rgba(255, 255, 255, 0.60);
+        }
+
+        .mini-contact-row strong {
+            font-size: 0.98rem;
+        }
+
+        .mini-contact-row span,
+        .mini-contact-row a {
+            color: var(--muted);
+            text-align: right;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .project-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .project-brief {
+            padding: 16px 18px;
+            border: 1px solid rgba(56, 44, 35, 0.08);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.62);
+        }
+
+        .project-brief h3 {
+            margin: 0 0 6px;
+            font-size: 1.04rem;
+        }
+
+        .footer {
+            margin-top: 24px;
+            padding: 18px;
+            text-align: center;
+            font-size: 0.94rem;
+        }
+
+        @media (max-width: 920px) {
+            .hero,
+            .about-layout,
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .topbar,
+            .topbar-actions,
+            .section-head,
+            .mini-contact-row {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .hero-main,
+            .hero-side,
+            .card {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .wrap {
+                width: min(var(--max), calc(100% - 18px));
+            }
+        }
+    </style>
+</head>
+<body class="locale-en">
+    <div class="wrap">
+        <header class="topbar">
+            <div class="brand">Tiger Dong</div>
+            <div class="topbar-actions">
+                <nav class="nav">
+                    <a class="active" href="index.html">
+                        <span class="lang-en">Home</span>
+                        <span class="lang-zh">主页</span>
+                    </a>
+                    <a href="project_interface.html">
+                        <span class="lang-en">Projects</span>
+                        <span class="lang-zh">项目</span>
+                    </a>
+                    <a href="history_update.html">
+                        <span class="lang-en">History Updates</span>
+                        <span class="lang-zh">历史更新</span>
+                    </a>
+                </nav>
+                <button id="lang-toggle" class="lang-toggle" type="button">中文</button>
+            </div>
+        </header>
+
+        <div class="page-layout">
+            <aside class="sidebar">
+                <h3>
+                    <span class="lang-en">On This Page</span>
+                    <span class="lang-zh">当前页面</span>
+                </h3>
+                <nav class="sidebar-nav">
+                    <a href="#about">
+                        <span class="lang-en">About</span>
+                        <span class="lang-zh">关于我</span>
+                    </a>
+                    <a href="#focus">
+                        <span class="lang-en">Focus Areas</span>
+                        <span class="lang-zh">工作重点</span>
+                    </a>
+                    <a href="#project-intro">
+                        <span class="lang-en">Project Introduction</span>
+                        <span class="lang-zh">项目简介</span>
+                    </a>
+                    <a href="#contact">
+                        <span class="lang-en">Contact</span>
+                        <span class="lang-zh">联系方式</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <section class="hero" id="about">
+                    <div class="hero-main">
+                        <span class="eyebrow">
+                            <span class="lang-en">ABOUT</span>
+                            <span class="lang-zh">关于我</span>
+                        </span>
+                        <h1>
+                            <span class="lang-en">Tiger Dong</span>
+                            <span class="lang-zh">Tiger Dong</span>
+                        </h1>
+                <p class="hero-copy">
+                    <span class="lang-en">I work across experimental assistance, agent services, industrial frontend design, and computational simulation. My work focuses on turning complex technical processes into clearer, more usable systems that can support real users, practical workflows, and more accessible experimentation.</span>
+                    <span class="lang-zh">我主要关注实验辅助、智能体服务、工业前端设计和计算仿真。我的工作重点，是把复杂技术流程转化为更清晰、更易用的系统，使它们能够服务真实用户、支持实际工作流程，并提升实验与工具的可达性。</span>
+                </p>
+                        <div class="actions">
+                            <a class="primary" href="project_interface.html">
+                                <span class="lang-en">View Full Projects</span>
+                                <span class="lang-zh">查看完整项目界面</span>
+                            </a>
+                            <a class="secondary" href="input/">
+                                <span class="lang-en">Open Materials</span>
+                                <span class="lang-zh">查看本地材料目录</span>
+                            </a>
+                        </div>
+                        <div class="hero-notes">
+                            <span class="hero-note">
+                                <span class="lang-en">Experimental assistance and accessibility</span>
+                                <span class="lang-zh">实验辅助与无障碍支持</span>
+                            </span>
+                            <span class="hero-note">
+                                <span class="lang-en">Frontend interfaces and simulation workflows</span>
+                                <span class="lang-zh">前端界面与模拟流程</span>
+                            </span>
+                            <span class="hero-note">
+                                <span class="lang-en">Practical tools built from real questions</span>
+                                <span class="lang-zh">从真实问题出发的实用工具</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <aside class="hero-side">
+                        <div class="side-panel">
+                            <h3>
+                                <span class="lang-en">Quick Snapshot</span>
+                                <span class="lang-zh">快速概览</span>
+                            </h3>
+                            <strong>4</strong>
+                            <p>
+                                <span class="lang-en">selected projects across hardware, frontend, agents, and simulation</span>
+                                <span class="lang-zh">覆盖硬件、前端、智能体与仿真的 4 个代表项目</span>
+                            </p>
+                        </div>
+                        <div class="side-panel">
+                            <h3>
+                                <span class="lang-en">Short Contact</span>
+                                <span class="lang-zh">简略联系方式</span>
+                            </h3>
+                            <div class="mini-contact">
+                                <div class="mini-contact-row">
+                                    <strong>GitHub</strong>
+                                    <a href="https://github.com/Tiger-Dong" target="_blank" rel="noreferrer">github.com/Tiger-Dong</a>
+                                </div>
+                                <div class="mini-contact-row">
+                                    <strong>
+                                        <span class="lang-en">Projects</span>
+                                        <span class="lang-zh">项目页</span>
+                                    </strong>
+                                    <a href="project_interface.html">
+                                        <span class="lang-en">Open project page</span>
+                                        <span class="lang-zh">打开项目界面</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </section>
+
+        <section class="section" id="focus">
+            <div class="section-head">
+                <h2>
+                    <span class="lang-en">Focus Areas</span>
+                    <span class="lang-zh">工作重点</span>
+                </h2>
+                <p>
+                    <span class="lang-en">These are the main directions that connect the projects shown on this site.</span>
+                    <span class="lang-zh">这些是串联当前网站项目内容的几个主要方向。</span>
+                </p>
+            </div>
+            <div class="grid">
+                <article class="card">
+                    <h3>
+                        <span class="lang-en">Experimental Assistance</span>
+                        <span class="lang-zh">实验辅助</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">Designing ways to make experimental operation more precise, more accessible, and easier to use.</span>
+                        <span class="lang-zh">关注如何让实验操作更精准、更易用，也更具无障碍支持能力。</span>
+                    </p>
+                </article>
+                <article class="card">
+                    <h3>
+                        <span class="lang-en">Agent Tools</span>
+                        <span class="lang-zh">智能体工具</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">Combining model inference with practical utility such as weather lookup and geolocation.</span>
+                        <span class="lang-zh">把模型调用和天气、地理等实用能力组合成可直接使用的小型服务。</span>
+                    </p>
+                </article>
+                <article class="card">
+                    <h3>
+                        <span class="lang-en">Simulation Interfaces</span>
+                        <span class="lang-zh">模拟界面</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">Turning complex processes and research ideas into clearer interfaces and more understandable workflows.</span>
+                        <span class="lang-zh">把复杂流程和研究问题转化为更清晰的界面与更容易理解的流程。</span>
+                    </p>
+                </article>
+            </div>
+                </section>
+
+                <section class="section" id="project-intro">
+            <div class="section-head">
+                <h2>
+                    <span class="lang-en">Project Introduction</span>
+                    <span class="lang-zh">项目简介</span>
+                </h2>
+                <p>
+                    <span class="lang-en">Only the project names and short descriptions are shown here. Full details are available on the project page.</span>
+                    <span class="lang-zh">这里仅保留项目名称和简要介绍，完整说明请进入项目界面查看。</span>
+                </p>
+            </div>
+            <div class="card">
+                <div class="project-list">
+                    <article class="project-brief">
+                        <h3>Arduino + Michelson Interferometer</h3>
+                        <p>
+                            <span class="lang-en">An accessibility-oriented optical experiment control project that uses Arduino, text commands, and voice interaction to assist Michelson interferometer operation.</span>
+                            <span class="lang-zh">一个面向无障碍实验辅助的光学仪器控制项目，通过 Arduino、文字指令和语音交互来辅助迈克耳孙干涉仪的操作。</span>
+                        </p>
+                    </article>
+                    <article class="project-brief">
+                        <h3>agent_service</h3>
+                        <p>
+                            <span class="lang-en">A lightweight agent service that combines model inference, weather lookup, and geolocation.</span>
+                            <span class="lang-zh">一个结合模型调用、天气查询和地理信息解析的轻量智能体服务。</span>
+                        </p>
+                    </article>
+                    <article class="project-brief">
+                        <h3>polyurethane reaction frontend</h3>
+                        <p>
+                            <span class="lang-en">A frontend platform for organizing polyurethane reaction simulation tasks, parameters, and result viewing in an industrial application context.</span>
+                            <span class="lang-zh">一个用于组织聚氨酯反应模拟任务、参数输入和结果查看的工业前端平台，服务于实际应用场景。</span>
+                        </p>
+                    </article>
+                    <article class="project-brief">
+                        <h3>wolf_sheep simulation</h3>
+                        <p>
+                            <span class="lang-en">A simulation program inspired by research on collective predation and escape behavior, exploring how group pursuit and evasion patterns can be modeled computationally.</span>
+                            <span class="lang-zh">一个受群体捕食与逃逸研究启发的狼羊群体行为仿真程序，用于从计算角度模拟群体追逐与逃逸规律。</span>
+                        </p>
+                    </article>
+                </div>
+                <div class="actions" style="margin-top: 18px;">
+                    <a class="primary" href="project_interface.html">
+                        <span class="lang-en">Open Full Project Page</span>
+                        <span class="lang-zh">查看完整项目界面</span>
+                    </a>
+                </div>
+            </div>
+                </section>
+
+                <section class="section" id="contact">
+            <div class="section-head">
+                <h2>
+                    <span class="lang-en">Detailed Contact</span>
+                    <span class="lang-zh">详细联系方式</span>
+                </h2>
+                <p>
+                    <span class="lang-en">A fuller contact section is kept here at the bottom, separate from the short contact block near the introduction.</span>
+                    <span class="lang-zh">更完整的联系方式保留在页面底部，与开头的简略联系方式区分开。</span>
+                </p>
+            </div>
+            <div class="about-layout">
+                <article class="card">
+                    <h3>
+                        <span class="lang-en">Public Links</span>
+                        <span class="lang-zh">公开入口</span>
+                    </h3>
+                    <div class="mini-contact">
+                        <div class="mini-contact-row">
+                            <strong>GitHub</strong>
+                            <a href="https://github.com/Tiger-Dong" target="_blank" rel="noreferrer">github.com/Tiger-Dong</a>
+                        </div>
+                        <div class="mini-contact-row">
+                            <strong>
+                                <span class="lang-en">Phone</span>
+                                <span class="lang-zh">电话</span>
+                            </strong>
+                            <span>+1 2819656386</span>
+                        </div>
+                        <div class="mini-contact-row">
+                            <strong>
+                                <span class="lang-en">Project Page</span>
+                                <span class="lang-zh">项目页</span>
+                            </strong>
+                            <a href="project_interface.html">
+                                <span class="lang-en">View detailed projects</span>
+                                <span class="lang-zh">查看完整项目说明</span>
+                            </a>
+                        </div>
+                        <div class="mini-contact-row">
+                            <strong>
+                                <span class="lang-en">Materials</span>
+                                <span class="lang-zh">本地材料</span>
+                            </strong>
+                            <a href="input/">
+                                <span class="lang-en">Open materials folder</span>
+                                <span class="lang-zh">打开资料目录</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                <article class="card">
+                    <h3>
+                        <span class="lang-en">Notes</span>
+                        <span class="lang-zh">补充说明</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">This section currently keeps only reliable public-facing links. If the site is later used for applications or formal presentation, it can be extended with an email address, resume, school information, or a longer profile statement.</span>
+                        <span class="lang-zh">当前版本先保留可靠的公开入口。如果以后需要用于投递、正式展示或比赛材料，这里还可以继续补充邮箱、简历、学校信息或更完整的个人介绍。</span>
+                    </p>
+                </article>
+            </div>
+                </section>
+            </main>
+        </div>
+
+        <div class="footer">
+            <span class="lang-en">This homepage provides a short public-facing introduction, while the detailed project explanations are kept on the projects page.</span>
+            <span class="lang-zh">首页现在更像一个面向外部读者的简要介绍页面，详细项目说明则集中保留在项目界面中。</span>
+        </div>
+    </div>
+    <script>
+        (function () {
+            const toggle = document.getElementById("lang-toggle");
+            const storageKey = "site-language";
+            const titles = {
+                en: "Tiger Dong | Home",
+                zh: "Tiger Dong | 首页"
+            };
+
+            function applyLanguage(lang) {
+                document.body.classList.remove("locale-en", "locale-zh");
+                document.body.classList.add(lang === "zh" ? "locale-zh" : "locale-en");
+                document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+                document.title = titles[lang] || titles.en;
+                toggle.textContent = lang === "zh" ? "English" : "中文";
+                localStorage.setItem(storageKey, lang);
+            }
+
+            const initial = localStorage.getItem(storageKey) || "en";
+            applyLanguage(initial);
+
+            toggle.addEventListener("click", function () {
+                const next = document.body.classList.contains("locale-zh") ? "en" : "zh";
+                applyLanguage(next);
+            });
+        }());
+    </script>
+</body>
+</html>
